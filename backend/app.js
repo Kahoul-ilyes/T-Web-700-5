@@ -1,20 +1,32 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+let express = require('express')
+let path = require('path')
+let cookieParser = require('cookie-parser')
+let logger = require('morgan')
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+let mongoose = require('mongoose')
+mongoose.connect('mongodb://127.0.0.1/cryptocodex', {useNewUrlParser: true, useUnifiedTopology: true})
 
-var app = express();
+let db = mongoose.connection
+db.on('error', console.error.bind(console, 'Bdd connection error:'))
+db.once('open', () => {
+  console.log('Bdd connected !')
+  // we're connected!
+});
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+let indexRouter = require('./routes/index')
+let usersRouter = require('./routes/users/users')
+let authRouter = require('./routes/auth/auth')
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+let app = express()
 
-module.exports = app;
+app.use(logger('dev'))
+app.use(express.json())
+app.use(express.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use(express.static(path.join(__dirname, 'public')))
+
+app.use('/', indexRouter)
+app.use('/users', usersRouter)
+app.use('/auth', authRouter)
+
+module.exports = app
