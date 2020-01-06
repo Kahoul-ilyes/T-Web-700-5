@@ -3,7 +3,35 @@ let router = express.Router()
 
 let User = require('../../models/user')
 
-/* GET users listing. */
+/**
+ * @api {get} /users/ Request all users
+ * @apiName GetUsers
+ * @apiGroup User
+ *
+ * @apiSuccess {User[]} users An Array of users.
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "users": [
+ *         {
+ *           "_id": "567897656zqdjqld",
+ *           "username": "Toto",
+ *           "email": "toto@yopmail.com",
+ *           "currency": "EUR",
+ *           "cryptos": [],
+ *           "keywords": []
+ *         },
+ *         {
+ *           "_id": "KA¨LDOASKA!çéà'",
+ *           "username": "Alice",
+ *           "email": "alice@yopmail.com",
+ *           "currency": "USD",
+ *           "cryptos": [],
+ *           "keywords": []
+ *         }
+ *       ]
+ *     }
+ */
 router.get('/', (req, res, next) => {
   User.find({}).exec((err, users) => {
     if (err) throw err
@@ -13,7 +41,27 @@ router.get('/', (req, res, next) => {
   })
 })
 
-/* GET Find a user by is ID */
+/**
+ * @api {get} /user/:id Request an user
+ * @apiName GetUser
+ * @apiGroup User
+ *
+ * @apiParam {ObjectId} id User's unique ID.
+ *
+ * @apiSuccess {User} user A user.
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "user": {
+ *         "_id": "JzmHAD68çzqdld9",
+ *         "username": "Toto",
+ *         "email": "toto@yopmail.com",
+ *         "currency": "EUR",
+ *         "cryptos": [],
+ *         "keywords": []
+ *       }
+ *     }
+ */
 router.get('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
@@ -28,7 +76,36 @@ router.get('/:id', (req, res, next) => {
   })
 })
 
-/* POST Create a new user */
+/**
+ * @api {post} /user/ Create a new user
+ * @apiName PostUser
+ * @apiGroup User
+ *
+ * @apiHeaderExample {json} Request-Example:
+ *     {
+ *       "username": "Newuser",
+ *       "email": "newuser@yopmail.com",
+ *       "password": "myawesomepassword",
+ *       "cryptos": [],
+ *       "currency": "AUS",
+ *       "keywords": ["bictoin", "lightning"]
+ *     }
+ *
+ * @apiSuccess {User} user The new user.
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "user": {
+ *         "_id": "47ADLKeqdmzah7A9E",
+ *         "username": "Newuser",
+ *         "email": "newuser@yopmail.com",
+ *         "currency": "AUS",
+ *         "cryptos": [],
+ *         "keywords": ["bictoin", "lightning"]
+ *       },
+ *       "msg": "User created successfully."
+ *     }
+ */
 router.post('/', (req, res, next) => {
 
   // mandatory
@@ -56,13 +133,40 @@ router.post('/', (req, res, next) => {
   User.create(datas, (err, user) => {
     if (err) throw err
     else {
-      res.json({user: user})
+      res.json({user: user, msg: 'User created successfully.'})
     }
   })
 
 })
 
-/* PUT Update a user */
+/**
+ * @api {put} /user/:id Update an existing user
+ * @apiName PutUser
+ * @apiGroup User
+ * 
+ * @apiParam {ObjectId} id User's unique ID.
+ *
+ * @apiHeaderExample {json} Request-Example:
+ *     {
+ *       "email": "tata@yopmail.com",
+ *       "currency": "AUS",
+ *     }
+ *
+ * @apiSuccess {User} user The updated user.
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "user": {
+ *         "_id": "567897656zqdjqld",
+ *         "username": "Toto",
+ *         "email": "tata@yopmail.com",
+ *         "currency": "AUS",
+ *         "cryptos": [],
+ *         "keywords": []
+ *       },
+ *       "msg": "User updated successfully."
+ *     }
+ */
 router.put('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
@@ -88,14 +192,28 @@ router.put('/:id', (req, res, next) => {
     if (err) throw err
 
     if (user) {
-      res.json({user: user, msg: 'User updated succesfully.'})
+      res.json({user: user, msg: 'User updated successfully.'})
     } else {
       res.json({err: 'No user found with this id.'})
     }
   })
 })
 
-/* DELETE Remove a user */
+/**
+ * @api {delete} /user/:id Remove an user
+ * @apiName DeleteUser
+ * @apiGroup User
+ *
+ * @apiParam {ObjectId} id User's unique ID.
+ * 
+ * @apiSuccess {User} user The updated user.
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "_id": "567897656zqdjqld",
+ *       "msg": "User deleted successfully."
+ *     }
+ */
 router.delete('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
@@ -103,7 +221,7 @@ router.delete('/:id', (req, res, next) => {
     if (err) throw err
 
     if (user) {
-      res.json({userId: req.params.id, msg: 'User deleted succesfully.'})
+      res.json({_id: req.params.id, msg: 'User deleted successfully.'})
     } else {
       res.json({err: 'No user found with this id.'})
     }
