@@ -1,23 +1,19 @@
-# Create image based on the official Node 10 image from dockerhub
-FROM node:10
+# Stage 0, "build-stage", based on Node.js, to build and compile the frontend
+FROM tiangolo/node-frontend:10 as build-stage
 
-# Create a directory where our app will be placed
-RUN mkdir -p /frontend
+WORKDIR /front
 
-# Change directory so that our commands run inside this new directory
-WORKDIR /frontend
+COPY package*.json /front/
 
-# Copy dependency definitions
-COPY package*.json /frontend/
-
-# Install dependecies
 RUN npm install
 
-# Get all the code needed to run the app
-COPY . /frontend/
+COPY ./ /front/
 
-# Expose the port the app runs in
-EXPOSE 4200
+ARG configuration=production
 
-# Serve the app
-CMD ["npm", "start"]
+RUN npm run build -- --output-path=./dist/out --configuration $configuration
+
+# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
+FROM nginx:1.15
+
+COPY --from=build-stage /front/dist/out/ /usr/share/nginx/html
