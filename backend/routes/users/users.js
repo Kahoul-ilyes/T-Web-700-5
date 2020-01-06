@@ -1,21 +1,16 @@
 let express = require('express')
 let router = express.Router()
 
-let mongoose = require('mongoose')
-
 let User = require('../../models/user')
 
 /* GET users listing. */
 router.get('/', (req, res, next) => {
   User.find({}).exec((err, users) => {
-    if (err) {
-      res.send({err: err})
-    } else {
-      if (users) res.send({ users: users})
-      else res.send({ users: []})
-    }
-  })
+    if (err) throw err
 
+    if (users) res.send({ users: users})
+    else res.send({ users: []})
+  })
 })
 
 router.post('/register', (req, res, next) => {
@@ -26,7 +21,11 @@ router.post('/register', (req, res, next) => {
   let password_confirmation = req.body.password
 
   if (!username || !email || !password || !password_confirmation) {
-    res.json({error: 'Bad request formatting, some params are missing.'})
+    res.json({error: 'Bad request formatting, some body params are missing.'})
+  }
+  
+  if (password != password_confirmation) {
+    res.json({error: 'The confirmation does not match the password.'})
   }
 
   User.create({
@@ -34,11 +33,13 @@ router.post('/register', (req, res, next) => {
     email: email,
     password: password
   }, (err, user) => {
-    if (err) res.json({err: err})
+    if (err) throw err
     else {
       res.json({user: user})
     }
   })
+
+  res.end()
 })
 
 router.post('/login', (req, res, next) => {
@@ -47,14 +48,25 @@ router.post('/login', (req, res, next) => {
   let password = req.body.password
 
   if (!email || !password) {
-    res.status(400)
-    res.send({error: 'Bad request formatting, some params are missing.'})
+    res.json({error: 'Bad request formatting, some body params are missing.'})
+  } else {
+    User.findOne({email: email}, (err, user) => {
+      if (err) throw err
+      if (user) {
+        user.checkPassword(password, (err, isMatch) => {
+          if (err) throw err
+          
+          if (isMatch) {
+            res.json({user: user, msg: 'Login successful'})
+          } else {
+            res.json({err: 'The password doesn\'t match.'})
+          }
+        })
+      } else {
+        res.json({err: 'No user found with this email address.'})
+      }
+    })
   }
-
-  res.status(200)
-  res.send({res: 'Login done.'})
 })
-
-
 
 module.exports = router
