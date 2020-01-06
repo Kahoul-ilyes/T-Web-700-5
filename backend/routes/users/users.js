@@ -1,9 +1,21 @@
 let express = require('express')
 let router = express.Router()
 
+let mongoose = require('mongoose')
+
+let User = require('../../models/user')
+
 /* GET users listing. */
 router.get('/', (req, res, next) => {
-  res.send('respond with a resource')
+  User.find({}).exec((err, users) => {
+    if (err) {
+      res.send({err: err})
+    } else {
+      if (users) res.send({ users: users})
+      else res.send({ users: []})
+    }
+  })
+
 })
 
 router.post('/register', (req, res, next) => {
@@ -14,12 +26,19 @@ router.post('/register', (req, res, next) => {
   let password_confirmation = req.body.password
 
   if (!username || !email || !password || !password_confirmation) {
-    res.status(400)
-    res.send({error: 'Bad request formatting, some params are missing.'})
+    res.json({error: 'Bad request formatting, some params are missing.'})
   }
 
-  res.status(200)
-  res.send({res: 'Register done.'})
+  User.create({
+    username: username,
+    email: email,
+    password: password
+  }, (err, user) => {
+    if (err) res.json({err: err})
+    else {
+      res.json({user: user})
+    }
+  })
 })
 
 router.post('/login', (req, res, next) => {

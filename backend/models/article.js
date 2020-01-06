@@ -1,33 +1,6 @@
 let mongoose = require('mongoose')
-let Schema = mongoose.Schema
+mongoose.connect('mongodb://127.0.0.1/cryptocodex', {useNewUrlParser: true, useUnifiedTopology: true})
+let db = mongoose.connection
+let articleSchema = require('../schemas/article')
 
-let validator = require('validator')
-import { isURL } from 'validator'
-
-let articleSchema = new Schema({
-  title: String,
-  summary: String,
-  source: String,
-  date: Date,
-  url: {
-    type: String,
-    validate: {
-      validator: isURL,
-      message: 'Please fill a valid URL',
-      isAsync: false
-    }
-  },
-  image: {
-    type: String,
-    validate: {
-      validator: isURL,
-      message: 'Please fill a valid URL',
-      isAsync: false
-    }
-  }
-}, {
-  collection: 'articles' ,
-  timestamps: true
-});
-
-module.exports = articleSchema
+module.exports = db.model('Article', articleSchema)
