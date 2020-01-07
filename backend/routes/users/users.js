@@ -8,7 +8,6 @@ let User = require('../../models/user')
  * @apiName GetUsers
  * @apiGroup User
  *
- * @apiSuccess {User[]} users An Array of users.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -42,13 +41,12 @@ router.get('/', (req, res, next) => {
 })
 
 /**
- * @api {get} /user/:id Request an user
+ * @api {get} /users/:id Request an user
  * @apiName GetUser
  * @apiGroup User
  *
  * @apiParam {ObjectId} id User's unique ID.
  *
- * @apiSuccess {User} user A user.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -77,7 +75,7 @@ router.get('/:id', (req, res, next) => {
 })
 
 /**
- * @api {post} /user/ Create a new user
+ * @api {post} /users/ Create a new user
  * @apiName PostUser
  * @apiGroup User
  *
@@ -91,7 +89,6 @@ router.get('/:id', (req, res, next) => {
  *       "keywords": ["bictoin", "lightning"]
  *     }
  *
- * @apiSuccess {User} user The new user.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -140,7 +137,7 @@ router.post('/', (req, res, next) => {
 })
 
 /**
- * @api {put} /user/:id Update an existing user
+ * @api {put} /users/:id Update an existing user
  * @apiName PutUser
  * @apiGroup User
  * 
@@ -152,7 +149,6 @@ router.post('/', (req, res, next) => {
  *       "currency": "AUS",
  *     }
  *
- * @apiSuccess {User} user The updated user.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -200,13 +196,12 @@ router.put('/:id', (req, res, next) => {
 })
 
 /**
- * @api {delete} /user/:id Remove an user
+ * @api {delete} /users/:id Remove an user
  * @apiName DeleteUser
  * @apiGroup User
  *
  * @apiParam {ObjectId} id User's unique ID.
  * 
- * @apiSuccess {User} user The updated user.
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
@@ -222,6 +217,62 @@ router.delete('/:id', (req, res, next) => {
 
     if (user) {
       res.json({_id: req.params.id, msg: 'User deleted successfully.'})
+    } else {
+      res.json({err: 'No user found with this id.'})
+    }
+  })
+})
+
+/**
+ * @api {get} /users/:id/cryptos Request an user's cryptos
+ * @apiName GetUserCryptos
+ * @apiGroup User
+ *
+ * @apiParam {ObjectId} id User's unique ID.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "cryptos": []
+ *     }
+ */
+router.get('/:id/cryptos', (req, res, next) => {
+  if (!req.params.id) res.json({err: 'Please provide an id param.'})
+
+  User.findById(req.params.id, 'cryptos', (err, doc) => {
+    if (err) throw err
+    console.log(doc)
+
+    if (doc) {
+      res.json({cryptos: doc.cryptos})
+    } else {
+      res.json({err: 'No user found with this id.'})
+    }
+  })
+})
+
+/**
+ * @api {get} /users/:id/keywords Request an user's keywords
+ * @apiName GetUserKeywords
+ * @apiGroup User
+ *
+ * @apiParam {ObjectId} id User's unique ID.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "keywords": []
+ *     }
+ */
+router.get('/:id/keywords', (req, res, next) => {
+  if (!req.params.id) res.json({err: 'Please provide an id param.'})
+
+  User.findById(req.params.id, 'keywords', (err, doc) => {
+    if (err) throw err
+    console.log(doc)
+
+    if (doc) {
+      res.json({keywords: doc.keywords})
     } else {
       res.json({err: 'No user found with this id.'})
     }

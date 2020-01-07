@@ -1,7 +1,7 @@
 define({ "api": [
   {
     "type": "delete",
-    "url": "/user/:id",
+    "url": "/users/:id",
     "title": "Remove an user",
     "name": "DeleteUser",
     "group": "User",
@@ -19,17 +19,6 @@ define({ "api": [
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "User",
-            "optional": false,
-            "field": "user",
-            "description": "<p>The updated user.</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Success-Response:",
@@ -44,7 +33,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/user/:id",
+    "url": "/users/:id",
     "title": "Request an user",
     "name": "GetUser",
     "group": "User",
@@ -62,21 +51,74 @@ define({ "api": [
       }
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "User",
-            "optional": false,
-            "field": "user",
-            "description": "<p>A user.</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Success-Response:",
           "content": "HTTP/1.1 200 OK\n{\n  \"user\": {\n    \"_id\": \"JzmHAD68çzqdld9\",\n    \"username\": \"Toto\",\n    \"email\": \"toto@yopmail.com\",\n    \"currency\": \"EUR\",\n    \"cryptos\": [],\n    \"keywords\": []\n  }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/users/users.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "get",
+    "url": "/users/:id/cryptos",
+    "title": "Request an user's cryptos",
+    "name": "GetUserCryptos",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "id",
+            "description": "<p>User's unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"cryptos\": []\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/users/users.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "get",
+    "url": "/users/:id/keywords",
+    "title": "Request an user's keywords",
+    "name": "GetUserKeywords",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "id",
+            "description": "<p>User's unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"keywords\": []\n}",
           "type": "json"
         }
       ]
@@ -92,17 +134,6 @@ define({ "api": [
     "name": "GetUsers",
     "group": "User",
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "User[]",
-            "optional": false,
-            "field": "users",
-            "description": "<p>An Array of users.</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Success-Response:",
@@ -117,7 +148,7 @@ define({ "api": [
   },
   {
     "type": "post",
-    "url": "/user/",
+    "url": "/users/",
     "title": "Create a new user",
     "name": "PostUser",
     "group": "User",
@@ -131,17 +162,6 @@ define({ "api": [
       ]
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "User",
-            "optional": false,
-            "field": "user",
-            "description": "<p>The new user.</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Success-Response:",
@@ -156,7 +176,7 @@ define({ "api": [
   },
   {
     "type": "put",
-    "url": "/user/:id",
+    "url": "/users/:id",
     "title": "Update an existing user",
     "name": "PutUser",
     "group": "User",
@@ -183,17 +203,6 @@ define({ "api": [
       ]
     },
     "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "User",
-            "optional": false,
-            "field": "user",
-            "description": "<p>The updated user.</p>"
-          }
-        ]
-      },
       "examples": [
         {
           "title": "Success-Response:",
