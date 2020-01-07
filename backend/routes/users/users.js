@@ -4,6 +4,11 @@ let router = express.Router()
 let User = require('../../models/user')
 
 /**
+ * @apiDefine NoUserError
+ * @apiError UserNotFound Please provide an id param.
+ */
+
+/**
  * @api {get} /users/ Request all users
  * @apiName GetUsers
  * @apiGroup User
@@ -59,6 +64,7 @@ router.get('/', (req, res, next) => {
  *         "keywords": []
  *       }
  *     }
+ * @apiUse NoUserError
  */
 router.get('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
@@ -162,6 +168,7 @@ router.post('/', (req, res, next) => {
  *       },
  *       "msg": "User updated successfully."
  *     }
+ * @apiUse NoUserError
  */
 router.put('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
@@ -208,6 +215,7 @@ router.put('/:id', (req, res, next) => {
  *       "_id": "567897656zqdjqld",
  *       "msg": "User deleted successfully."
  *     }
+ * @apiUse NoUserError
  */
 router.delete('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
@@ -235,6 +243,7 @@ router.delete('/:id', (req, res, next) => {
  *     {
  *       "cryptos": []
  *     }
+ * @apiUse NoUserError
  */
 router.get('/:id/cryptos', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
@@ -263,6 +272,7 @@ router.get('/:id/cryptos', (req, res, next) => {
  *     {
  *       "keywords": []
  *     }
+ * @apiUse NoUserError
  */
 router.get('/:id/keywords', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})

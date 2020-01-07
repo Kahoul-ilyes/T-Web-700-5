@@ -29,7 +29,19 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "routes/users/users.js",
-    "groupTitle": "User"
+    "groupTitle": "User",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>Please provide an id param.</p>"
+          }
+        ]
+      }
+    }
   },
   {
     "type": "get",
@@ -61,7 +73,19 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "routes/users/users.js",
-    "groupTitle": "User"
+    "groupTitle": "User",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>Please provide an id param.</p>"
+          }
+        ]
+      }
+    }
   },
   {
     "type": "get",
@@ -93,7 +117,19 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "routes/users/users.js",
-    "groupTitle": "User"
+    "groupTitle": "User",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>Please provide an id param.</p>"
+          }
+        ]
+      }
+    }
   },
   {
     "type": "get",
@@ -125,7 +161,19 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "routes/users/users.js",
-    "groupTitle": "User"
+    "groupTitle": "User",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>Please provide an id param.</p>"
+          }
+        ]
+      }
+    }
   },
   {
     "type": "get",
@@ -213,6 +261,18 @@ define({ "api": [
     },
     "version": "0.0.0",
     "filename": "routes/users/users.js",
-    "groupTitle": "User"
+    "groupTitle": "User",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>Please provide an id param.</p>"
+          }
+        ]
+      }
+    }
   }
 ] });
