@@ -8,11 +8,10 @@ services:
       - "3000:3000"
 
   frontend:
+    container_name: T-web-frontend
     build: ./frontend
     image: t-web-frontend
     restart: always
-    depends_on:
-      - backend
     ports:
       - "80:80"
 
