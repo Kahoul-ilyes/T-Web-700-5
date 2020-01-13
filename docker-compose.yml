@@ -4,11 +4,8 @@ services:
     container_name: t-web-backend
     build: ./backend
     restart: always
-    expose:
-      - 3000
-    environment:
-      - VIRTUAL_HOST=35.214.83.191
-      - VIRTUAL_PORT=3000
+    ports:
+      - "3000:3000"
 
   frontend:
     build: ./frontend
@@ -16,15 +13,6 @@ services:
     restart: always
     depends_on:
       - backend
-    expose:
-      - 80
-    environment:
-      - VIRTUAL_HOST=35.214.83.191
-
-  nginx-proxy:
-    image: jwilder/nginx-proxy
     ports:
       - "80:80"
-      - "443:443"
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
+
