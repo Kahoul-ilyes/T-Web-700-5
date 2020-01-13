@@ -5,7 +5,7 @@ let validator = require('validator')
 
 let cryptoSchema = new Schema({
   name: String,
-  acronym: String,
+  symbol: String,
   currentPrice: Number,
   openingPrice: Number,
   lowestPrice: Number,
@@ -25,6 +25,11 @@ let cryptoSchema = new Schema({
       message: 'Please fill a valid URL',
       isAsync: false
     }
+  },
+  dateAvailability: Date,
+  isTradable: {
+    type: Boolean,
+    default: false
   }
 }, {
   collection: 'cryptos',
