@@ -14,8 +14,10 @@ db.once('open', () => {
 });
 
 let indexRouter = require('./routes/index')
-let usersRouter = require('./routes/users/users')
 let authRouter = require('./routes/auth/auth')
+let usersRouter = require('./routes/users/users')
+let cryptosRouter = require('./routes/cryptos/cryptos')
+let coinsRouter = require('./routes/cryptos/coins')
 
 let app = express()
 
@@ -27,7 +29,9 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'doc')))
 
 app.use('/', indexRouter)
-app.use('/api/v0/users', usersRouter)
 app.use('/api/v0/auth', authRouter)
+app.use('/api/v0/users', usersRouter)
+app.use('/api/v0/cryptos', cryptosRouter)
+app.use('/api/v0/coins', coinsRouter)
 
 module.exports = app

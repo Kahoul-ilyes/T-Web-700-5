@@ -1,6 +1,238 @@
 define({ "api": [
   {
     "type": "delete",
+    "url": "/cryptos/:id",
+    "title": "Remove an crypto",
+    "name": "DeleteCrypto",
+    "group": "Crypto",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Crypto's unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"_id\": \"567897656zqdjqld\",\n  \"msg\": \"Crypto deleted successfully.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/cryptos/cryptos.js",
+    "groupTitle": "Crypto",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CryptoNotFound",
+            "description": "<p>Please provide an id param.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/cryptos/:id",
+    "title": "Request a crypto",
+    "name": "GetCrypto",
+    "group": "Crypto",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Crypto's unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"crypto\": {\n    \"_id\": \"567897656zqdjqld\",\n    \"name\": \"Bitcoin\",\n    \"acronym\": \"BTC\",\n    \"currentPrice\": 80000000000,\n    \"openingPrice\": 79000000000,\n    \"lowestPrice\": 787000000000,\n    \"highestPrice\": 85000000000,\n    \"logo\": \"https://bitcoin.org/img/icons/logotop.svg?1577873163\",\n    \"website\": \"https://bitcoin.org/fr/\"\n  }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/cryptos/cryptos.js",
+    "groupTitle": "Crypto",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CryptoNotFound",
+            "description": "<p>Please provide an id param.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/cryptos/:id/prices",
+    "title": "Request a crypto's prices",
+    "name": "GetCryptoPrices",
+    "group": "Crypto",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Crypto's unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"currentPrice\": 80000000000,\n  \"openingPrice\": 79000000000,\n  \"lowestPrice\": 787000000000,\n  \"highestPrice\": 85000000000\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/cryptos/cryptos.js",
+    "groupTitle": "Crypto",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CryptoNotFound",
+            "description": "<p>Please provide an id param.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/cryptos/",
+    "title": "Request all cryptos",
+    "name": "GetCryptos",
+    "group": "Crypto",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"cryptos\": [\n    {\n      \"_id\": \"567897656zqdjqld\",\n      \"name\": \"Bitcoin\",\n      \"acronym\": \"BTC\",\n      \"currentPrice\": 80000000000,\n      \"openingPrice\": 79000000000,\n      \"lowestPrice\": 787000000000,\n      \"highestPrice\": 85000000000,\n      \"logo\": \"https://bitcoin.org/img/icons/logotop.svg?1577873163\",\n      \"website\": \"https://bitcoin.org/fr/\"\n    },\n    {\n      \"_id\": \"5193bqzdiu68dbq\",\n      \"name\": \"Ethereum\",\n      \"acronym\": \"ETH\",\n      \"currentPrice\": 2000000000,\n      \"openingPrice\": 1900000000,\n      \"lowestPrice\": 1700000000,\n      \"highestPrice\": 2100000000,\n      \"logo\": \"https://www.ethereum-france.com/wp-content/uploads/2019/11/ETHEREUM-ICON_RGB-v3-xsmall.png\",\n      \"website\": \"https://ethereum.org/fr/\"\n    }\n  ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/cryptos/cryptos.js",
+    "groupTitle": "Crypto"
+  },
+  {
+    "type": "post",
+    "url": "/cryptos/",
+    "title": "Create a new crypto",
+    "name": "PostCrypto",
+    "group": "Crypto",
+    "header": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"name\": \"Bitcoin\",\n  \"acronym\": \"BTC\",\n  \"logo\": \"https://bitcoin.org/img/icons/logotop.svg?1577873163\",\n  \"website\": \"https://bitcoin.org/fr/\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"crypto\": {\n    \"_id\": \"567897656zqdjqld\",\n    \"name\": \"Bitcoin\",\n    \"acronym\": \"BTC\",\n    \"currentPrice\": 80000000000,\n    \"openingPrice\": 79000000000,\n    \"lowestPrice\": 787000000000,\n    \"highestPrice\": 85000000000,\n    \"logo\": \"https://bitcoin.org/img/icons/logotop.svg?1577873163\",\n    \"website\": \"https://bitcoin.org/fr/\"\n  },\n  \"msg\": \"Crypto created successfully.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/cryptos/cryptos.js",
+    "groupTitle": "Crypto"
+  },
+  {
+    "type": "put",
+    "url": "/cryptos/:id",
+    "title": "Update an existing crypto",
+    "name": "PutCrypto",
+    "group": "Crypto",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Crypto's unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "header": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"acronym\": \"BTC2\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"crypto\": {\n    \"_id\": \"567897656zqdjqld\",\n    \"name\": \"Bitcoin\",\n    \"acronym\": \"BTC2\",\n    \"currentPrice\": 80000000000,\n    \"openingPrice\": 79000000000,\n    \"lowestPrice\": 787000000000,\n    \"highestPrice\": 85000000000,\n    \"logo\": \"https://bitcoin.org/img/icons/logotop.svg?1577873163\",\n    \"website\": \"https://bitcoin.org/fr/\"\n  },\n  \"msg\": \"Crypto updated successfully.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/cryptos/cryptos.js",
+    "groupTitle": "Crypto",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CryptoNotFound",
+            "description": "<p>Please provide an id param.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "delete",
     "url": "/users/:id",
     "title": "Remove an user",
     "name": "DeleteUser",
