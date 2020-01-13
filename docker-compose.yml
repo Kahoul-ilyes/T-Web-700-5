@@ -1,7 +1,7 @@
 version: '3'
 services:
   backend:
-    container_name: T-web-backend
+    container_name: t-web-backend
     build: ./backend
     restart: always
     ports:
@@ -9,7 +9,7 @@ services:
 
   frontend:
     build: ./frontend
-    image: T-web-frontend
+    image: t-web-frontend
     restart: always
     depends_on:
       - backend
