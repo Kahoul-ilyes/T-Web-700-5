@@ -13,9 +13,8 @@ services:
     restart: always
     depends_on:
       - backend
-    ports:
-      - "80:80"
-      - "443:443"
+    expose:
+      - 80
     environment:
       - VIRTUAL_HOST=35.214.83.191
 
@@ -23,5 +22,6 @@ services:
     image: jwilder/nginx-proxy
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
