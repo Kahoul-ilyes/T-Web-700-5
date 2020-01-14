@@ -141,30 +141,13 @@ router.post('/', (req, res, next) => {
   if (logo) datas.logo = logo
   if (website) datas.website = website
 
-  // check that this crypto is in the available coin list
-  axios({
-    url: 'https://min-api.cryptocompare.com/data/blockchain/list',
-    method: 'get',
-    headers: {
-      authorization: "Apikey 31255fdff90cdeb050d6efa71f6e84917ed11d573e7dffcc76999f1c30ec58ab"
-    } 
-  }).then((res) => {
-    console.log(res)
+  Crypto.create(datas, (err, crypto) => {
+    if (err) throw err
+    
+    if (crypto) {
+      res.json({crypto: crypto, msg: 'Crypto created successfully.'})
+    }
   })
-
-  // Crypto.create(datas, (err, crypto) => {
-  //   if (err) throw err
-  //   else {
-  //     // Get the price informations for this crypto
-      
-
-
-  //     res.json({crypto: crypto, msg: 'Crypto created successfully.'})
-  //   }
-  // })
-
-  
-
 })
 
 /**
@@ -278,12 +261,17 @@ router.delete('/:id', (req, res, next) => {
 router.get('/:id/prices', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
-  Crypto.findById(req.params.id, 'keywords', (err, doc) => {
+  Crypto.findById(req.params.id, 'currentPrice openingPrice lowestPrice highestPrice', (err, doc) => {
     if (err) throw err
     console.log(doc)
 
     if (doc) {
-      res.json({keywords: doc.keywords})
+      res.json({
+        currentPrice: doc.currentPrice,
+        openingPrice: doc.openingPrice,
+        lowestPrice: doc.lowestPrice,
+        highestPrice: doc.highestPrice
+      })
     } else {
       res.json({err: 'No crypto found with this id.'})
     }
