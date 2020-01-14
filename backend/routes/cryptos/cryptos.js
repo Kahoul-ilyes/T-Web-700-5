@@ -23,10 +23,10 @@ const axios = require('axios');
  *           "_id": "567897656zqdjqld",
  *           "name": "Bitcoin",
  *           "acronym": "BTC",
- *           "currentPrice": 80000000000,
- *           "openingPrice": 79000000000,
- *           "lowestPrice": 787000000000,
- *           "highestPrice": 85000000000,
+ *           "currentPrice": 8000,
+ *           "openingPrice": 7900,
+ *           "lowestPrice": 7870,
+ *           "highestPrice": 8500,
  *           "logo": "https://bitcoin.org/img/icons/logotop.svg?1577873163",
  *           "website": "https://bitcoin.org/fr/"
  *         },
@@ -34,10 +34,10 @@ const axios = require('axios');
  *           "_id": "5193bqzdiu68dbq",
  *           "name": "Ethereum",
  *           "acronym": "ETH",
- *           "currentPrice": 2000000000,
- *           "openingPrice": 1900000000,
- *           "lowestPrice": 1700000000,
- *           "highestPrice": 2100000000,
+ *           "currentPrice": 200,
+ *           "openingPrice": 190,
+ *           "lowestPrice": 170,
+ *           "highestPrice": 210,
  *           "logo": "https://www.ethereum-france.com/wp-content/uploads/2019/11/ETHEREUM-ICON_RGB-v3-xsmall.png",
  *           "website": "https://ethereum.org/fr/"
  *         }
@@ -67,10 +67,10 @@ router.get('/', (req, res, next) => {
  *         "_id": "567897656zqdjqld",
  *         "name": "Bitcoin",
  *         "acronym": "BTC",
- *         "currentPrice": 80000000000,
- *         "openingPrice": 79000000000,
- *         "lowestPrice": 787000000000,
- *         "highestPrice": 85000000000,
+ *         "currentPrice": 8000,
+ *         "openingPrice": 7900,
+ *         "lowestPrice": 7870,
+ *         "highestPrice": 8500,
  *         "logo": "https://bitcoin.org/img/icons/logotop.svg?1577873163",
  *         "website": "https://bitcoin.org/fr/"
  *       }
@@ -111,10 +111,10 @@ router.get('/:id', (req, res, next) => {
  *         "_id": "567897656zqdjqld",
  *         "name": "Bitcoin",
  *         "acronym": "BTC",
- *         "currentPrice": 80000000000,
- *         "openingPrice": 79000000000,
- *         "lowestPrice": 787000000000,
- *         "highestPrice": 85000000000,
+ *         "currentPrice": 8000,
+ *         "openingPrice": 7900,
+ *         "lowestPrice": 7870,
+ *         "highestPrice": 8500,
  *         "logo": "https://bitcoin.org/img/icons/logotop.svg?1577873163",
  *         "website": "https://bitcoin.org/fr/"
  *       },
@@ -129,9 +129,13 @@ router.post('/', (req, res, next) => {
   // optionnal
   let logo = req.body.logo
   let website = req.body.website
+  let currentPrice = req.body.currentPrice
+  let openingPrice = req.body.openingPrice
+  let lowestPrice = req.body.lowestPrice
+  let highestPrice = req.body.highestPrice
 
   if (!name || !acronym) {
-    res.json({error: 'Bad request formatting, some body params are missing.'})
+    res.json({error: 'Bad request formatting, name or acronym is missing.'})
   }
 
   let datas = {}
@@ -140,12 +144,19 @@ router.post('/', (req, res, next) => {
   if (acronym) datas.acronym = acronym
   if (logo) datas.logo = logo
   if (website) datas.website = website
+  if (currentPrice) datas.currentPrice = currentPrice
+  if (openingPrice) datas.openingPrice = openingPrice
+  if (lowestPrice) datas.lowestPrice = lowestPrice
+  if (highestPrice) datas.website = highestPrice
+
 
   Crypto.create(datas, (err, crypto) => {
     if (err) throw err
     
     if (crypto) {
       res.json({crypto: crypto, msg: 'Crypto created successfully.'})
+    } else {
+      res.json({err: 'Unable to create this crypto.'})
     }
   })
 })
@@ -184,22 +195,26 @@ router.put('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
   // mandatory
-  let username = req.body.username
-  let email = req.body.email
-  let password = req.body.password
+  let name = req.body.name
+  let acronym = req.body.acronym
   // optionnal
-  let currency = req.body.currency
-  let cryptos = req.body.cryptos
-  let keywords = req.body.keywords
+  let logo = req.body.logo
+  let website = req.body.website
+  let currentPrice = req.body.currentPrice
+  let openingPrice = req.body.openingPrice
+  let lowestPrice = req.body.lowestPrice
+  let highestPrice = req.body.highestPrice
 
   let datas = {}
 
-  if (username) datas.username = username
-  if (email) datas.email = email
-  if (password) datas.password = password
-  if (currency) datas.currency = currency
-  if (cryptos) datas.cryptos = cryptos
-  if (keywords) datas.keywords = keywords
+  if (name) datas.name = name
+  if (acronym) datas.acronym = acronym
+  if (logo) datas.logo = logo
+  if (website) datas.website = website
+  if (currentPrice) datas.currentPrice = currentPrice
+  if (openingPrice) datas.openingPrice = openingPrice
+  if (lowestPrice) datas.lowestPrice = lowestPrice
+  if (highestPrice) datas.website = highestPrice
 
   Crypto.findOneAndUpdate(req.params.id, datas, (err, crypto) => {
     if (err) throw err
