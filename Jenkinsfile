@@ -24,7 +24,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                if (env.JOB_BASE_NAME} == 't-web') {
+                if (env.JOB_BASE_NAME == 't-web') {
                     echo '[Deploying PROD]...'
                     sh "docker-compose -p ${JOB_BASE_NAME} -f docker-compose-prod.yml up -d"
                 } else {
