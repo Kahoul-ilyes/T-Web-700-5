@@ -15,5 +15,8 @@
      - Back => localhost:4000 \
      For the local the front use the dev deploy backend\
    
-     $ docker-compose up -d
+   To dev locally use :
+  
+    $ cd backend && npm start
+    $ cd frontend && npm start
       
