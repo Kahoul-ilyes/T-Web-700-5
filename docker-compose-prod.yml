@@ -4,7 +4,7 @@ services:
     build: ./backend
     restart: always
     ports:
-      - "${SERVER_PORT}:${SERVER_PORT}"
+      - "${SERVER_PORT}:4000"
 
   frontend:
     build:
