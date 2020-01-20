@@ -121,7 +121,7 @@ router.post('/', (req, res, next) => {
   let keywords = req.body.keywords
 
   if (!username || !email || !password) {
-    res.json({error: 'Bad request formatting, some body params are missing.'})
+    res.json({error: 'Bad request formatting, username, email or password is missing.'})
   }
 
   let datas = {}
