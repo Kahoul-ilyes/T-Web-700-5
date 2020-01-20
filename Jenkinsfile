@@ -12,15 +12,25 @@ pipeline {
         }
         stage('Build') {
             steps {
-                echo '[Building]...'
-                sh "docker-compose -p ${JOB_BASE_NAME} build"
+                if (${JOB_BASE_NAME} == 't-web') {
+                    echo '[Building PROD]...'
+                    sh "docker-compose -p ${JOB_BASE_NAME} -f docker-compose-prod.yml build"
+                } else {
+                    echo '[Building DEV]...'
+                    sh "docker-compose -p ${JOB_BASE_NAME} build"
+                }
                 echo '...[Building]'
             }
         }
         stage('Deploy') {
             steps {
-                echo '[Deploying]....'
-                sh "docker-compose -p ${JOB_BASE_NAME} up -d"
+                if (${JOB_BASE_NAME} == 't-web') {
+                    echo '[Deploying PROD]...'
+                    sh "docker-compose -p ${JOB_BASE_NAME} -f docker-compose-prod.yml up -d"
+                } else {
+                    echo '[Deploying DEV]...'
+                    sh "docker-compose -p ${JOB_BASE_NAME} up -d"
+                }
                 echo '...[Deploying]'
             }
         }
