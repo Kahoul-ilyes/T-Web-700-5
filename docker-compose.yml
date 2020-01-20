@@ -11,4 +11,4 @@ services:
     image: t-web-frontend
     restart: always
     ports:
-      - "${FRONT_PORT:-4200}:${FRONT_PORT:-4200}"
+      - "${FRONT_PORT:-4200}:80"
