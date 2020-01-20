@@ -6,6 +6,6 @@
     - Backend => http://35.214.83.191:3000
  
   Development :     
-     - Front => http://35.214.83.191:4000 \
-     - Backend => http://35.214.83.191:4200
+     - Front => http://35.214.83.191:4200 \
+     - Backend => http://35.214.83.191:4000
  

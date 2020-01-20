@@ -13,14 +13,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo '[Building]...'
-                sh "docker-compose build"
+                sh "docker-compose -p ${JOB_BASE_NAME} build"
                 echo '...[Building]'
             }
         }
         stage('Deploy') {
             steps {
                 echo '[Deploying]....'
-                sh "docker-compose up -d"
+                sh "docker-compose -p ${JOB_BASE_NAME} up -d"
                 echo '...[Deploying]'
             }
         }
