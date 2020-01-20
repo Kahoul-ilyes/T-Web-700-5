@@ -7,8 +7,10 @@ services:
       - "${SERVER_PORT:-4000}:${SERVER_PORT:-4000}"
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile-prod
     image: t-web-frontend
     restart: always
     ports:
-      - "${FRONT_PORT:-4200}:80"
+      - "${FRONT_PORT:-4200}:${FRONT_PORT:-4200}"
