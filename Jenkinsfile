@@ -28,10 +28,10 @@ pipeline {
             steps {
                 script {
                     if (env.JOB_BASE_NAME == 't-web') {
-                        echo '[Building PROD]...'
+                        echo '[Deploying PROD]...'
                         sh "docker-compose -p ${JOB_BASE_NAME} -f docker-compose-prod.yml up -d"
                     } else {
-                        echo '[Building DEV]...'
+                        echo '[Deploying DEV]...'
                         sh "docker-compose -p ${JOB_BASE_NAME} up -d"
                     }
                     echo '...[Building]'
