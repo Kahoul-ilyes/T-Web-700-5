@@ -1,15 +1,14 @@
 version: '3'
 services:
   backend:
-    container_name: T-web-backend
     build: ./backend
     restart: always
     ports:
-      - "3000:3000"
+      - "${SERVER_PORT:-4000}:4000"
 
   frontend:
-    container_name: T-web-frontend
     build: ./frontend
+    image: t-web-frontend
     restart: always
     ports:
-      - "4200:4200"
+      - "${FRONT_PORT:-4200}:80"
