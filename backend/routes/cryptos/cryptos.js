@@ -93,6 +93,8 @@ router.get('/subscribe', (req, res, next) => {
  *           "openingPrice": 7900,
  *           "lowestPrice": 7870,
  *           "highestPrice": 8500,
+ *           "supply": 18000000,
+ *           "marketCap": 37800450789,
  *           "logo": "https://bitcoin.org/img/icons/logotop.svg?1577873163",
  *           "website": "https://bitcoin.org/fr/"
  *         },
@@ -104,6 +106,8 @@ router.get('/subscribe', (req, res, next) => {
  *           "openingPrice": 190,
  *           "lowestPrice": 170,
  *           "highestPrice": 210,
+ *           "supply": 98000000,
+ *           "marketCap": 245679900,
  *           "logo": "https://www.ethereum-france.com/wp-content/uploads/2019/11/ETHEREUM-ICON_RGB-v3-xsmall.png",
  *           "website": "https://ethereum.org/fr/"
  *         }
@@ -137,6 +141,8 @@ router.get('/', (req, res, next) => {
  *         "openingPrice": 7900,
  *         "lowestPrice": 7870,
  *         "highestPrice": 8500,
+ *         "supply": 18000000,
+ *         "marketCap": 37800450789,
  *         "logo": "https://bitcoin.org/img/icons/logotop.svg?1577873163",
  *         "website": "https://bitcoin.org/fr/"
  *       }
@@ -167,7 +173,13 @@ router.get('/:id', (req, res, next) => {
  *       "name": "Bitcoin",
  *       "acronym": "BTC",
  *       "logo": "https://bitcoin.org/img/icons/logotop.svg?1577873163",
- *       "website": "https://bitcoin.org/fr/"
+ *       "website": "https://bitcoin.org/fr/",
+ *       "currentPrice": 8000,
+ *       "openingPrice": 7900,
+ *       "lowestPrice": 7870,
+ *       "highestPrice": 8500,
+ *       "supply": 18000000,
+ *       "marketCap": 37800450789
  *     }
  *
  * @apiSuccessExample {json} Success-Response:
@@ -199,6 +211,8 @@ router.post('/', (req, res, next) => {
   let openingPrice = req.body.openingPrice
   let lowestPrice = req.body.lowestPrice
   let highestPrice = req.body.highestPrice
+  let supply = req.body.supply
+  let marketCap = req.body.marketCap
 
   if (!name || !acronym) {
     res.json({error: 'Bad request formatting, name or acronym is missing.'})
@@ -214,6 +228,8 @@ router.post('/', (req, res, next) => {
   if (openingPrice) datas.openingPrice = openingPrice
   if (lowestPrice) datas.lowestPrice = lowestPrice
   if (highestPrice) datas.website = highestPrice
+  if (supply) datas.supply = supply
+  if (marketCap) datas.marketCap = marketCap
 
 
   Crypto.create(datas, (err, crypto) => {
@@ -270,6 +286,8 @@ router.put('/:id', (req, res, next) => {
   let openingPrice = req.body.openingPrice
   let lowestPrice = req.body.lowestPrice
   let highestPrice = req.body.highestPrice
+  let supply = req.body.supply
+  let marketCap = req.body.marketCap
 
   let datas = {}
 
@@ -281,6 +299,8 @@ router.put('/:id', (req, res, next) => {
   if (openingPrice) datas.openingPrice = openingPrice
   if (lowestPrice) datas.lowestPrice = lowestPrice
   if (highestPrice) datas.website = highestPrice
+  if (supply) datas.supply = supply
+  if (marketCap) datas.marketCap = marketCap
 
   Crypto.findOneAndUpdate(req.params.id, datas, (err, crypto) => {
     if (err) throw err
@@ -332,10 +352,12 @@ router.delete('/:id', (req, res, next) => {
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
- *       "currentPrice": 80000000000,
- *       "openingPrice": 79000000000,
- *       "lowestPrice": 787000000000,
- *       "highestPrice": 85000000000
+ *       "currentPrice": 8000,
+ *       "openingPrice": 7900,
+ *       "lowestPrice": 7870,
+ *       "highestPrice": 8500,
+ *       "supply": 18000000,
+ *       "marketCap": 37800450789
  *     }
  * @apiUse NoCryptoError
  */

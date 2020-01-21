@@ -41,6 +41,10 @@ router.get('/', (req, res, next) => {
         let website = 'https://www.cryptocompare.com' + coin.Url
         let isTradable = coin.IsTrading
         let dateAvailability = coin.ContentCreatedOn
+        let supply = 0
+        // console.log(coin.TotalCoinSupply)
+        if (coin.TotalCoinsMined && coin.TotalCoinsMined != null && coin.TotalCoinsMined !== "N/A")
+          supply = coin.TotalCoinsMined
 
         let datas = {
           name: name,
@@ -48,23 +52,24 @@ router.get('/', (req, res, next) => {
           logo: logo,
           website: website,
           isTradable: isTradable,
-          dateAvailability: dateAvailability
+          dateAvailability: dateAvailability,
+          supply: supply
         }
         Crypto.findOneAndUpdate({name: name}, datas, {upsert: true, runValidators: true}, (err, crypto) => {
           if (err) throw err
 
           if (crypto) {
-            console.log(`Crypto ${dateAvailability} added/updated successfully.`)
+            console.log(`Crypto ${name} added/updated successfully.`)
           }
         })
         
       }
     }
+    res.json({msg: 'Crypto list updated successfully.'})
   }).catch((err) => {
     throw err
   })
 
-  res.json({msg: 'Crypto list updated successfully.'})
 })
 
 module.exports = router

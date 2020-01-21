@@ -10,6 +10,8 @@ let cryptoSchema = new Schema({
   openingPrice: Number,
   lowestPrice: Number,
   highestPrice: Number,
+  marketCap: Number,
+  supply: Number,
   logo: {
     type: String,
     validate: {

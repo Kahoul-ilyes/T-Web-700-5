@@ -38,9 +38,11 @@ socket.onmessage = (event) => {
 
   if (event.data.indexOf('id') > -1) {
     let data = JSON.parse(event.data)
+    // subscribed coins list event
     if (data.id == 3) {
       subscribedCryptos = data.result
     }
+    // unsubscribed event
     if (data.id == 312) {
       console.log('Successfully unsubscribed from all streams.')
     }
@@ -63,10 +65,13 @@ socket.onmessage = (event) => {
       if (err) throw err
   
       if (crypto) {
-        console.log(crypto)
-        // res.json({crypto: crypto})
-      } else {
-        // res.json({err: 'No crypto found with this symbol.'})
+        // update marketcap
+        if (crypto.supply && crypto.supply != 0) {
+          crypto.marketCap = parseInt(crypto.supply * parseFloat(data.data.o))
+          crypto.save((err, doc) => {
+            if (err) throw err
+          })
+        }
       }
     })
   }
