@@ -1,16 +1,14 @@
-/**
- * Classe qui mappe la structure des données recues de l'api
- */
+
 export class CryptoModel {
-  /** id unique de la crypto ( fourni back) */
+  isTradable: boolean;
   id: string;
-  /** Nom complet */
   name: string;
-  /** Acronyme ( 3 lettres max) */
-  acronym: string;
-  /** Lien vers une image */
+  v: number;
+  createdAt: string;
+  dateAvailability: Date;
   logo: string;
-  /** Lien vers un site web  */
+  symbol: string;
+  updatedAt: Date;
   website: string;
   /** Prix actuel */
   currentPrice: number;
@@ -20,33 +18,39 @@ export class CryptoModel {
   openingPrice: number;
   /** Prix d'achat récent le plus élevée  */
   highestPrice: number;
+    /** envois le pourcentage d'évolution de la valeur depuis le début de la session */
+    supply: number;
+  marketCap: number;
 
 
-  /**
-   * Constructeur complet
-   */
-   constructor(id, name, acronym, logo, website, currentPrice, lowestPrice, openingPrice, highestPrice) {
+  getChangesValue() {
+    return ((this.currentPrice - this.openingPrice) / this.openingPrice) ;
+  }
+
+  /** renvois true si l'évolution est positive despuis le début de la session */
+  isChangesPositive() {
+    return (this.currentPrice - this.openingPrice) >= 0;
+  }
+
+
+  // tslint:disable-next-line:max-line-length
+  constructor(isTradable , id, name , v, createdAt , dateAvailability, logo, symbol, updatedAt, website, currentPrice, lowestPrice, openingPrice, highestPrice, supply, marketCap) {
+    this.isTradable = isTradable;
     this.id = id;
     this.name = name;
-    this.acronym = acronym, this.currentPrice = currentPrice;
+    this.v = v;
+    this.createdAt = createdAt;
+    this.dateAvailability = new Date(dateAvailability as string);
+    this.logo = logo;
+    this.symbol = symbol;
+    this.updatedAt = new Date(updatedAt as string);
+    this.website = website;
+    this.currentPrice = currentPrice;
     this.lowestPrice = lowestPrice;
     this.openingPrice = openingPrice;
     this.highestPrice = highestPrice;
-    this.logo = logo;
-    this.website = website;
+    this.supply = supply;
+    this.marketCap = marketCap;
   }
 
-  /**
-   * renvois le pourcentage d'évolution de la valeur depuis le début de la session
-   */
-  getChangesValue() {
-    return ((this.currentPrice - this.openingPrice) / this.openingPrice) * 100;
-  }
-
-  /**
-   * renvois true si l'évolution est positive despuis le début de la session
-   */
-    isChangesPositive() {
-    return (this.currentPrice - this.openingPrice) >= 0;
-  }
 }

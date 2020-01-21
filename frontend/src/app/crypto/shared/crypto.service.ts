@@ -70,6 +70,15 @@ export class CryptoService {
   }
 
   /**
+   * Ajoute les cryptos au systeme de subscribe pour avoir les données en temps réels
+   */
+  public subscribeCryptosTicker(cryptoSuscribed : string) {
+    return this.httpClient.get<any[]>(this.URL + '/api/v0/cryptos/subscribe?cryptos=' + cryptoSuscribed);
+  }
+
+
+
+  /**
    * Edition d'un ou plusieurs éléments d'un crypto
    * @param idCrypto id de la crypto a get
    * @param body les changements sur la crypto
