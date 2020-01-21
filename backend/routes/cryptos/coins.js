@@ -5,6 +5,14 @@ let Crypto = require('../../models/crypto')
 
 const axios = require('axios');
 
+
+
+
+router.get('/subscribe', (req, res, next) => {
+  console.log(req.query.cryptos.split(','))
+})
+
+
 /**
  * @api {get} /coins/ Get the available coin list and update database
  * @apiName GetCoin
