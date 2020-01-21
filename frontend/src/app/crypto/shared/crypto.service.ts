@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+
 
 /** Access level root */
 @Injectable({
@@ -7,13 +8,20 @@ import { HttpClient } from '@angular/common/http';
 })
 /** Gestion des appels a la parti crypto du server et à l'API de CryptoCompare  */
 export class CryptoService {
+
+  optionRequete = {
+    headers: new HttpHeaders({
+      'Access-Control-Allow-Origin': '*',
+      'mon-entete-personnalise': 'maValeur'
+    })
+  };
   /** Main URL, a changer à la fin des test */
-  URL = 'localhost:3000/';
+  URL = 'http://localhost:4000';
   /** url du site de crypto, a delete après les test */
 
   url = 'https://min-api.cryptocompare.com/data/blockchain/histo/day?fsym=BTC&api_key=';
   /** Clé du site de crypto */
- apiKey = '31255fdff90cdeb050d6efa71f6e84917ed11d573e7dffcc76999f1c30ec58ab';
+  apiKey = '31255fdff90cdeb050d6efa71f6e84917ed11d573e7dffcc76999f1c30ec58ab';
 
   /** Récupère des valeurs directement dpuis l'API, pour des test */
   public getDataFromApi() {
@@ -26,7 +34,7 @@ export class CryptoService {
    */
   public createCrypto(body: string) {
     return this.httpClient.post(this.URL + '/api/v0/cryptos/', body);
- }
+  }
 
   /**
    * Suppression d'une crypto du server
@@ -57,8 +65,8 @@ export class CryptoService {
    * Récupération de toute les cryptos
    * @param idCrypto id de la crypto a get
    */
-  public getAllCryptos(idCrypto: string) {
-    return this.httpClient.get(this.URL + '/api/v0/cryptos/');
+  public getAllCryptos() {
+    return this.httpClient.get<any[]>(this.URL + '/api/v0/cryptos/');
   }
 
   /**
@@ -70,11 +78,18 @@ export class CryptoService {
     return this.httpClient.put(this.URL + '/api/v0/cryptos/', body);
   }
 
+  /** Mise a jour de la liste des cryptos de la BDD */
+  public updateCoinList() {
+    return this.httpClient.get(this.URL + '/api/v0/coins/');
+  }
+
 
   /**
    * constructeur du service
    * @param httpClient pour la communication avec les APIs
    */
   constructor(private httpClient: HttpClient) {
+    this.updateCoinList().subscribe((data) => {
+    });
   }
 }

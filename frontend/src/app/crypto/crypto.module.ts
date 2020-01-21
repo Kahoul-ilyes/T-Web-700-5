@@ -12,6 +12,7 @@ import {HttpClientModule} from '@angular/common/http';
 import { CryptoGraphComponent } from './crypto-graph/crypto-graph.component';
 import {CryptoService} from './shared/crypto.service';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 
 @NgModule({
   declarations: [CryptoListComponent, CryptoGraphComponent],
@@ -25,7 +26,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
     MatTableModule,
     MatFormFieldModule,
     MatInputModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatSlideToggleModule
   ]
 })
 export class CryptoModule {
