@@ -251,6 +251,25 @@ define({ "api": [
     }
   },
   {
+    "type": "get",
+    "url": "/cryptos/subscribe?cryptos=BTC,eth,Ltc,aTom,...",
+    "title": "Subscribe to cryptos in real-time ticker",
+    "name": "SubscribeCryptosTicker",
+    "group": "Crypto",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"msg\": \"Cryptos subscribed succesfully\",\n  \"streams\": ['btcusdt@ticker', 'ltcusdt@ticker', 'ethusdt@ticker', ...]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/cryptos/cryptos.js",
+    "groupTitle": "Crypto"
+  },
+  {
     "type": "delete",
     "url": "/users/:id",
     "title": "Remove an user",

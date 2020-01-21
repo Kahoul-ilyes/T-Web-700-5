@@ -20,7 +20,7 @@ let Crypto = require('../../models/crypto')
  *     HTTP/1.1 200 OK
  *     {
  *       "msg": "Cryptos subscribed succesfully",
- *       "cryptos": ['BTC', 'LTC', 'ETH', ...]
+ *       "streams": ['btcusdt@ticker', 'ltcusdt@ticker', 'ethusdt@ticker', ...]
  *     }
  */
 router.get('/subscribe', (req, res, next) => {
@@ -63,7 +63,11 @@ router.get('/subscribe', (req, res, next) => {
           id: 1
         }
       ))
-
+      
+      res.json({
+        msg: "Cryptos subscribed succesfully",
+        cryptos: streams
+      })
     } else {
       res.json({err: 'Bad request formatting.'})
     }
