@@ -1,0 +1,16 @@
+version: '3'
+services:
+  backend:
+    build: ./backend
+    restart: always
+    ports:
+      - "${SERVER_PORT}:4000"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile-prod
+    image: t-web-frontend
+    restart: always
+    ports:
+      - "${FRONT_PORT:-4200}:${FRONT_PORT:-4200}"

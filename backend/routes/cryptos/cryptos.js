@@ -180,10 +180,10 @@ router.post('/', (req, res, next) => {
  *         "_id": "567897656zqdjqld",
  *         "name": "Bitcoin",
  *         "acronym": "BTC2",
- *         "currentPrice": 8000,
- *         "openingPrice": 7900,
- *         "lowestPrice": 7870,
- *         "highestPrice": 8500,
+ *         "currentPrice": 80000000000,
+ *         "openingPrice": 79000000000,
+ *         "lowestPrice": 787000000000,
+ *         "highestPrice": 85000000000,
  *         "logo": "https://bitcoin.org/img/icons/logotop.svg?1577873163",
  *         "website": "https://bitcoin.org/fr/"
  *       },
@@ -266,10 +266,10 @@ router.delete('/:id', (req, res, next) => {
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
- *       "currentPrice": 8000,
- *       "openingPrice": 7900,
- *       "lowestPrice": 7870,
- *       "highestPrice": 8500
+ *       "currentPrice": 80000000000,
+ *       "openingPrice": 79000000000,
+ *       "lowestPrice": 787000000000,
+ *       "highestPrice": 85000000000
  *     }
  * @apiUse NoCryptoError
  */

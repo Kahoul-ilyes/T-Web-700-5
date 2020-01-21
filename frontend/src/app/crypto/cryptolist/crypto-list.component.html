@@ -1,0 +1,54 @@
+<div class="crypto-param"><mat-form-field>
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+</mat-form-field>
+
+  <mat-slide-toggle
+    class="example-margin"
+    [color]="color"
+    [checked]="checked"
+    (change)="checked = $event.source.checked"
+    (click)="refreshTable()">
+      Trading Only
+  </mat-slide-toggle>
+</div>
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+  <!-- Acronym Column -->
+  <ng-container matColumnDef="acronym">
+    <th mat-header-cell *matHeaderCellDef> No. </th>
+    <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="logo">
+    <th mat-header-cell *matHeaderCellDef>  </th>
+
+    <td mat-cell *matCellDef="let element"> <a [href]="element.website" target="_blank"><img [src]="element.logo"/></a> </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <!-- <ng-container matColumnDef="value">
+     <th mat-header-cell *matHeaderCellDef> Current Price </th>
+     <td mat-cell *matCellDef="let element"> {{element.currentPrice | currency }} </td>
+   </ng-container>-->
+
+  <!--<ng-container matColumnDef="evolution">
+    <th mat-header-cell *matHeaderCellDef> Latest evolution </th>
+    <td mat-cell  class="" *matCellDef="let element" > <span [class]="element.isChangesPositive()? 'green' : 'red'"> {{element.getChangesValue() | percent }} </span>  </td>
+  </ng-container> -->
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<mat-paginator [pageSizeOptions]="[25, 5, 10, 25, 100]"></mat-paginator>
+
+<app-crypto-graph></app-crypto-graph>
+
+
+

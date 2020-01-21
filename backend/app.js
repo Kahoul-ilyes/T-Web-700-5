@@ -29,6 +29,12 @@ app.use(cookieParser())
 // app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, 'doc')))
 
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*")
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+  next()
+})
+
 app.use('/', indexRouter)
 app.use('/api/v0/auth', authRouter)
 app.use('/api/v0/users', usersRouter)
@@ -40,44 +46,44 @@ app.use('/api/v0/coins', coinsRouter)
 /**
  * Socket IO
  */
-const io = require('socket.io-client');
-const socket = io('wss://stream.binance.com:9443', {
-  path: '/ws/btcusdt@ticker'
-})
+// const io = require('socket.io-client');
+// const socket = io('wss://stream.binance.com:9443', {
+//   path: '/ws/btcusdt@ticker'
+// })
 
-socket.on('connect', () => {
-  console.log('socket connected : ')
-  console.log(socket.id); // 'G5p5...'
-})
+// socket.on('connect', () => {
+//   console.log('socket connected : ')
+//   console.log(socket.id); // 'G5p5...'
+// })
 
-socket.on('connect_error', (error) => {
-  console.log('socket connect error : ')
-  throw error
-})
+// socket.on('connect_error', (error) => {
+//   console.log('socket connect error : ')
+//   throw error
+// })
 
-socket.on('connect_timeout', (timeout) => {
-  console.log('socket timeout : ')
-  throw timeout
-})
+// socket.on('connect_timeout', (timeout) => {
+//   console.log('socket timeout : ')
+//   throw timeout
+// })
 
-socket.on('error', (error) => {
-  console.log('socket error : ')
-  throw error
-})
+// socket.on('error', (error) => {
+//   console.log('socket error : ')
+//   throw error
+// })
 
-socket.on('disconnect', (reason) => {
-  console.log('socket disconnected : ')
-  if (reason === 'io server disconnect') {
-    // the disconnection was initiated by the server, you need to reconnect manually
-    socket.connect()
-  }
-  // else the socket will automatically try to reconnect
-})
+// socket.on('disconnect', (reason) => {
+//   console.log('socket disconnected : ')
+//   if (reason === 'io server disconnect') {
+//     // the disconnection was initiated by the server, you need to reconnect manually
+//     socket.connect()
+//   }
+//   // else the socket will automatically try to reconnect
+// })
 
-socket.on('ping', () => {
-  console.log('socket ping received : ')
-  socket.emit('pong')
-})
+// socket.on('ping', () => {
+//   console.log('socket ping received : ')
+//   socket.emit('pong')
+// })
 
 
 /**
