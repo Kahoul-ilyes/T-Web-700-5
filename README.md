@@ -10,6 +10,7 @@ cd backend
 npm install
 DEBUG=backend:* npm start
 ```
+
 ## SERVERS
 
 The front have apiBaseUrl env var as backend base url.

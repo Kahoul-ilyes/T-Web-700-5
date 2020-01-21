@@ -1,14 +1,76 @@
 let express = require('express')
 let router = express.Router()
+let websocket = require('../../socket/socket')
 
 let Crypto = require('../../models/crypto')
 
-const axios = require('axios');
+// const axios = require('axios');
 
 /**
  * @apiDefine NoCryptoError
  * @apiError CryptoNotFound Please provide an id param.
  */
+
+/**
+ * @api {get} /cryptos/subscribe?cryptos=BTC,eth,Ltc,aTom,... Subscribe to cryptos in real-time ticker
+ * @apiName SubscribeCryptosTicker
+ * @apiGroup Crypto
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "msg": "Cryptos subscribed succesfully",
+ *       "cryptos": ['BTC', 'LTC', 'ETH', ...]
+ *     }
+ */
+router.get('/subscribe', (req, res, next) => {
+
+  // get subscribed cryptos
+  websocket.socket.send(JSON.stringify(
+    {
+      method: "LIST_SUBSCRIPTIONS",
+      id: 3
+    }
+  ))
+
+  let cryptos = req.query.cryptos.split(',')
+
+  if (cryptos.length > 0) {
+    if (Array.isArray(cryptos)) {
+      
+      let streams = websocket.subscribedCryptos
+
+      cryptos.forEach(crypto => {
+
+        let stream = `${crypto.toLowerCase()}usdt@ticker`
+        // unsubscribe from this crypto
+        websocket.socket.send(JSON.stringify(
+          {
+            method: "UNSUBSCRIBE",
+            params: [stream],
+            id: 312
+          }
+        ))
+
+        if (streams.indexOf(stream) == -1)
+          streams.push(stream)
+      })
+
+      websocket.socket.send(JSON.stringify(
+        {
+          method: "SUBSCRIBE",
+          params: streams,
+          id: 1
+        }
+      ))
+
+    } else {
+      res.json({err: 'Bad request formatting.'})
+    }
+  } else {
+    res.json({err: 'Erreur request, cryptos to subscribe are missing.'})
+  }
+})
 
 /**
  * @api {get} /cryptos/ Request all cryptos
