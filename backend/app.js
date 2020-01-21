@@ -3,8 +3,9 @@ let path = require('path')
 let cookieParser = require('cookie-parser')
 let logger = require('morgan')
 
+
 let mongoose = require('mongoose')
-mongoose.connect('mongodb://127.0.0.1/cryptocodex', {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect('mongodb://127.0.0.1/cryptocodex', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
 
 let db = mongoose.connection
 db.on('error', console.error.bind(console, 'Bdd connection error:'))
@@ -16,7 +17,7 @@ db.once('open', () => {
 let indexRouter = require('./routes/index')
 let authRouter = require('./routes/auth/auth')
 let usersRouter = require('./routes/users/users')
-let cryptosRouter = require('./routes/cryptos/cryptos')
+let cryptosRouter = require('./routes/cryptos/cryptos', )
 let coinsRouter = require('./routes/cryptos/coins')
 let articlesRouter = require('./routes/articles/articles')
 
