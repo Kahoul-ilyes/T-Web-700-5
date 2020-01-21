@@ -18,6 +18,7 @@ let authRouter = require('./routes/auth/auth')
 let usersRouter = require('./routes/users/users')
 let cryptosRouter = require('./routes/cryptos/cryptos')
 let coinsRouter = require('./routes/cryptos/coins')
+let articlesRouter = require('./routes/articles/articles')
 
 let app = express()
 
@@ -39,5 +40,6 @@ app.use('/api/v0/auth', authRouter)
 app.use('/api/v0/users', usersRouter)
 app.use('/api/v0/cryptos', cryptosRouter)
 app.use('/api/v0/coins', coinsRouter)
+app.use('/api/v0/articles', articlesRouter)
 
 module.exports = app

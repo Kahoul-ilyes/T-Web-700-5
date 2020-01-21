@@ -2,7 +2,6 @@ let mongoose = require('mongoose')
 let Schema = mongoose.Schema
 
 let validator = require('validator')
-import { isURL } from 'validator'
 
 let articleSchema = new Schema({
   title: {
@@ -15,7 +14,7 @@ let articleSchema = new Schema({
   url: {
     type: String,
     validate: {
-      validator: isURL,
+      validator: validator.isURL,
       message: 'Please fill a valid URL',
       isAsync: false
     }
@@ -23,7 +22,7 @@ let articleSchema = new Schema({
   image: {
     type: String,
     validate: {
-      validator: isURL,
+      validator: validator.isURL,
       message: 'Please fill a valid URL',
       isAsync: false
     }
