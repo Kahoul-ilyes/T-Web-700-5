@@ -37,11 +37,7 @@ const userSchema = new Schema({
   },
   cryptos: [{ type: Schema.Types.ObjectId, ref: 'Crypto'}],
   keywords: {
-    type: [
-      {
-        word: String
-      }
-    ]
+    type: [String]
   }
 }, {
   collection: 'users',

@@ -8,10 +8,10 @@ let articleSchema = new Schema({
     type: String,
     required: true
   },
-  summary: String,
+  content: String,
   source: String,
   date: Date,
-  url: {
+  link: {
     type: String,
     validate: {
       validator: validator.isURL,

@@ -1,7 +1,22 @@
 let express = require('express')
 let router = express.Router()
-//let Article = require('../../models/article')
-let Parser = require('rss-parser');
+let Article = require('../../models/article')
+let Parser = require('rss-parser')
+let User = require('../../models/user')
+//test feed read module
+// let feed = require('feed-read')
+
+ //Rss adress book management
+    //default adressbook
+ let defaultAdressBook = [
+  // "https://blocknews.fr/feed/",
+  // "https://investing-api-eng.ambcrypto.com/feed/merge_category",
+  "https://cointelegraph.com/rss"
+]
+    //adressbook + user added adresses
+let adressBook= defaultAdressBook
+let userKeywords= []
+
 
 // get user interest keywords, scan rss flux, send back to front concerned articles
 /*GET /articles[?params1=value1&...]
@@ -14,19 +29,19 @@ Here for each article, you must provide at least:
 -> a title
 -> an URL of the article’s page
 -> an URL of its image (if it exists) */
-router.get('/articles', function(req, res) {
+router.get('/:id', function(req, res) {
 // check if logged in
-if (!req.body.isLogged) {
-
-}
+// if (!req.body.isLogged) {
+// }
 
 // if logged in, get user keywords
-  let userKeywords = User.findById(req.params.id, 'keywords', (err, doc) => {
+  userKeywords = User.findById(req.params.id, 'keywords', (err, doc) => {
     if (err) throw err
-    console.log(doc)
+    // console.log(doc)
 
     if (doc) {
-      res.json({keywords: doc.keywords})
+      userKeywords = doc.keywords
+
     } else {
       res.json({err: 'No user found with this id.'})
     }
@@ -35,19 +50,47 @@ if (!req.body.isLogged) {
 // scan rss content
 let parser = new Parser();
 (async () => {
- //ranger adresse
-  let feed = await parser.parseURL('https://cointelegraph.com/rss');
-  //https://blocknews.fr/feed/
-  //https://investing-api-eng.ambcrypto.com/feed/merge_category
-  //https://cointelegraph.com/rss
-  //
-  //
- // console.log(feed.title);
- 
+
+  // scan rss for each adress
+  for (let j = 0; j<adressBook.length; j++){
+  feed = await parser.parseURL(adressBook[j]);
+
+
+//  check if key words exist within RSS content
   feed.items.forEach(item => {
-	console.log(item)
+    console.log(item)
+    // store item in dbb, working but need overall feedback, not only one article
+    Article.create(item, (err, article) => {
+      if (err) throw err
+      else {
+        res.json({article: article, msg: 'Article created successfully.'})
+      }
+      })
+
+      // console.log(userKeywords)
+      // console.log(userKeywords.length)
+      // console.log(item)
+
+
+    // for(var i = 0; i < userKeywords.length; i++) {
+     
+    //   let pick = (item, userKeywords) => {
+    //     console.log(pick)
+    //     return Object.keys(item).reduce((r, e) => {
+    //       if (typeof item[e] == 'object') Object.assign(r, pick(item[e], userKeywords[i]))
+    //       if (e.includes(key)) r[e] = obj[e]
+    //       console.log(r)
+    //     }, {})}
+
+    // if ((new RegExp("\\b" + userKeywords[i] + "\\b", "i").test(item))){
+  
+    //   console.log(item)
+
+      
+    //}
 	//item.title + ':' + item.link
   });
+};
  
 })();
 });
@@ -76,4 +119,22 @@ router.get('/articles/:id', function(req, res, next) {
     }
   })
 });
+
+// delete an article
+router.delete('/:id', (req, res, next) => {
+  if (!req.params.id) res.json({err: 'Please provide an id param.'})
+
+  Article.findOneAndDelete(req.params.id, (err, article) => {
+    if (err) throw err
+
+    if (article) {
+      res.json({_id: req.params.id, msg: 'Article deleted successfully.'})
+    } else {
+      res.json({err: 'No article found with this id.'})
+    }
+  })
+})
+
+
+
 module.exports = router
