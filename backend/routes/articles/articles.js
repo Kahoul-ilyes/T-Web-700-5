@@ -6,18 +6,79 @@ let User = require('../../models/user')
 //test feed read module
 // let feed = require('feed-read')
 
- //Rss adress book management
-    //default adressbook
- let defaultAdressBook = [
-  // "https://blocknews.fr/feed/",
-  // "https://investing-api-eng.ambcrypto.com/feed/merge_category",
+//Rss adress book management
+//default adressbook
+let defaultAdressBook = [
+  "https://blocknews.fr/feed/",
+  "https://investing-api-eng.ambcrypto.com/feed/merge_category",
   "https://cointelegraph.com/rss"
 ]
-    //adressbook + user added adresses
-let adressBook= defaultAdressBook
-let userKeywords= []
+//adressbook + user added adresses
+let adressBook = defaultAdressBook
+// user key words
+let userKeywords = []
+// check if article is already added this time
+let itemAdded = []
+
+// route urss pr mathieu le communiste de droite, get rss feed and store it, aimed for a job
+router.get('/rss/', function (req, res) {
+  let articleAddedCount = 0
+  // scan rss content
+  let parser1 = new Parser();
+  (async () => {
+
+    // scan rss for every adresses
+    for (let j = 0; j < adressBook.length; j++) {
+      feed = await parser1.parseURL(adressBook[j]);
+      feed.items.forEach(item => {
+        //set default image
+        let imageSet = false
+        item.image = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Feed-icon.svg/1200px-Feed-icon.svg.png"
+        //find if article already exists in bdd
+        Article.findOne({
+          link: item.link
+        }, (err, article) => {
+          if (article) {
+            console.log(item.link + " already exists!")
+          } else {
+            // set image field
+            for (const key in item) {
+              if (item.hasOwnProperty(key)) {
+                const value = item[key];
+                if (imageSet === false) {
+                  let regExpImg = RegExp('"(https.*?png|bmp|jpg|gif)"', "gi").exec(value)
+                  if (regExpImg) {
+                    item.image = regExpImg[0]
+                  }
+                  imagetSet = true;
+                }
+              }
+            }
+            //store in dbb
+            Article.create(item, (err, article) => {
+              if (err) throw err
+              else {
+                console.log(item.link + " has been added successfully!")
+                articleAddedCount++
+              }
+            })
+          }
+        })
+
+      })
+    }
+  })()
+  .then(function (result) {
+    console.log(articleAddedCount + ' added successfully!')
+    res.json({
+      msg: articleAddedCount + ' added successfully!'
+    })
+  })
+
+})
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // get user interest keywords, scan rss flux, send back to front concerned articles
 /*GET /articles[?params1=value1&...]
 params: free. User MUST be logged in (OR NOT). If the user is anonymous the settings (if any) are
@@ -29,70 +90,161 @@ Here for each article, you must provide at least:
 -> a title
 -> an URL of the article’s page
 -> an URL of its image (if it exists) */
-router.get('/:id', function(req, res) {
-// check if logged in
-// if (!req.body.isLogged) {
-// }
 
-// if logged in, get user keywords
+router.get('/user/:id', function (req, res) {
+  let articlesToReturn = []
+  let articlesToTest = []
+
+  // if logged in, get user keywords
   userKeywords = User.findById(req.params.id, 'keywords', (err, doc) => {
     if (err) throw err
-    // console.log(doc)
 
     if (doc) {
       userKeywords = doc.keywords
 
     } else {
-      res.json({err: 'No user found with this id.'})
+
+      console.log('No user found with this id, default: no keywords')
+      userKeywords = null
+
+    }  })
+    //check if keywords are null
+    // if keywords, return concerned articles
+    if (userKeywords!== null) {
+      //get every article to test
+      Article.find({}, function (err, result) {
+
+        if (err) throw err;
+        articlesToTest=result;
+      });
+      let keywordIsPresent = false;
+      for (let i = 0; i < userKeywords.length; i++) {
+        for (let l = 0; l < articlesToTest; l++){
+        for (const key in articlesToTest[l]) {
+          if (articlesToTest[l].hasOwnProperty(key) && !keywordIsPresent) {
+            const value = articlesToTest[l][key];
+            if ((new RegExp("(" + userKeywords[i] + ")", "gi").test(value))) {
+              keywordIsPresent = true;
+              articlesToReturn.push(articlesToTest[l])
+            }
+          }
+        }}
+      }
+    }
+    // if keywords null, return every articles
+    else {
+      Article.find({}, function (err, result) {
+
+        if (err) throw err;
+        articlesToReturn=result;
+        res.json({
+          articlesToReturn
+        })
+      });
+
+    }
+
+
+})
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+router.get('/users/:id', function (req, res) {
+  let articlesToReturn = [];
+  // check if logged in
+  // if (!req.body.isLogged) {
+  // }
+
+  // if logged in, get user keywords
+  userKeywords = User.findById(req.params.id, 'keywords', (err, doc) => {
+    if (err) throw err
+
+    if (doc) {
+      userKeywords = doc.keywords
+
+    } else {
+      res.json({
+        err: 'No user found with this id.'
+      })
     }
   })
 
-// scan rss content
-let parser = new Parser();
-(async () => {
+  // scan rss content
+  let parser = new Parser();
+  (async () => {
 
-  // scan rss for each adress
-  for (let j = 0; j<adressBook.length; j++){
-  feed = await parser.parseURL(adressBook[j]);
-
-
-//  check if key words exist within RSS content
-  feed.items.forEach(item => {
-    console.log(item)
-    // store item in dbb, working but need overall feedback, not only one article
-    Article.create(item, (err, article) => {
-      if (err) throw err
-      else {
-        res.json({article: article, msg: 'Article created successfully.'})
-      }
-      })
-
-      // console.log(userKeywords)
-      // console.log(userKeywords.length)
-      // console.log(item)
+    // scan rss for every adresses
+    for (let j = 0; j < adressBook.length; j++) {
+      feed = await parser.parseURL(adressBook[j]);
 
 
-    // for(var i = 0; i < userKeywords.length; i++) {
-     
-    //   let pick = (item, userKeywords) => {
-    //     console.log(pick)
-    //     return Object.keys(item).reduce((r, e) => {
-    //       if (typeof item[e] == 'object') Object.assign(r, pick(item[e], userKeywords[i]))
-    //       if (e.includes(key)) r[e] = obj[e]
-    //       console.log(r)
-    //     }, {})}
 
-    // if ((new RegExp("\\b" + userKeywords[i] + "\\b", "i").test(item))){
-  
-    //   console.log(item)
+      // let itemAdded = []
+      // pour chaque feed.item:
+      //   check si item pas present en base via url (async):
+      //     boucle sur les mots-clefs:
+      //       si (mot clefs present dans titre ou contenu) ET (item[link] pas present dans itemAdded):
+      //         parse item + recuperation premiere image du content + verification des donnees (date, ...)
+      //         store item (async) => retour du callback itemAdded.push(item[link])
 
-      
-    //}
-	//item.title + ':' + item.link
-  });
-};
- 
-})();
+
+
+      //  check if key words exist within RSS content
+      feed.items.forEach(item => {
+        //set default image
+        item.image = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Feed-icon.svg/1200px-Feed-icon.svg.png"
+        //find if article already exists in bdd
+        Article.findOne({
+          link: item.link
+        }, (err, article) => {
+          if (article) {
+            console.log(item.link + " already exists!")
+          } else {
+
+            let alreadyAdded = false;
+            for (let f = 0; f > itemAdded.length; f++) {
+              if (item.link === itemAdded[f]) {
+                alreadyAdded = true;
+                console.log(item.link + " already added!")
+              }
+            }
+            // check for every keywords in every fields
+            let keywordIsPresent = false;
+            for (let i = 0; i < userKeywords.length; i++) {
+              let imageSet = false
+              for (const key in item) {
+                if (item.hasOwnProperty(key) && !keywordIsPresent && !alreadyAdded) {
+                  const value = item[key];
+                  if ((new RegExp("(" + userKeywords[i] + ")", "gi").test(value))) {
+                    keywordIsPresent = true;
+
+                    // set image field
+                    if (imageSet === false) {
+                      let regExpImg = RegExp('(https.*?jpg|bmp|png|gif)', "gi").exec(value)
+                      if (regExpImg) {
+                        item.image = regExpImg[0]
+                      }
+                      imagetSet = true;
+
+                    }
+
+                    //Store article in dbb
+                    Article.create(item, (err, article) => {
+                      if (err) throw err
+                      else {
+                        itemAdded.push(item.link)
+                        console.log(item.link + " has been added successfully!")
+                      }
+                    })
+                  }
+                }
+              }
+            }
+          }
+        })
+      });
+    };
+  })();
 });
 
 
@@ -106,31 +258,45 @@ let parser = new Parser();
 // -> its date
 // -> the URL of the article’s page
 // -> the URL of its image (if it exists)
-router.get('/articles/:id', function(req, res, next) {
-  if (!req.params.id) res.json({err: 'Please provide an id param.'})
+router.get('/:id', function (req, res, next) {
+  if (!req.params.id) res.json({
+    err: 'Please provide an id param.'
+  })
 
-  Article.findById(req.params.id, (err, article) => {
+  Article.findOne({
+    _id: req.params.id
+  }, (err, article) => {
     if (err) throw err
-
     if (article) {
-      res.json({article: article})
+      res.json({
+        article
+      })
     } else {
-      res.json({err: 'No article found with this id.'})
+      res.json({
+        err: 'No article found with this id.'
+      })
     }
   })
-});
+})
 
 // delete an article
 router.delete('/:id', (req, res, next) => {
-  if (!req.params.id) res.json({err: 'Please provide an id param.'})
+  if (!req.params.id) res.json({
+    err: 'Please provide an id param.'
+  })
 
   Article.findOneAndDelete(req.params.id, (err, article) => {
     if (err) throw err
 
     if (article) {
-      res.json({_id: req.params.id, msg: 'Article deleted successfully.'})
+      res.json({
+        _id: req.params.id,
+        msg: 'Article deleted successfully.'
+      })
     } else {
-      res.json({err: 'No article found with this id.'})
+      res.json({
+        err: 'No article found with this id.'
+      })
     }
   })
 })
