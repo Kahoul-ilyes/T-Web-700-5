@@ -1,8 +1,8 @@
 import { Routes, RouterModule } from '@angular/router';
-import {HomeComponent} from './home/home.component';
-import {AuthGuard} from './helpers/auth.guard';
-import {LoginComponent} from './login/login.component';
-import {RegisterComponent} from './register/register.component';
+import {HomeComponent} from './user/home/home.component';
+import {AuthGuard} from './user/helpers/auth.guard';
+import {LoginComponent} from './user/login/login.component';
+import {RegisterComponent} from './user/register/register.component';
 import {CryptoListComponent} from './crypto/cryptolist/crypto-list.component';
 
 

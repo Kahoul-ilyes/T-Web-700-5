@@ -1,12 +1,9 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import {User} from './user/user';
+import {AuthenticationService} from './user/authentication.service';
 
-
-
-import './content/app.css';
-import {User} from './models/user';
-import {AuthenticationService} from './services/authentication.service';
-
+// tslint:disable-next-line:component-selector
 @Component({ selector: 'app', templateUrl: 'app.component.html' })
 export class AppComponent {
   currentUser: User;
@@ -20,6 +17,6 @@ export class AppComponent {
 
   logout() {
     this.authenticationService.logout();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login']).then();
   }
 }

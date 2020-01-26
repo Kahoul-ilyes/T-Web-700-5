@@ -15,8 +15,6 @@ export class UserModel {
   /** Mots clés lié a l'user */
   keywords: string[];
 
-
-
   /**
    * Constructeur complet
    */

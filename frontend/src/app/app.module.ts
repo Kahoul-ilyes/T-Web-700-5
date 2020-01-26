@@ -3,16 +3,16 @@ import { NgModule } from '@angular/core';
 
 import { appRoutingModule } from './app.routing';
 
-import {AlertComponent} from './components/alert.component';
-import {RegisterComponent} from './register/register.component';
-import {HomeComponent} from './home/home.component';
-import {JwtInterceptor} from './helpers/jwt.interceptor';
-import {ErrorInterceptor} from './helpers/error.interceptor';
-import {fakeBackendProvider} from './helpers/fake-backend';
+import {AlertComponent} from './user/alert/alert.component';
+import {RegisterComponent} from './user/register/register.component';
+import {HomeComponent} from './user/home/home.component';
+import {JwtInterceptor} from './user/helpers/jwt.interceptor';
+import {ErrorInterceptor} from './user/helpers/error.interceptor';
+import {fakeBackendProvider} from './user/helpers/fake-backend';
 
 // App Module
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
+import { LoginComponent } from './user/login/login.component';
 import {CryptoModule} from './crypto/crypto.module';
 import {CoreModule} from './core/core.module';
 // Angular Material
@@ -25,6 +25,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { ReactiveFormsModule } from '@angular/forms';
+import {UserModule} from './user/user.module';
 
 
 @NgModule({
@@ -33,6 +34,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     BrowserAnimationsModule,
     CryptoModule,
     CoreModule,
+    UserModule,
     MatButtonModule,
     MatToolbarModule,
     MatToolbarModule,
@@ -42,11 +44,6 @@ import { ReactiveFormsModule } from '@angular/forms';
     appRoutingModule
   ],
   declarations: [
-    AppComponent,
-    HomeComponent,
-    LoginComponent,
-    RegisterComponent,
-    AlertComponent
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

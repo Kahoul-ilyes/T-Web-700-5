@@ -15,6 +15,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatSortModule} from '@angular/material/sort';
 
+/**
+ * Module pour tout ce qui concerne les crypto, affichage des listes de crypto et des stats
+ */
 @NgModule({
   declarations: [CryptoListComponent, CryptoGraphComponent],
   exports: [
