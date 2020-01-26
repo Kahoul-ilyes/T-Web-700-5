@@ -45,12 +45,21 @@ export class CryptoModel {
     this.symbol = symbol;
     this.updatedAt = new Date(updatedAt as string);
     this.website = website;
-    this.currentPrice = currentPrice;
-    this.lowestPrice = lowestPrice;
-    this.openingPrice = openingPrice;
-    this.highestPrice = highestPrice;
+    if (currentPrice !== undefined) {
+      this.currentPrice = currentPrice;
+      this.lowestPrice = lowestPrice;
+      this.openingPrice = openingPrice;
+      this.highestPrice = highestPrice;
+      this.marketCap = marketCap;
+
+    } else {
+      this.currentPrice = 0;
+      this.lowestPrice = 0;
+      this.openingPrice = 0;
+      this.highestPrice = 0;
+      this.marketCap = 0;
+    }
     this.supply = supply;
-    this.marketCap = marketCap;
   }
 
 }

@@ -13,6 +13,7 @@ import { CryptoGraphComponent } from './crypto-graph/crypto-graph.component';
 import {CryptoService} from './shared/crypto.service';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatSortModule} from '@angular/material/sort';
 
 @NgModule({
   declarations: [CryptoListComponent, CryptoGraphComponent],
@@ -27,7 +28,8 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     MatFormFieldModule,
     MatInputModule,
     MatPaginatorModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatSortModule
   ]
 })
 export class CryptoModule {
