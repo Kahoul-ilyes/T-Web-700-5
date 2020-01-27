@@ -1,5 +1,85 @@
 define({ "api": [
   {
+    "type": "post",
+    "url": "/login",
+    "title": "Login an user",
+    "name": "PostLogin",
+    "group": "Authentification",
+    "header": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"email\": \"toto@yopmail.com\",\n  \"password\": \"myawesomepassword\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"user\": {\n    \"_id\": \"567897656zqdjqld\",\n    \"username\": \"Toto\",\n    \"email\": \"toto@yopmail.com\",\n    \"currency\": \"EUR\",\n    \"cryptos\": [],\n    \"keywords\": []\n  },\n  \"Login successful.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/auth/auth.js",
+    "groupTitle": "Authentification",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "BadRequestFormatting",
+            "description": "<p>Bad request formatting, some body params are missing.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "post",
+    "url": "/register",
+    "title": "Register a new user",
+    "name": "PostRegister",
+    "group": "Authentification",
+    "header": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"username\": \"Toto\",\n  \"email\": \"toto@yopmail.com\",\n  \"password\": \"myawesomepassword\",\n  \"password_confirmation\": \"myawesomepassword\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"user\": {\n    \"_id\": \"567897656zqdjqld\",\n    \"username\": \"Toto\",\n    \"email\": \"toto@yopmail.com\",\n    \"currency\": \"EUR\",\n    \"cryptos\": [],\n    \"keywords\": []\n  },\n  \"msg\": \"User registered successfully.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/auth/auth.js",
+    "groupTitle": "Authentification",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "BadRequestFormatting",
+            "description": "<p>Bad request formatting, some body params are missing.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "get",
     "url": "/coins/",
     "title": "Get the available coin list and update database",
@@ -152,7 +232,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/cryptos/",
+    "url": "/cryptos(?cryptos=BTC,ETH)(?ids=ObjectID1,ObjectID2,ObjectID3)",
     "title": "Request all cryptos",
     "name": "GetCryptos",
     "group": "Crypto",

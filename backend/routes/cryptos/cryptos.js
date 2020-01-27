@@ -77,7 +77,7 @@ router.get('/subscribe', (req, res, next) => {
 })
 
 /**
- * @api {get} /cryptos/ Request all cryptos
+ * @api {get} /cryptos(?cryptos=BTC,ETH)(?ids=ObjectID1,ObjectID2,ObjectID3) Request all cryptos
  * @apiName GetCryptos
  * @apiGroup Crypto
  *
@@ -115,7 +115,26 @@ router.get('/subscribe', (req, res, next) => {
  *     }
  */
 router.get('/', (req, res, next) => {
-  Crypto.find({}).exec((err, cryptos) => {
+
+  let query = {}
+  let cryptosToRetrieve = []
+  if (req.query.cryptos) {
+    cryptosToRetrieve = req.query.cryptos.split(',')
+  } else if (req.query.ids) {
+    cryptosToRetrieve = req.query.ids.split(',')
+  }
+
+  if (cryptosToRetrieve.length > 0) {
+    if (Array.isArray(cryptosToRetrieve)) {
+      if (req.query.cryptos) {
+        query = {symbol: { $in: cryptosToRetrieve }}
+      } else if (req.query.ids) {
+        query = {_id: { $in: cryptosToRetrieve }}
+      }
+    }
+  }
+
+  Crypto.find(query).collation( { locale: 'fr', strength: 1 } ).exec((err, cryptos) => {
     if (err) throw err
 
     if (cryptos) res.send({ cryptos: cryptos})
