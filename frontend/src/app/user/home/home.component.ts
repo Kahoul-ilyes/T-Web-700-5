@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
-import {User} from '../user';
+import {UserModel} from '../user.model';
 import {AuthenticationService} from '../authentication.service';
 import {UserService} from '../user.service';
 
@@ -8,7 +8,7 @@ import {UserService} from '../user.service';
 
 @Component({ templateUrl: 'home.component.html' })
 export class HomeComponent implements OnInit {
-  currentUser: User;
+  currentUser: UserModel;
   users = [];
 
   constructor(
