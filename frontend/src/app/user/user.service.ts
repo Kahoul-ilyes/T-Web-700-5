@@ -8,7 +8,7 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) { }
 
-  URL = 'localhost:3000/';
+  URL = 'localhost:4000/';
 
   getAll() {
     return this.httpClient.get<User[]>(`${config.apiUrl}/users`);

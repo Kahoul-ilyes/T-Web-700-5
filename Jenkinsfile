@@ -3,38 +3,38 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
+        stage('Environment') {
             steps {
-                echo '[Checkout]...'
+                echo '[Environment]...'
                 sh 'printenv'
-                echo '...[Checkout]'
+                echo '...[Environment]'
             }
         }
         stage('Build') {
             steps {
                 script {
-                    if (env.JOB_BASE_NAME == 't-web') {
+                    if (env.BRANCH_NAME == 'master') {
                         echo '[Building PROD]...'
-                        sh "docker-compose -p ${JOB_BASE_NAME} -f docker-compose-prod.yml build"
+                        sh "docker-compose -f docker-compose-prod.yml build"
                     } else {
-                        echo '[Building DEV]...'
+                        echo "[Building ${JOB_BASE_NAME}]..."
                         sh "docker-compose -p ${JOB_BASE_NAME} build"
                     }
-                    echo '...[Building]'
+                    echo "...[Building ${JOB_BASE_NAME}]"
                 }
             }
         }
         stage('Deploy') {
             steps {
                 script {
-                    if (env.JOB_BASE_NAME == 't-web') {
+                    if (env.BRANCH_NAME == 'master') {
                         echo '[Deploying PROD]...'
-                        sh "docker-compose -p ${JOB_BASE_NAME} -f docker-compose-prod.yml up -d"
-                    } else {
+                        sh "docker-compose -f docker-compose-prod.yml up -d"
+                    } else if (env.BRANCH_NAME == 'develop') {
                         echo '[Deploying DEV]...'
                         sh "docker-compose -p ${JOB_BASE_NAME} up -d"
                     }
-                    echo '...[Building]'
+                    echo '...[Deploying]'
                 }
             }
         }
