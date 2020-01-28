@@ -59,18 +59,14 @@ const checkJwt = jwt({
   algorithm: ["RS256"]
 });
 
-// Define an endpoint that must be called with an access token
-app.get("/api/v0/external", checkJwt, (req, res) => {
-  res.send({
-    msg: "Your Access Token was successfully validated!"
-  });
-});
+// middleware for checking jwt
+// app.use(checkJwt)
 
-app.use('/', checkJwt, indexRouter)
-app.use('/api/v0/auth', checkJwt, authRouter)
-app.use('/api/v0/users', checkJwt, usersRouter)
-app.use('/api/v0/cryptos', checkJwt, cryptosRouter)
-app.use('/api/v0/coins', checkJwt, coinsRouter)
-app.use('/api/v0/articles', checkJwt, articlesRouter)
+app.use('/', indexRouter)
+app.use('/api/v0/auth', authRouter)
+app.use('/api/v0/users', usersRouter)
+app.use('/api/v0/cryptos', cryptosRouter)
+app.use('/api/v0/coins', coinsRouter)
+app.use('/api/v0/articles', articlesRouter)
 
 module.exports = app
