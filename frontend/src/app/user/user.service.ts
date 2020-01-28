@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {User} from './user';
 
 
 @Injectable({ providedIn: 'root' })
@@ -9,18 +8,6 @@ export class UserService {
   constructor(private httpClient: HttpClient) { }
 
   URL = 'localhost:4000/';
-
-  getAll() {
-    return this.httpClient.get<User[]>(`${config.apiUrl}/users`);
-  }
-
-  register(user: User) {
-    return this.httpClient.post(`${config.apiUrl}/users/register`, user);
-  }
-
-  delete(id: number) {
-    return this.httpClient.delete(`${config.apiUrl}/users/${id}`);
-  }
 
   /**
    * Request all users
