@@ -15,7 +15,7 @@ pipeline {
                 script {
                     if (env.BRANCH_NAME == 'master') {
                         echo '[Building PROD]...'
-                        sh "docker-compose -p production -f docker-compose-prod.yml build"
+                        sh "docker-compose -f docker-compose-prod.yml build"
                     } else {
                         echo "[Building ${JOB_BASE_NAME}]..."
                         sh "docker-compose -p ${JOB_BASE_NAME} build"
@@ -29,7 +29,7 @@ pipeline {
                 script {
                     if (env.BRANCH_NAME == 'master') {
                         echo '[Deploying PROD]...'
-                        sh "docker-compose -p production -f docker-compose-prod.yml up -d"
+                        sh "docker-compose -f docker-compose-prod.yml up -d"
                     } else if (env.BRANCH_NAME == 'develop') {
                         echo '[Deploying DEV]...'
                         sh "docker-compose -p ${JOB_BASE_NAME} up -d"
