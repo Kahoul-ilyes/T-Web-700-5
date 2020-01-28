@@ -5,6 +5,9 @@ import {CryptoModel} from '../shared/crypto.model';
 import {CryptoService} from '../shared/crypto.service';
 import {Target} from '@angular/compiler';
 import {MatSort, MatSortable, Sort} from '@angular/material/sort';
+import {MatIconRegistry} from '@angular/material/icon';
+import {DomSanitizer} from '@angular/platform-browser';
+import {timer} from 'rxjs';
 
 
 @Component({
@@ -16,11 +19,10 @@ export class CryptoListComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-
+  cryptoOnPage: CryptoModel[];
   cryptoSymbolDisplayed = '';
-
+  displayedColumns: string[];
   /** Colonnes affichées */
-  displayedColumns: string[] = ['acronym', 'name', 'logo' , 'value', 'evolution'];
 
   /** Values du bouton de
    * @var color sa couleur
@@ -29,32 +31,40 @@ export class CryptoListComponent implements OnInit {
   color = 'primary';
   checked = true;
   /** Liste Affichée une fois filtré */
-  cryptoListDisplayed: CryptoModel[];
+  cryptoListSort: CryptoModel[];
   /** Liste complète */
   cryptoListFull: CryptoModel[];
   /** Systeme d'affichage d'angular mat */
-  dataSource = new MatTableDataSource(this.cryptoListDisplayed);
+  dataSource = new MatTableDataSource(this.cryptoListSort);
 
   /** permet d'acceder aux cryptos displayed */
   pageEvent: PageEvent;
 
 
+
   ngOnInit() {
+    if (false) {
+      this.displayedColumns = ['acronym', 'name', 'logo', 'value', 'capitalization', 'evolution', 'favorite'];
+    } else {
+      this.displayedColumns = ['acronym', 'name', 'logo', 'value', 'capitalization', 'evolution', 'favorite'];
+    }
+
     this.dataSource.paginator = this.paginator;
-    this.cryptoListDisplayed = new Array<CryptoModel>();
+    this.cryptoListSort = new Array<CryptoModel>();
     this.cryptoListFull = new Array<CryptoModel>();
 
-    this.cryptoService.getAllCryptos().subscribe( data => {
+    this.cryptoService.getAllCryptos().subscribe(data => {
       // @ts-ignore cryptos n'est pas trouvé sinon
       for (const d of (data.cryptos)) {
-        this.cryptoListFull.push(new CryptoModel(d.isTradable, d._id, d.name,
+        this.cryptoListFull.push( new CryptoModel(d.isTradable, d._id, this.cryptoListFull.length, d.name,
           d.__v, d.createdAt, d.dateAvailability, d.logo, d.symbol, d.updatedAt, d.website,
           d.currentPrice, d.lowestPrice, d.openingPrice, d.highestPrice, d.supply, d.marketCap));
       }
+
       this.initDataSource();
 
     });
-    }
+  }
 
   /**
    * Initialise la liste pour diffuser les cryptos dans le bon ordre
@@ -62,34 +72,62 @@ export class CryptoListComponent implements OnInit {
   initDataSource() {
     this.filterList();
     this.sortList();
-    this.dataSource = new MatTableDataSource(this.cryptoListDisplayed);
+    this.dataSource = new MatTableDataSource(this.cryptoListSort);
     this.dataSource.paginator = this.paginator;
     this.paginator._changePageSize(25);
+    this.onPageChange(null) ;
+
+    this.cryptoListSort.forEach((crypto, index) => crypto.idTab = index);
+
+    // tslint:disable-next-line:no-shadowed-variable
+    const timer = setInterval(() => this.refreshTable(), 2000);
   }
 
   // ######### Système de filtre ##############
 
-  /** Call a chaque clic sur le bouton 'Trading only' */
+  /**
+   * Update toutes les 2 sec des datas affichées
+   */
   refreshTable(): void {
-    /*this.cryptoSymbolDisplayed ='';
-    this.dataSource._pageData(this.dataSource.data).forEach(a => this.cryptoSymbolDisplayed += a.symbol + ',');
-  */
+    this.cryptoOnPage = this.dataSource._pageData(this.dataSource.data);
+    const cryptoTab = new Array<string>();
+    const cryptoRef = new Array<string>();
+
+    console.log('cryptoOnPage' , this.cryptoOnPage);
+    this.cryptoOnPage.forEach((crypto, index) => cryptoTab[index] = crypto.symbol);
+    this.cryptoOnPage.forEach((crypto) => cryptoRef[crypto.symbol] = crypto.idTab);
+    this.cryptoService.getCryptosBySymbol(cryptoTab).subscribe(data => {
+      // @ts-ignore cryptos n'est pas trouvé sinon
+      for (const d of (data.cryptos)) {
+        this.cryptoListSort[cryptoRef[d.symbol]] = new CryptoModel(d.isTradable, d._id, cryptoRef[d.symbol], d.name,
+          d.__v, d.createdAt, d.dateAvailability, d.logo, d.symbol, d.updatedAt, d.website,
+          d.currentPrice, d.lowestPrice, d.openingPrice, d.highestPrice, d.supply, d.marketCap);
+        this.dataSource.data = this.cryptoListSort;
+      }
+    });
+
+
+
+  }
+
+  getDataSource() {
+    return this.dataSource;
   }
 
 
   /** Applique des filtres sur la liste à afficher */
   filterList() {
-   // this.cryptoListDisplayed = this.cryptoListFull.filter((a, b) => a.currentPrice !== 0);
-     this.cryptoListDisplayed = this.cryptoListFull;
+    // this.cryptoListDisplayed = this.cryptoListFull.filter((a, b) => a.currentPrice !== 0);
+    this.cryptoListSort = this.cryptoListFull;
   }
 
   /** Tri de base, par capitalisation (prix* quantité) */
   sortList() {
-    console.log('list not sorted' , this.cryptoListDisplayed);
-    this.cryptoListDisplayed = this.cryptoListDisplayed.sort((a, b) =>
+    console.log('list not sorted', this.cryptoListSort);
+    this.cryptoListSort = this.cryptoListSort.sort((a, b) =>
       b.currentPrice * b.marketCap - a.currentPrice * a.marketCap
     );
-    console.log('list sorted' , this.cryptoListDisplayed);
+    console.log('list sorted', this.cryptoListSort);
   }
 
   /** filtre les cryptos selon leur valeurs */
@@ -104,26 +142,35 @@ export class CryptoListComponent implements OnInit {
     // @ts-ignore
     this.dataSource.filter = target.value.trim().toLowerCase();
     this.cryptoSymbolDisplayed = '';
-    this.dataSource.filteredData.slice(0, 24).forEach(a => {if (a.symbol.length <= 8) {  this.cryptoSymbolDisplayed += a.symbol + ','; }});
-    this.cryptoService.subscribeCryptosTicker( this.cryptoSymbolDisplayed).subscribe( data2 => {
+    this.dataSource.filteredData.slice(0, 24).forEach(a => {
+      if (a.symbol.length <= 8) {
+        this.cryptoSymbolDisplayed += a.symbol + ',';
+      }
+    });
+    this.cryptoService.subscribeCryptosTicker(this.cryptoSymbolDisplayed).subscribe(data2 => {
     });
   }
+
   /**
    * Fonction appelé a chaque changement de pages
    */
   onPageChange($event: PageEvent) {
     this.cryptoSymbolDisplayed = '';
     this.dataSource._pageData(this.dataSource.data).forEach(a => this.cryptoSymbolDisplayed += a.symbol + ',');
-    this.cryptoService.subscribeCryptosTicker( this.cryptoSymbolDisplayed).subscribe( data2 => {
+    this.cryptoService.subscribeCryptosTicker(this.cryptoSymbolDisplayed).subscribe(data2 => {
     });
   }
 
-
-
-
-  constructor(private cryptoService: CryptoService) {
+  cryptoRefresher() {
   }
 
+
+  constructor(private cryptoService: CryptoService, iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+
+    iconRegistry.addSvgIcon(
+      'thumbs-up',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/img/examples/thumbup-icon.svg'));
+  }
 }
 
 

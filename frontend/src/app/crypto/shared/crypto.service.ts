@@ -63,16 +63,25 @@ export class CryptoService {
 
   /**
    * Récupération de toute les cryptos
-   * @param idCrypto id de la crypto a get
    */
   public getAllCryptos() {
     return this.httpClient.get<any[]>(this.URL + '/api/v0/cryptos/');
   }
 
   /**
+   * Récupération des cryptos dont l'id est fourni
+   * @param idCrypto id de la crypto a get
+   */
+  public getCryptosBySymbol(tabCryptos: string[]) {
+    let cryptosRequest = '';
+    tabCryptos.forEach((symbol) => cryptosRequest += symbol + ',');
+    return this.httpClient.get<any[]>(this.URL + '/api/v0/cryptos?cryptos=' + cryptosRequest);
+  }
+
+  /**
    * Ajoute les cryptos au systeme de subscribe pour avoir les données en temps réels
    */
-  public subscribeCryptosTicker(cryptoSuscribed : string) {
+  public subscribeCryptosTicker(cryptoSuscribed: string) {
     return this.httpClient.get<any[]>(this.URL + '/api/v0/cryptos/subscribe?cryptos=' + cryptoSuscribed);
   }
 

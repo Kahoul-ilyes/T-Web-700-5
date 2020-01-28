@@ -14,6 +14,7 @@ import {CryptoService} from './shared/crypto.service';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatSortModule} from '@angular/material/sort';
+import {MatIconModule} from '@angular/material/icon';
 
 /**
  * Module pour tout ce qui concerne les crypto, affichage des listes de crypto et des stats
@@ -24,16 +25,17 @@ import {MatSortModule} from '@angular/material/sort';
     CryptoListComponent,
     HttpClientModule
   ],
-  imports: [
-    CommonModule,
-    MatSliderModule,
-    MatTableModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatPaginatorModule,
-    MatSlideToggleModule,
-    MatSortModule
-  ]
+    imports: [
+        CommonModule,
+        MatSliderModule,
+        MatTableModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatPaginatorModule,
+        MatSlideToggleModule,
+        MatSortModule,
+        MatIconModule
+    ]
 })
 export class CryptoModule {
 

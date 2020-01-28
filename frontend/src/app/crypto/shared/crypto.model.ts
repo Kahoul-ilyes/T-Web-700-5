@@ -2,6 +2,8 @@
 export class CryptoModel {
   isTradable: boolean;
   id: string;
+  idTab: number;
+
   name: string;
   v: number;
   createdAt: string;
@@ -23,6 +25,8 @@ export class CryptoModel {
   marketCap: number;
 
 
+
+
   getChangesValue() {
     return ((this.currentPrice - this.openingPrice) / this.openingPrice) ;
   }
@@ -32,11 +36,11 @@ export class CryptoModel {
     return (this.currentPrice - this.openingPrice) >= 0;
   }
 
-
   // tslint:disable-next-line:max-line-length
-  constructor(isTradable , id, name , v, createdAt , dateAvailability, logo, symbol, updatedAt, website, currentPrice, lowestPrice, openingPrice, highestPrice, supply, marketCap) {
+  constructor(isTradable , id, idTab,  name , v, createdAt , dateAvailability, logo, symbol, updatedAt, website, currentPrice, lowestPrice, openingPrice, highestPrice, supply, marketCap) {
     this.isTradable = isTradable;
     this.id = id;
+    this.idTab = idTab;
     this.name = name;
     this.v = v;
     this.createdAt = createdAt;
