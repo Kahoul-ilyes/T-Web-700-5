@@ -3,5 +3,5 @@
   <span routerLink="/">Crypto Infos</span>
   <span class="example-spacer"></span>
   <button routerLink="/register" mat-button color="secondary">Register</button>
-  <button routerLink="/login" mat-button color="primary">Login</button>
+  <button (click)="auth.login()" *ngIf="!auth.loggedIn"mat-button color="primary">Login</button>
 </mat-toolbar>
