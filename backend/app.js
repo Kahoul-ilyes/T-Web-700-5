@@ -1,13 +1,15 @@
-let express = require('express')
-let path = require('path')
-let cookieParser = require('cookie-parser')
-let logger = require('morgan')
+const express = require('express')
+const path = require('path')
+const cookieParser = require('cookie-parser')
+const logger = require('morgan')
+const jwt = require("express-jwt");
+const jwksRsa = require("jwks-rsa");
 
 
-let mongoose = require('mongoose')
+const mongoose = require('mongoose')
 mongoose.connect('mongodb://127.0.0.1/cryptocodex', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
 
-let db = mongoose.connection
+const db = mongoose.connection
 db.on('error', console.error.bind(console, 'Bdd connection error:'))
 db.once('open', () => {
   console.log('Bdd connected !')
@@ -36,11 +38,39 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use('/', indexRouter)
-app.use('/api/v0/auth', authRouter)
-app.use('/api/v0/users', usersRouter)
-app.use('/api/v0/cryptos', cryptosRouter)
-app.use('/api/v0/coins', coinsRouter)
-app.use('/api/v0/articles', articlesRouter)
+// Set up Auth0 configuration
+const authConfig = {
+  domain: "dev-m6frxp9u.eu.auth0.com",
+  audience: "https://dev-m6frxp9u.eu.auth0.com/api/v2/"
+};
+
+// Define middleware that validates incoming bearer tokens
+// using JWKS from dev-m6frxp9u.eu.auth0.com
+const checkJwt = jwt({
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: `https://${authConfig.domain}/.well-known/jwks.json`
+  }),
+
+  audience: authConfig.audience,
+  issuer: `https://${authConfig.domain}/`,
+  algorithm: ["RS256"]
+});
+
+// Define an endpoint that must be called with an access token
+app.get("/api/v0/external", checkJwt, (req, res) => {
+  res.send({
+    msg: "Your Access Token was successfully validated!"
+  });
+});
+
+app.use('/', checkJwt, indexRouter)
+app.use('/api/v0/auth', checkJwt, authRouter)
+app.use('/api/v0/users', checkJwt, usersRouter)
+app.use('/api/v0/cryptos', checkJwt, cryptosRouter)
+app.use('/api/v0/coins', checkJwt, coinsRouter)
+app.use('/api/v0/articles', checkJwt, articlesRouter)
 
 module.exports = app
