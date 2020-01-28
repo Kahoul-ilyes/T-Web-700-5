@@ -4,7 +4,7 @@ services:
     build: ./backend
     restart: always
     ports:
-      - "4200:3000"
+      - "4000:3000"
     links:
       - mongo
 
@@ -12,7 +12,7 @@ services:
     build: ./frontend
     restart: always
     ports:
-      - "4000:80"
+      - "4200:80"
 
   mongo:
     image: mongo
