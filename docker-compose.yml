@@ -1,4 +1,4 @@
-version: '3'
+version: '3.6'
 services:
   backend:
     build: ./backend
@@ -16,5 +16,10 @@ services:
 
   mongo:
     image: mongo
-    ports:
-      - "27017:27017"
+    volumes:
+      - db_data:/data/db
+    expose:
+      - "27017"
+
+volumes:
+  db_data:
