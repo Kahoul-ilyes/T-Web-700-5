@@ -67,6 +67,7 @@ router.get('/rss/', function (req, res) {
 
       })
     }
+
   })()
   .then(function (result) {
     console.log(articleAddedCount + ' added successfully!')
@@ -79,7 +80,7 @@ router.get('/rss/', function (req, res) {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// get user interest keywords, scan rss flux, send back to front concerned articles
+// get user interest keywords, scan rss flux, send back to front concerned articles or every article if no keywords
 /*GET /articles[?params1=value1&...]
 params: free. User MUST be logged in (OR NOT). If the user is anonymous the settings (if any) are
 ignored and the last published articles are returned. If the user is logged in the settings are used to
@@ -92,60 +93,55 @@ Here for each article, you must provide at least:
 -> an URL of its image (if it exists) */
 
 router.get('/user/:id', function (req, res) {
-  let articlesToReturn = []
-  let articlesToTest = []
 
-  // if logged in, get user keywords
-  userKeywords = User.findById(req.params.id, 'keywords', (err, doc) => {
+  User.findById(req.params.id, 'keywords', async (err, user) => {
     if (err) throw err
-
-    if (doc) {
-      userKeywords = doc.keywords
+    console.log(user)
+    if (user && user.keywords) {
+      console.log("user found with this id and has keywords")
+      res.json({articles: await returnArticles(user.keywords)})
 
     } else {
 
       console.log('No user found with this id, default: no keywords')
-      userKeywords = null
-
-    }  })
-    //check if keywords are null
-    // if keywords, return concerned articles
-    if (userKeywords!== null) {
-      //get every article to test
       Article.find({}, function (err, result) {
-
         if (err) throw err;
-        articlesToTest=result;
+        // console.log ("RESULT" + result)
+        res.json({articles: result})
       });
+    }
+  })
+})
+
+
+  async function returnArticles(userKeywords) {
+    let articlesToTest=[]
+    let articlesToReturn=[]
+      //get every article to test
+      Article.find({}, async (err, result) => {
+        console.log("finding articles...")
+        if (err) throw err;
+        articlesToTest = result;
+      })
+      console.log(articlesToTest)
       let keywordIsPresent = false;
       for (let i = 0; i < userKeywords.length; i++) {
-        for (let l = 0; l < articlesToTest; l++){
-        for (const key in articlesToTest[l]) {
-          if (articlesToTest[l].hasOwnProperty(key) && !keywordIsPresent) {
-            const value = articlesToTest[l][key];
-            if ((new RegExp("(" + userKeywords[i] + ")", "gi").test(value))) {
-              keywordIsPresent = true;
-              articlesToReturn.push(articlesToTest[l])
+        for (let l = 0; l < articlesToTest.length; l++) {
+          for (const key in articlesToTest[l]) {
+            if (articlesToTest[l].hasOwnProperty(key) && !keywordIsPresent) {
+              const value = articlesToTest[l][key];
+              if ((new RegExp("(" + userKeywords[i] + ")", "gi").test(value))) {
+                keywordIsPresent = true;
+                console.log("test test test"+articlesToTest[l])
+                articlesToReturn.push(articlesToTest[l])
+              }
             }
           }
-        }}
+        }
       }
-    }
-    // if keywords null, return every articles
-    else {
-      Article.find({}, function (err, result) {
+      // return articlesToReturn
+  }
 
-        if (err) throw err;
-        articlesToReturn=result;
-        res.json({
-          articlesToReturn
-        })
-      });
-
-    }
-
-
-})
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -176,17 +172,6 @@ router.get('/users/:id', function (req, res) {
     // scan rss for every adresses
     for (let j = 0; j < adressBook.length; j++) {
       feed = await parser.parseURL(adressBook[j]);
-
-
-
-      // let itemAdded = []
-      // pour chaque feed.item:
-      //   check si item pas present en base via url (async):
-      //     boucle sur les mots-clefs:
-      //       si (mot clefs present dans titre ou contenu) ET (item[link] pas present dans itemAdded):
-      //         parse item + recuperation premiere image du content + verification des donnees (date, ...)
-      //         store item (async) => retour du callback itemAdded.push(item[link])
-
 
 
       //  check if key words exist within RSS content
