@@ -4,11 +4,17 @@ services:
     build: ./backend
     restart: always
     ports:
-      - "${SERVER_PORT:-4000}:4000"
+      - "4200:3000"
+    links:
+      - mongo
 
   frontend:
     build: ./frontend
-    image: t-web-frontend
     restart: always
     ports:
-      - "${FRONT_PORT:-4200}:80"
+      - "4000:80"
+
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"

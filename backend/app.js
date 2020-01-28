@@ -3,15 +3,15 @@ let path = require('path')
 let cookieParser = require('cookie-parser')
 let logger = require('morgan')
 
-let mongoose = require('mongoose')
-mongoose.connect('mongodb://127.0.0.1/cryptocodex', {useNewUrlParser: true, useUnifiedTopology: true})
-
-let db = mongoose.connection
-db.on('error', console.error.bind(console, 'Bdd connection error:'))
-db.once('open', () => {
-  console.log('Bdd connected !')
-  // we're connected!
-});
+const mongoose = require('mongoose')
+// connect to Mongo daemon
+mongoose
+    .connect(
+        'mongodb://mongo:27017/express-mongo',
+        { useNewUrlParser: true }
+    )
+    .then(() => console.log('MongoDB Connected'))
+    .catch(err => console.log(err));
 
 let indexRouter = require('./routes/index')
 let authRouter = require('./routes/auth/auth')
