@@ -50,10 +50,13 @@
     <td mat-cell  class="" *matCellDef="let element" > <span [class]="element.isChangesPositive()? 'green' : 'red'"> {{element.getChangesValue() | number: '1.2' }} % </span>  </td>
   </ng-container>
 
-  <ng-container matColumnDef="favorite">
+  <ng-container  matColumnDef="favorite">
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell  class="" *matCellDef="let element" >
-      <i class="material-icons">favorite_border</i>
+      <div  *ngIf="auth.loggedIn">
+      <i *ngIf="userService.user.containsCrypto(element.symbol)" (click)="userService.user.removeCrypto(element.symbol)" class="material-icons">favorite</i>
+      <i *ngIf="!userService.user.containsCrypto(element.symbol)" (click)="userService.user.addCrypto(element.symbol)" class="material-icons">favorite_border</i>
+      </div>
     </td>
   </ng-container>
 
@@ -67,8 +70,6 @@
 <mat-paginator
   [pageSizeOptions]="[25, 5, 10, 100]"
   (page)="onPageChange($event)"></mat-paginator>
-<i class="material-icons">face</i>
-<i class="material-icons">&#xE87C;</i>
 
 
 

@@ -16,7 +16,7 @@ export class CryptoService {
     })
   };
   /** Main URL, a changer à la fin des test */
-  URL = 'http://localhost:4000';
+  URL = 'http://localhost:3000';
   // URL = 'http://35.214.83.191:4000';
   /** url du site de crypto, a delete après les test */
   url = 'https://min-api.cryptocompare.com/data/blockchain/histo/day?fsym=BTC&api_key=';

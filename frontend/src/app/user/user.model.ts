@@ -1,6 +1,8 @@
 /**
  * Classe qui mappe la structure des données recues de l'api
  */
+import {Observable} from 'rxjs';
+
 export class UserModel {
   /** id unique de l'user ( fourni back) */
   id: string;
@@ -11,10 +13,9 @@ export class UserModel {
   /** Currency principale de l'user */
   currency: string;
   /** Cryptos liées à l'user  */
-  cryptos: string[];
+  cryptos: Array<string>;
   /** Mots clés lié a l'user */
-  keywords: string[];
-
+  keywords: Array<string>;
   /**
    * Constructeur complet
    */
@@ -27,12 +28,38 @@ export class UserModel {
     this.keywords = keywords;
   }
 /** Renvois true si keywords n'estp as vide */
-  hasKeyWords(): boolean {
+publichasKeyWords(): boolean {
     return this.keywords.length !== 0;
   }
 
   /** Renvois true si cryptos n'est pas vide */
-  hasCryptos(): boolean {
+  public hasCryptos(): boolean {
     return this.cryptos.length !== 0;
   }
+
+ public addCrypto(symbol: string) {
+    this.cryptos.push(symbol);
+  }
+
+  public addKeyword(keyword: string) {
+    this.cryptos.push(keyword);
+  }
+
+  public removeCrypto(symbol: string) {
+    this.cryptos.splice(this.cryptos.lastIndexOf(symbol), 1);
+  }
+
+  public removeKeyword(keyword: string) {
+    this.cryptos.splice(this.keywords.lastIndexOf(keyword), 1);
+  }
+
+
+  public containsCrypto(symbol: string): boolean {
+    return this.cryptos.includes(symbol);
+  }
+
+  public(keyword: string): boolean {
+    return this.keywords.includes(keyword);
+  }
+
 }

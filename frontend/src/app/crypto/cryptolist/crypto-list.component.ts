@@ -8,6 +8,8 @@ import {MatSort, MatSortable, Sort} from '@angular/material/sort';
 import {MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
 import {timer} from 'rxjs';
+import {AuthService} from '../../auth.service';
+import {UserService} from '../../user/user.service';
 
 
 @Component({
@@ -41,13 +43,11 @@ export class CryptoListComponent implements OnInit {
   pageEvent: PageEvent;
 
 
-
   ngOnInit() {
-    if (false) {
-      this.displayedColumns = ['acronym', 'name', 'logo', 'value', 'capitalization', 'evolution', 'favorite'];
-    } else {
-      this.displayedColumns = ['acronym', 'name', 'logo', 'value', 'capitalization', 'evolution', 'favorite'];
-    }
+
+    this.displayedColumns = ['acronym', 'name', 'logo', 'value', 'capitalization', 'evolution', 'favorite'];
+
+
 
     this.dataSource.paginator = this.paginator;
     this.cryptoListSort = new Array<CryptoModel>();
@@ -60,11 +60,11 @@ export class CryptoListComponent implements OnInit {
           d.__v, d.createdAt, d.dateAvailability, d.logo, d.symbol, d.updatedAt, d.website,
           d.currentPrice, d.lowestPrice, d.openingPrice, d.highestPrice, d.supply, d.marketCap));
       }
-
       this.initDataSource();
-
     });
   }
+
+
 
   /**
    * Initialise la liste pour diffuser les cryptos dans le bon ordre
@@ -76,6 +76,8 @@ export class CryptoListComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
     this.paginator._changePageSize(25);
     this.onPageChange(null) ;
+
+
 
     this.cryptoListSort.forEach((crypto, index) => crypto.idTab = index);
 
@@ -93,7 +95,6 @@ export class CryptoListComponent implements OnInit {
     const cryptoTab = new Array<string>();
     const cryptoRef = new Array<string>();
 
-    console.log('cryptoOnPage' , this.cryptoOnPage);
     this.cryptoOnPage.forEach((crypto, index) => cryptoTab[index] = crypto.symbol);
     this.cryptoOnPage.forEach((crypto) => cryptoRef[crypto.symbol] = crypto.idTab);
     this.cryptoService.getCryptosBySymbol(cryptoTab).subscribe(data => {
@@ -105,15 +106,7 @@ export class CryptoListComponent implements OnInit {
         this.dataSource.data = this.cryptoListSort;
       }
     });
-
-
-
   }
-
-  getDataSource() {
-    return this.dataSource;
-  }
-
 
   /** Applique des filtres sur la liste à afficher */
   filterList() {
@@ -123,11 +116,9 @@ export class CryptoListComponent implements OnInit {
 
   /** Tri de base, par capitalisation (prix* quantité) */
   sortList() {
-    console.log('list not sorted', this.cryptoListSort);
     this.cryptoListSort = this.cryptoListSort.sort((a, b) =>
       b.currentPrice * b.marketCap - a.currentPrice * a.marketCap
     );
-    console.log('list sorted', this.cryptoListSort);
   }
 
   /** filtre les cryptos selon leur valeurs */
@@ -161,11 +152,8 @@ export class CryptoListComponent implements OnInit {
     });
   }
 
-  cryptoRefresher() {
-  }
-
-
-  constructor(private cryptoService: CryptoService, iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+  constructor(private cryptoService: CryptoService, iconRegistry: MatIconRegistry, sanitizer: DomSanitizer
+    ,         public auth: AuthService, public userService: UserService) {
 
     iconRegistry.addSvgIcon(
       'thumbs-up',

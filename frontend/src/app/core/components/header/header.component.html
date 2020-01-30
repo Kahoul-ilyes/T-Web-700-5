@@ -2,6 +2,7 @@
 <mat-toolbar>
   <span routerLink="/">Crypto Infos</span>
   <span class="example-spacer"></span>
-  <button routerLink="/register" mat-button color="secondary">Register</button>
-  <button (click)="auth.login()" *ngIf="!auth.loggedIn"mat-button color="primary">Login</button>
+  <button (click)="auth.login()" *ngIf="!auth.loggedIn" mat-button color="primary">Login</button>
+  <button (click)="auth.logout()" *ngIf="auth.loggedIn" mat-button color="primary">Logout</button>
+
 </mat-toolbar>
