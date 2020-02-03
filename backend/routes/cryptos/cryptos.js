@@ -96,7 +96,9 @@ router.get('/subscribe', (req, res, next) => {
  *           "supply": 18000000,
  *           "marketCap": 37800450789,
  *           "logo": "https://bitcoin.org/img/icons/logotop.svg?1577873163",
- *           "website": "https://bitcoin.org/fr/"
+ *           "website": "https://bitcoin.org/fr/",
+ *           "isTradable": true,
+ *           "isAvailable": true
  *         },
  *         {
  *           "_id": "5193bqzdiu68dbq",
@@ -109,7 +111,9 @@ router.get('/subscribe', (req, res, next) => {
  *           "supply": 98000000,
  *           "marketCap": 245679900,
  *           "logo": "https://www.ethereum-france.com/wp-content/uploads/2019/11/ETHEREUM-ICON_RGB-v3-xsmall.png",
- *           "website": "https://ethereum.org/fr/"
+ *           "website": "https://ethereum.org/fr/",
+ *           "isTradable": true,
+ *           "isAvailable": true
  *         }
  *       ]
  *     }
@@ -163,7 +167,9 @@ router.get('/', (req, res, next) => {
  *         "supply": 18000000,
  *         "marketCap": 37800450789,
  *         "logo": "https://bitcoin.org/img/icons/logotop.svg?1577873163",
- *         "website": "https://bitcoin.org/fr/"
+ *         "website": "https://bitcoin.org/fr/",
+ *         "isTradable": true,
+ *         "isAvailable": true
  *       }
  *     }
  * @apiUse NoCryptoError
@@ -198,7 +204,8 @@ router.get('/:id', (req, res, next) => {
  *       "lowestPrice": 7870,
  *       "highestPrice": 8500,
  *       "supply": 18000000,
- *       "marketCap": 37800450789
+ *       "marketCap": 37800450789,
+ *       "isAvailable": true
  *     }
  *
  * @apiSuccessExample {json} Success-Response:
@@ -213,7 +220,9 @@ router.get('/:id', (req, res, next) => {
  *         "lowestPrice": 7870,
  *         "highestPrice": 8500,
  *         "logo": "https://bitcoin.org/img/icons/logotop.svg?1577873163",
- *         "website": "https://bitcoin.org/fr/"
+ *         "website": "https://bitcoin.org/fr/",
+ *         "isTradable": true,
+ *         "isAvailable": true
  *       },
  *       "msg": "Crypto created successfully."
  *     }
@@ -232,6 +241,8 @@ router.post('/', (req, res, next) => {
   let highestPrice = req.body.highestPrice
   let supply = req.body.supply
   let marketCap = req.body.marketCap
+  let isTradable = req.body.isTradable
+  let isAvailable = req.body.isAvailable
 
   if (!name || !acronym) {
     res.json({error: 'Bad request formatting, name or acronym is missing.'})
@@ -249,6 +260,8 @@ router.post('/', (req, res, next) => {
   if (highestPrice) datas.website = highestPrice
   if (supply) datas.supply = supply
   if (marketCap) datas.marketCap = marketCap
+  if (isTradable) datas.isTradable = isTradable
+  if (isAvailable) datas.isAvailable = isAvailable
 
 
   Crypto.create(datas, (err, crypto) => {
@@ -286,7 +299,9 @@ router.post('/', (req, res, next) => {
  *         "lowestPrice": 787000000000,
  *         "highestPrice": 85000000000,
  *         "logo": "https://bitcoin.org/img/icons/logotop.svg?1577873163",
- *         "website": "https://bitcoin.org/fr/"
+ *         "website": "https://bitcoin.org/fr/",
+ *         "isTradable": true,
+ *         "isAvailable": true
  *       },
  *       "msg": "Crypto updated successfully."
  *     }
@@ -307,6 +322,8 @@ router.put('/:id', (req, res, next) => {
   let highestPrice = req.body.highestPrice
   let supply = req.body.supply
   let marketCap = req.body.marketCap
+  let isTradable = req.body.isTradable
+  let isAvailable = req.body.isAvailable
 
   let datas = {}
 
@@ -320,6 +337,8 @@ router.put('/:id', (req, res, next) => {
   if (highestPrice) datas.website = highestPrice
   if (supply) datas.supply = supply
   if (marketCap) datas.marketCap = marketCap
+  if (isTradable) datas.isTradable = isTradable
+  if (isAvailable) datas.isAvailable = isAvailable
 
   Crypto.findOneAndUpdate(req.params.id, datas, (err, crypto) => {
     if (err) throw err
@@ -392,7 +411,9 @@ router.get('/:id/prices', (req, res, next) => {
         currentPrice: doc.currentPrice,
         openingPrice: doc.openingPrice,
         lowestPrice: doc.lowestPrice,
-        highestPrice: doc.highestPrice
+        highestPrice: doc.highestPrice,
+        supply: doc.supply,
+        marketCap: doc.marketCap
       })
     } else {
       res.json({err: 'No crypto found with this id.'})
