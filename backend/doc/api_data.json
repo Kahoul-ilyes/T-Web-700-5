@@ -524,7 +524,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "    HTTP/1.1 200 OK\n{\n  \"user\": {\n      \"created_at\": \"2020-01-28T12:40:23.511Z\",\n      \"email\": \"toto@yopmail.com\",\n      \"email_verified\": false,\n      \"identities\": [\n          {\n              \"user_id\": \"5e302bb72d8bd60e7a2b2f19\",\n              \"provider\": \"auth0\",\n              \"connection\": \"Username-Password-Authentication\",\n              \"isSocial\": false\n          }\n      ],\n      \"user_metadata\": {\n          \"currency\": \"USD\",\n          \"cryptos\": [],\n          \"keywords\": [\n              \"Bitcoin\",\n              \"dollar\",\n              \"Cointelegraph\"\n          ]\n      },\n      \"name\": \"toto@yopmail.com\",\n      \"nickname\": \"toto\",\n      \"picture\": \"https://s.gravatar.com/avatar/5e97dde8285093128059298e52eeeb55?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fto.png\",\n      \"updated_at\": \"2020-01-28T12:40:23.985Z\",\n      \"user_id\": \"auth0|5e302bb72d8bd60e7a2b2f19\",\n      \"username\": \"toto\",\n      \"last_ip\": \"163.5.170.74\",\n      \"last_login\": \"2020-01-28T12:40:23.985Z\",\n      \"logins_count\": 1\n  }\n}",
+          "content": "    HTTP/1.1 200 OK\n{\n  \"user\": {\n      \"created_at\": \"2020-01-28T12:40:23.511Z\",\n      \"email\": \"toto@yopmail.com\",\n      \"email_verified\": false,\n      \"identities\": [\n          {\n              \"user_id\": \"5e302bb72d8bd60e7a2b2f19\",\n              \"provider\": \"auth0\",\n              \"connection\": \"Username-Password-Authentication\",\n              \"isSocial\": false\n          }\n      ],\n      \"user_metadata\": {\n          \"currency\": \"USD\",\n          \"cryptos\": [],\n          \"keywords\": [\n              \"Bitcoin\",\n              \"dollar\",\n              \"Cointelegraph\"\n          ]\n      },\n      \"name\": \"toto@yopmail.com\",\n      \"nickname\": \"toto\",\n      \"picture\": \"https://s.gravatar.com/avatar/5e97dde8285093128059298e52eeeb55?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fto.png\",\n      \"updated_at\": \"2020-01-28T12:40:23.985Z\",\n      \"user_id\": \"auth0|5e302bb72d8bd60e7a2b2f19\",\n      \"username\": \"toto\",\n      \"last_ip\": \"163.5.170.74\",\n      \"last_login\": \"2020-01-28T12:40:23.985Z\",\n      \"logins_count\": 1\n  },\n  \"roles\": [\n    {\n      \"id\": \"AIqsjqeiodfjop356789\",\n      \"name\": \"basic\",\n      \"description\": \"trololol role basic utilisateur\"\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -644,6 +644,38 @@
         {
           "title": "Success-Response:",
           "content": "HTTP/1.1 200 OK\n{\n  \"users\": [\n    user1,\n    user2\n  ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/users/users.js",
+    "groupTitle": "User"
+  },
+  {
+    "type": "post",
+    "url": "/users/:id/initialize",
+    "title": "Initialize a new user",
+    "name": "InitializeUser",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "id",
+            "description": "<p>User's unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"user\": {\n  },\n  \"msg\": \"User initialized successfully.\"\n}",
           "type": "json"
         }
       ]

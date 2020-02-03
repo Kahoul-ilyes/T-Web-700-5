@@ -95,7 +95,14 @@ router.get('/', (req, res, next) => {
  *       "last_ip": "163.5.170.74",
  *       "last_login": "2020-01-28T12:40:23.985Z",
  *       "logins_count": 1
- *   }
+ *   },
+ *   "roles": [
+ *     {
+ *       "id": "AIqsjqeiodfjop356789",
+ *       "name": "basic",
+ *       "description": "trololol role basic utilisateur"
+ *     }
+ *   ]
  * }
  * @apiUse NoUserError
  */
@@ -105,7 +112,59 @@ router.get('/:id', (req, res, next) => {
   axios
   .get(`users/${req.params.id}`)
   .then(response => {
-    res.json({user: response.data})
+    let user = response.data
+    // get user roles
+    axios
+    .get(`users/${req.params.id}/roles`)
+    .then(response => {
+      res.json({user: user, roles: response.data})
+    }).catch(err => {
+      res.json(handleError(err))
+    })
+  }).catch(err => {
+    res.json(handleError(err))
+  })
+})
+
+/**
+ * @api {post} /users/:id/initialize Initialize a new user
+ * @apiName InitializeUser
+ * @apiGroup User
+ * 
+ * @apiParam {ObjectId} id User's unique ID.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "user": {
+ *       },
+ *       "msg": "User initialized successfully."
+ *     }
+ */
+router.post('/:id/initialize', (req, res, next) => {
+  if (!req.params.id) res.json({err: 'Please provide an id param.'})
+
+  let datas = {
+    user_metadata: {
+      currency: "EUR",
+      cryptos: [],
+      keywords: []
+    }
+  }
+
+  axios
+  .patch(`users/${req.params.id}`, datas)
+  .then(response => {
+    // the user metadata are succesffuly initialize
+    let user = response.data
+    // now initialize the user's role
+    axios
+    .post(`users/${user.user_id}/roles`, { roles: ['rol_659MJW4SYZOZZK7c'] })
+    .then(response => {
+      res.json({user: user, msg: 'User initialized successfully.'})
+    }).catch(err => {
+      res.json(handleError(err))
+    })
   }).catch(err => {
     res.json(handleError(err))
   })
