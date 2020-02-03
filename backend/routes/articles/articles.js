@@ -90,23 +90,22 @@ Here for each article, you must provide at least:
 -> an URL of its image (if it exists) */
 
 router.get('/', function (req, res) {
+  let userKeywordsCheck = req.query.keywords
+  if (userKeywordsCheck !== undefined | userKeywordsCheck !== null) {
+    let userKeywords = req.query.keywords.split(',')
+    if (userKeywords.length > 0) {
 
-  if (req.query.keywords){
-  let userKeywords = req.query.keywords.split(',')
-  if (userKeywords > 0) {
-
-    if (userkeywords) {
-      returnArticles(userkeywords, (articlesToReturn) => {
-        console.log("RETURN : ", articlesToReturn)
-        console.log("user found with this id and has keywords")
-        res.json({
-          articles: articlesToReturn
+      if (userKeywords) {
+        returnArticles(userKeywords, (articlesToReturn) => {
+          res.json({
+            articles: articlesToReturn
+          })
         })
-      })
 
 
+      }
     }
-  }} else {
+  } else {
 
     console.log('No user found with this id, default: no keywords')
     Article.find({}, function (err, result) {
@@ -142,7 +141,7 @@ function returnArticles(userKeywords, callback) {
 
             if (value && ((value.title && regExpTest.test(value.title)) || (value.content && regExpTest.test(value.content)))) {
               keywordIsPresent = true;
-              // console.log("test test test"+result[l])
+              console.log("test test test" + result[l])
               articlesToReturn.push(result[l])
             }
           }
