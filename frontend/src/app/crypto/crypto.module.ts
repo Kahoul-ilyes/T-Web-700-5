@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CryptoListComponent } from './cryptolist/crypto-list.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTableModule} from '@angular/material/table';
 // tslint:disable-next-line:import-spacing
@@ -15,29 +14,35 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatSortModule} from '@angular/material/sort';
 import {MatIconModule} from '@angular/material/icon';
+import {CryptoPageComponent} from './crypto-page/crypto-page.component';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {CryptoListComponent} from './cryptolist/crypto-list.component';
+import {CryptoModel} from './shared/crypto.model';
 
 /**
  * Module pour tout ce qui concerne les crypto, affichage des listes de crypto et des stats
  */
 @NgModule({
-  declarations: [CryptoListComponent, CryptoGraphComponent],
+  declarations: [CryptoListComponent, CryptoGraphComponent, CryptoPageComponent],
   exports: [
-    CryptoListComponent,
+    CryptoPageComponent,
     HttpClientModule
   ],
-    imports: [
-        CommonModule,
-        MatSliderModule,
-        MatTableModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatPaginatorModule,
-        MatSlideToggleModule,
-        MatSortModule,
-        MatIconModule
-    ]
+  imports: [
+    CommonModule,
+    MatSliderModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatSlideToggleModule,
+    MatSortModule,
+    MatIconModule,
+    MatExpansionModule
+  ]
 })
 export class CryptoModule {
+  cryptoListFull: CryptoModel[];
 
   constructor(private cryptoService: CryptoService) { }
 }

@@ -1,11 +1,15 @@
 import { Routes, RouterModule } from '@angular/router';
-import {CryptoListComponent} from './crypto/cryptolist/crypto-list.component';
 import {AuthGuard} from './auth.guard';
+import {CryptoPageComponent} from './crypto/crypto-page/crypto-page.component';
+import {ArticleListComponent} from './article/article-list/article-list.component';
 
 
 
 const routes: Routes = [
-  { path: '', component: CryptoListComponent},
+  { path: '', component: CryptoPageComponent},
+  { path: 'article', component: ArticleListComponent},
+  { path: 'cryptos', component: CryptoPageComponent},
+
 
 
   // otherwise redirect to home

@@ -1,4 +1,5 @@
 // Core
+
 import { NgModule } from '@angular/core';
 
 import { appRoutingModule } from './app.routing';
@@ -18,10 +19,14 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import {UserModule} from './user/user.module';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import {ArticleModule} from './article/article.module';
 
 
 @NgModule({
+
   imports: [
+    ArticleModule,
     BrowserModule,
     BrowserAnimationsModule,
     CryptoModule,
@@ -33,7 +38,8 @@ import {UserModule} from './user/user.module';
     HttpClientModule,
     ReactiveFormsModule,
     HttpClientModule,
-    appRoutingModule
+    appRoutingModule,
+    MatTooltipModule
   ],
   declarations: [
   ],

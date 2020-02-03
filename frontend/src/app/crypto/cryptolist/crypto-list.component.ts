@@ -1,15 +1,14 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {CryptoModel} from '../shared/crypto.model';
 import {CryptoService} from '../shared/crypto.service';
-import {Target} from '@angular/compiler';
 import {MatSort, MatSortable, Sort} from '@angular/material/sort';
 import {MatIconRegistry} from '@angular/material/icon';
 import {DomSanitizer} from '@angular/platform-browser';
-import {timer} from 'rxjs';
 import {AuthService} from '../../auth.service';
 import {UserService} from '../../user/user.service';
+import {Subscription} from 'rxjs';
 
 
 @Component({
@@ -18,6 +17,8 @@ import {UserService} from '../../user/user.service';
   styleUrls: ['./crypto-list.component.scss']
 })
 export class CryptoListComponent implements OnInit {
+  @Input()favorites: boolean;
+
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -41,10 +42,10 @@ export class CryptoListComponent implements OnInit {
 
   /** permet d'acceder aux cryptos displayed */
   pageEvent: PageEvent;
+  private suscription: Subscription;
 
 
   ngOnInit() {
-
     this.displayedColumns = ['acronym', 'name', 'logo', 'value', 'capitalization', 'evolution', 'favorite'];
 
 
@@ -108,10 +109,28 @@ export class CryptoListComponent implements OnInit {
     });
   }
 
+  addCrypto(symbol: string) {
+
+    this.userService.currentUser.addCrypto(symbol);
+    this.filterList();
+  }
+
+  removeCrypto(symbol: string) {
+    this.userService.currentUser.removeCrypto(symbol);
+    this.filterList();
+  }
+
   /** Applique des filtres sur la liste à afficher */
   filterList() {
-    // this.cryptoListDisplayed = this.cryptoListFull.filter((a, b) => a.currentPrice !== 0);
-    this.cryptoListSort = this.cryptoListFull;
+    if (this.favorites) {
+      this.suscription = this.userService.currentUser.cryptos$.subscribe((a) => {
+        console.log('tab', a);
+        this.cryptoListSort = this.cryptoListFull.filter((crypto) => a.includes(crypto.symbol));
+      });
+    } else {
+       this.cryptoListSort = this.cryptoListFull.filter((a, b) => a.currentPrice !== 0);
+       this.cryptoListSort = this.cryptoListFull;
+    }
   }
 
   /** Tri de base, par capitalisation (prix* quantité) */
@@ -153,7 +172,7 @@ export class CryptoListComponent implements OnInit {
   }
 
   constructor(private cryptoService: CryptoService, iconRegistry: MatIconRegistry, sanitizer: DomSanitizer
-    ,         public auth: AuthService, public userService: UserService) {
+    ,         public auth: AuthService, public userService: UserService, ) {
 
     iconRegistry.addSvgIcon(
       'thumbs-up',
