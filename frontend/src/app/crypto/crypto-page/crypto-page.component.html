@@ -1,0 +1,25 @@
+<div class="display-center" *ngIf="auth.loggedIn !== null">
+  <mat-accordion *ngIf="auth.loggedIn" >
+  <mat-expansion-panel [expanded]="auth.loggedIn" >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Favorites Cryptos
+      </mat-panel-title>
+
+    </mat-expansion-panel-header>
+    <app-cryptopage [favorites]="true" ></app-cryptopage> </mat-expansion-panel>
+</mat-accordion>
+
+
+
+<mat-accordion>
+  <mat-expansion-panel  [expanded]="!auth.loggedIn">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        All cryptos
+      </mat-panel-title>
+
+    </mat-expansion-panel-header>
+    <app-cryptopage></app-cryptopage> </mat-expansion-panel>
+</mat-accordion>
+</div>

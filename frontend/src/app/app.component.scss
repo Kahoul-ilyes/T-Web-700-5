@@ -1,4 +1,19 @@
 app-cryptopage{
     margin: 0 auto;
+}
 
+#menu{
+  width: 200px;
+  display: flex;
+  background-color: #00acc1;
+}
+.main-display {
+  display: block;
+  width: 70%;
+}
+
+.panel
+{
+  max-height: 50px;
+  max-width: 50px;
 }

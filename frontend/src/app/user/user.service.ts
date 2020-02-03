@@ -2,19 +2,32 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {AuthService} from '../auth.service';
 import {UserModel} from './user.model';
+import {Subscription} from 'rxjs';
+import {environment} from '../../environments/environment';
 
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
 
-  user = new UserModel('', '', '', '', new Array(), new Array());
+  currentUser = new UserModel('', '', '', '', new Array(), new Array());
+  private usersubs: Subscription;
 
   constructor(private httpClient: HttpClient, public auth: AuthService) {
-    // this.user = new UserModel('', '', '', '', new Array(), new Array());
+  /*   this.usersubs = auth.userProfile$.subscribe(userAuthO => {
+      console.log('user' , userAuthO);
+      if (userAuthO !== null ) {
+        this.currentUser = new UserModel(userAuthO.sub, userAuthO.nickname, userAuthO.email, 'EUR', new Array(), new Array());
+        this.getUser(userAuthO.sub).subscribe(next => {
+            console.log('User connect ', next);
+          }
+
+        );
+      }*.
+    }); */
     // const listener  = auth.userProfile$.subscribe(res => console.log('listener' , res));
   }
 
-  URL = 'localhost:4000/';
+  URL = environment.apiBaseUrl;
 
   /**
    * Request all users

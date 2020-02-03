@@ -54,8 +54,8 @@
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell  class="" *matCellDef="let element" >
       <div  *ngIf="auth.loggedIn">
-      <i *ngIf="userService.user.containsCrypto(element.symbol)" (click)="userService.user.removeCrypto(element.symbol)" class="material-icons">favorite</i>
-      <i *ngIf="!userService.user.containsCrypto(element.symbol)" (click)="userService.user.addCrypto(element.symbol)" class="material-icons">favorite_border</i>
+      <i *ngIf="userService.currentUser.containsCrypto(element.symbol)" (click)="removeCrypto(element.symbol)" class="material-icons">favorite</i>
+      <i *ngIf="!userService.currentUser.containsCrypto(element.symbol)" (click)="addCrypto(element.symbol)" class="material-icons">favorite_border</i>
       </div>
     </td>
   </ng-container>
@@ -70,6 +70,8 @@
 <mat-paginator
   [pageSizeOptions]="[25, 5, 10, 100]"
   (page)="onPageChange($event)"></mat-paginator>
+
+
 
 
 

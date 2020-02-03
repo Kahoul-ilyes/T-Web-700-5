@@ -1,0 +1,18 @@
+.example-card {
+  width: 300px;
+  margin: 20px;
+}
+.main-display{
+  margin-right: 30px;
+  margin-left: 30px;
+}
+.flex-display{
+
+  display: flex;
+  flex-wrap: wrap;
+
+}
+.example-header-image {
+  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  background-size: cover;
+}
