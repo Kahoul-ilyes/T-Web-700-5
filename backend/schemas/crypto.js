@@ -32,6 +32,10 @@ let cryptoSchema = new Schema({
   isTradable: {
     type: Boolean,
     default: false
+  },
+  isAvailable: {
+    type: Boolean,
+    default: true
   }
 }, {
   collection: 'cryptos',

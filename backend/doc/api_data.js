@@ -1,85 +1,5 @@
 define({ "api": [
   {
-    "type": "post",
-    "url": "/login",
-    "title": "Login an user",
-    "name": "PostLogin",
-    "group": "Authentification",
-    "header": {
-      "examples": [
-        {
-          "title": "Request-Example:",
-          "content": "{\n  \"email\": \"toto@yopmail.com\",\n  \"password\": \"myawesomepassword\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"user\": {\n    \"_id\": \"567897656zqdjqld\",\n    \"username\": \"Toto\",\n    \"email\": \"toto@yopmail.com\",\n    \"currency\": \"EUR\",\n    \"cryptos\": [],\n    \"keywords\": []\n  },\n  \"Login successful.\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "routes/auth/auth.js",
-    "groupTitle": "Authentification",
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "BadRequestFormatting",
-            "description": "<p>Bad request formatting, some body params are missing.</p>"
-          }
-        ]
-      }
-    }
-  },
-  {
-    "type": "post",
-    "url": "/register",
-    "title": "Register a new user",
-    "name": "PostRegister",
-    "group": "Authentification",
-    "header": {
-      "examples": [
-        {
-          "title": "Request-Example:",
-          "content": "{\n  \"username\": \"Toto\",\n  \"email\": \"toto@yopmail.com\",\n  \"password\": \"myawesomepassword\",\n  \"password_confirmation\": \"myawesomepassword\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "success": {
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"user\": {\n    \"_id\": \"567897656zqdjqld\",\n    \"username\": \"Toto\",\n    \"email\": \"toto@yopmail.com\",\n    \"currency\": \"EUR\",\n    \"cryptos\": [],\n    \"keywords\": []\n  },\n  \"msg\": \"User registered successfully.\"\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "version": "0.0.0",
-    "filename": "routes/auth/auth.js",
-    "groupTitle": "Authentification",
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "BadRequestFormatting",
-            "description": "<p>Bad request formatting, some body params are missing.</p>"
-          }
-        ]
-      }
-    }
-  },
-  {
     "type": "get",
     "url": "/coins/",
     "title": "Get the available coin list and update database",
@@ -165,7 +85,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"crypto\": {\n    \"_id\": \"567897656zqdjqld\",\n    \"name\": \"Bitcoin\",\n    \"acronym\": \"BTC\",\n    \"currentPrice\": 8000,\n    \"openingPrice\": 7900,\n    \"lowestPrice\": 7870,\n    \"highestPrice\": 8500,\n    \"supply\": 18000000,\n    \"marketCap\": 37800450789,\n    \"logo\": \"https://bitcoin.org/img/icons/logotop.svg?1577873163\",\n    \"website\": \"https://bitcoin.org/fr/\"\n  }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"crypto\": {\n    \"_id\": \"567897656zqdjqld\",\n    \"name\": \"Bitcoin\",\n    \"acronym\": \"BTC\",\n    \"currentPrice\": 8000,\n    \"openingPrice\": 7900,\n    \"lowestPrice\": 7870,\n    \"highestPrice\": 8500,\n    \"supply\": 18000000,\n    \"marketCap\": 37800450789,\n    \"logo\": \"https://bitcoin.org/img/icons/logotop.svg?1577873163\",\n    \"website\": \"https://bitcoin.org/fr/\",\n    \"isAvailable\": true\n  }\n}",
           "type": "json"
         }
       ]
@@ -240,7 +160,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"cryptos\": [\n    {\n      \"_id\": \"567897656zqdjqld\",\n      \"name\": \"Bitcoin\",\n      \"acronym\": \"BTC\",\n      \"currentPrice\": 8000,\n      \"openingPrice\": 7900,\n      \"lowestPrice\": 7870,\n      \"highestPrice\": 8500,\n      \"supply\": 18000000,\n      \"marketCap\": 37800450789,\n      \"logo\": \"https://bitcoin.org/img/icons/logotop.svg?1577873163\",\n      \"website\": \"https://bitcoin.org/fr/\"\n    },\n    {\n      \"_id\": \"5193bqzdiu68dbq\",\n      \"name\": \"Ethereum\",\n      \"acronym\": \"ETH\",\n      \"currentPrice\": 200,\n      \"openingPrice\": 190,\n      \"lowestPrice\": 170,\n      \"highestPrice\": 210,\n      \"supply\": 98000000,\n      \"marketCap\": 245679900,\n      \"logo\": \"https://www.ethereum-france.com/wp-content/uploads/2019/11/ETHEREUM-ICON_RGB-v3-xsmall.png\",\n      \"website\": \"https://ethereum.org/fr/\"\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"cryptos\": [\n    {\n      \"_id\": \"567897656zqdjqld\",\n      \"name\": \"Bitcoin\",\n      \"acronym\": \"BTC\",\n      \"currentPrice\": 8000,\n      \"openingPrice\": 7900,\n      \"lowestPrice\": 7870,\n      \"highestPrice\": 8500,\n      \"supply\": 18000000,\n      \"marketCap\": 37800450789,\n      \"logo\": \"https://bitcoin.org/img/icons/logotop.svg?1577873163\",\n      \"website\": \"https://bitcoin.org/fr/\",\n      \"isAvailable\": true\n    },\n    {\n      \"_id\": \"5193bqzdiu68dbq\",\n      \"name\": \"Ethereum\",\n      \"acronym\": \"ETH\",\n      \"currentPrice\": 200,\n      \"openingPrice\": 190,\n      \"lowestPrice\": 170,\n      \"highestPrice\": 210,\n      \"supply\": 98000000,\n      \"marketCap\": 245679900,\n      \"logo\": \"https://www.ethereum-france.com/wp-content/uploads/2019/11/ETHEREUM-ICON_RGB-v3-xsmall.png\",\n      \"website\": \"https://ethereum.org/fr/\",\n      \"isAvailable\": true\n    }\n  ]\n}",
           "type": "json"
         }
       ]
@@ -259,7 +179,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Request-Example:",
-          "content": "{\n  \"name\": \"Bitcoin\",\n  \"acronym\": \"BTC\",\n  \"logo\": \"https://bitcoin.org/img/icons/logotop.svg?1577873163\",\n  \"website\": \"https://bitcoin.org/fr/\",\n  \"currentPrice\": 8000,\n  \"openingPrice\": 7900,\n  \"lowestPrice\": 7870,\n  \"highestPrice\": 8500,\n  \"supply\": 18000000,\n  \"marketCap\": 37800450789\n}",
+          "content": "{\n  \"name\": \"Bitcoin\",\n  \"acronym\": \"BTC\",\n  \"logo\": \"https://bitcoin.org/img/icons/logotop.svg?1577873163\",\n  \"website\": \"https://bitcoin.org/fr/\",\n  \"currentPrice\": 8000,\n  \"openingPrice\": 7900,\n  \"lowestPrice\": 7870,\n  \"highestPrice\": 8500,\n  \"supply\": 18000000,\n  \"marketCap\": 37800450789,\n  \"isAvailable\": true\n}",
           "type": "json"
         }
       ]
@@ -268,7 +188,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"crypto\": {\n    \"_id\": \"567897656zqdjqld\",\n    \"name\": \"Bitcoin\",\n    \"acronym\": \"BTC\",\n    \"currentPrice\": 8000,\n    \"openingPrice\": 7900,\n    \"lowestPrice\": 7870,\n    \"highestPrice\": 8500,\n    \"logo\": \"https://bitcoin.org/img/icons/logotop.svg?1577873163\",\n    \"website\": \"https://bitcoin.org/fr/\"\n  },\n  \"msg\": \"Crypto created successfully.\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"crypto\": {\n    \"_id\": \"567897656zqdjqld\",\n    \"name\": \"Bitcoin\",\n    \"acronym\": \"BTC\",\n    \"currentPrice\": 8000,\n    \"openingPrice\": 7900,\n    \"lowestPrice\": 7870,\n    \"highestPrice\": 8500,\n    \"logo\": \"https://bitcoin.org/img/icons/logotop.svg?1577873163\",\n    \"website\": \"https://bitcoin.org/fr/\",\n    \"isAvailable\": true\n  },\n  \"msg\": \"Crypto created successfully.\"\n}",
           "type": "json"
         }
       ]
@@ -348,6 +268,194 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "routes/cryptos/cryptos.js",
     "groupTitle": "Crypto"
+  },
+  {
+    "type": "delete",
+    "url": "/rss/:id",
+    "title": "Remove a rss",
+    "name": "DeleteRss",
+    "group": "Rss",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Rss's unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"_id\": \"567897656zqdjqld\",\n  \"msg\": \"Rss deleted successfully.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rss/rss.js",
+    "groupTitle": "Rss",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "RssNotFound",
+            "description": "<p>Please provide an id param.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/rss",
+    "title": "Request all rss",
+    "name": "GetAllRss",
+    "group": "Rss",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"rss\": [\n    {\n      \"_id\": \"QJIOdiqejoid478921399\",\n      \"isFetchable\": true,\n      \"url\": \"https://bitcoin.org/rss\"\n    },\n    {\n      \"_id\": \"pJIldiqejoidc7892é399\",\n      \"isFetchable\": false,\n      \"url\": \"https://fakenews.org/rss\"\n    }\n  ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rss/rss.js",
+    "groupTitle": "Rss"
+  },
+  {
+    "type": "get",
+    "url": "/rss/:id",
+    "title": "Request a rss",
+    "name": "GetOneRss",
+    "group": "Rss",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Rss's unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"rss\": {\n    \"_id\": \"QJIOdiqejoid478921399\",\n    \"isFetchable\": true,\n    \"url\": \"https://bitcoin.org/rss\"\n  }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rss/rss.js",
+    "groupTitle": "Rss",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "CryptoNotFound",
+            "description": "<p>Please provide an id param.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "post",
+    "url": "/rss/",
+    "title": "Create a new rss",
+    "name": "PostRss",
+    "group": "Rss",
+    "header": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"isFetchable\": true,\n  \"url\": \"https://bitcoin.org/rss\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"rss\": {\n    \"_id\": \"567897656zqdjqld\",\n    \"isFetchable\": true,\n    \"url\": \"https://bitcoin.org/rss\"\n  },\n  \"msg\": \"Rss created successfully.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rss/rss.js",
+    "groupTitle": "Rss"
+  },
+  {
+    "type": "put",
+    "url": "/rss/:id",
+    "title": "Update an existing rss",
+    "name": "PutRss",
+    "group": "Rss",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "id",
+            "description": "<p>Rss's unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "header": {
+      "examples": [
+        {
+          "title": "Request-Example:",
+          "content": "{\n  \"isFetchable\": false\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"rss\": {\n    \"_id\": \"567897656zqdjqld\",\n    \"isFetchable\": false,\n    \"url\": \"https://bitcoin.org/rss\"\n  },\n  \"msg\": \"Rss updated successfully.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/rss/rss.js",
+    "groupTitle": "Rss",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "RssNotFound",
+            "description": "<p>Please provide an id param.</p>"
+          }
+        ]
+      }
+    }
   },
   {
     "type": "delete",
