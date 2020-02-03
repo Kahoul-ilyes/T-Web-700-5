@@ -18,7 +18,7 @@ import {Subscription} from 'rxjs';
 })
 export class CryptoListComponent implements OnInit {
   @Input()favorites: boolean;
-
+  @Input() cryptoList: Array<CryptoModel>;
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
@@ -110,7 +110,6 @@ export class CryptoListComponent implements OnInit {
   }
 
   addCrypto(symbol: string) {
-
     this.userService.currentUser.addCrypto(symbol);
     this.filterList();
   }

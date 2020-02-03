@@ -13,17 +13,19 @@ export class UserService {
   private usersubs: Subscription;
 
   constructor(private httpClient: HttpClient, public auth: AuthService) {
-  /*   this.usersubs = auth.userProfile$.subscribe(userAuthO => {
+     this.usersubs = auth.userProfile$.subscribe(userAuthO => {
       console.log('user' , userAuthO);
       if (userAuthO !== null ) {
-        this.currentUser = new UserModel(userAuthO.sub, userAuthO.nickname, userAuthO.email, 'EUR', new Array(), new Array());
-        this.getUser(userAuthO.sub).subscribe(next => {
+
+        console.log(userAuthO.sub.split('|'));
+        console.log(userAuthO.sub.split('|')[1]);
+        this.currentUser = new UserModel(userAuthO.sub.split('|')[1], userAuthO.nickname, userAuthO.email, 'EUR', new Array(), new Array());
+        this.getUser(userAuthO.sub.split('|')[1]).subscribe(next => {
             console.log('User connect ', next);
           }
-
         );
-      }*.
-    }); */
+      }
+    });
     // const listener  = auth.userProfile$.subscribe(res => console.log('listener' , res));
   }
 
@@ -41,6 +43,7 @@ export class UserService {
    * @param userI duser unique id
    */
   public getUser(userId: string ) {
+    console.log('requetes', this.URL +  '/api/v0/users/' + userId );
     return this.httpClient.get(this.URL +  '/api/v0/users/' + userId );
   }
 
