@@ -97,6 +97,7 @@ router.get('/subscribe', (req, res, next) => {
  *           "marketCap": 37800450789,
  *           "logo": "https://bitcoin.org/img/icons/logotop.svg?1577873163",
  *           "website": "https://bitcoin.org/fr/",
+ *           "isTradable": true,
  *           "isAvailable": true
  *         },
  *         {
@@ -111,6 +112,7 @@ router.get('/subscribe', (req, res, next) => {
  *           "marketCap": 245679900,
  *           "logo": "https://www.ethereum-france.com/wp-content/uploads/2019/11/ETHEREUM-ICON_RGB-v3-xsmall.png",
  *           "website": "https://ethereum.org/fr/",
+ *           "isTradable": true,
  *           "isAvailable": true
  *         }
  *       ]
@@ -166,6 +168,7 @@ router.get('/', (req, res, next) => {
  *         "marketCap": 37800450789,
  *         "logo": "https://bitcoin.org/img/icons/logotop.svg?1577873163",
  *         "website": "https://bitcoin.org/fr/",
+ *         "isTradable": true,
  *         "isAvailable": true
  *       }
  *     }
@@ -218,6 +221,7 @@ router.get('/:id', (req, res, next) => {
  *         "highestPrice": 8500,
  *         "logo": "https://bitcoin.org/img/icons/logotop.svg?1577873163",
  *         "website": "https://bitcoin.org/fr/",
+ *         "isTradable": true,
  *         "isAvailable": true
  *       },
  *       "msg": "Crypto created successfully."
@@ -295,7 +299,9 @@ router.post('/', (req, res, next) => {
  *         "lowestPrice": 787000000000,
  *         "highestPrice": 85000000000,
  *         "logo": "https://bitcoin.org/img/icons/logotop.svg?1577873163",
- *         "website": "https://bitcoin.org/fr/"
+ *         "website": "https://bitcoin.org/fr/",
+ *         "isTradable": true,
+ *         "isAvailable": true
  *       },
  *       "msg": "Crypto updated successfully."
  *     }

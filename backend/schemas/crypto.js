@@ -31,7 +31,7 @@ let cryptoSchema = new Schema({
   dateAvailability: Date,
   isTradable: {
     type: Boolean,
-    default: false
+    default: true
   },
   isAvailable: {
     type: Boolean,
