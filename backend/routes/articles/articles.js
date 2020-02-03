@@ -14,9 +14,8 @@ let defaultAdressBook = [
 //adressbook + user added adresses
 let adressBook = defaultAdressBook
 // user key words
-let userKeywords = []
+// let userKeywords = []
 // check if article is already added this time
-let itemAdded = []
 
 //get rss feed and store it, aimed for a job
 router.get('/rss/', function (req, res) {
@@ -90,33 +89,38 @@ Here for each article, you must provide at least:
 -> an URL of the article’s page
 -> an URL of its image (if it exists) */
 
-// router.get('/user/:id', function (req, res) {
+router.get('/', function (req, res) {
 
-//   User.findById(req.params.id, 'keywords', (err, user) => {
-//     if (err) throw err
-//     console.log(user)
-//     if (user && user.keywords) {
-//       returnArticles(user.keywords, (articlesToReturn) => {
-//         console.log("RETURN : ", articlesToReturn)
-//         console.log("user found with this id and has keywords")
-//         res.json({
-//           articles: articlesToReturn
-//         })
-//       })
+  if (req.query.keywords){
+  let userKeywords = req.query.keywords.split(',')
+  if (userKeywords > 0) {
+
+    if (userkeywords) {
+      returnArticles(userkeywords, (articlesToReturn) => {
+        console.log("RETURN : ", articlesToReturn)
+        console.log("user found with this id and has keywords")
+        res.json({
+          articles: articlesToReturn
+        })
+      })
 
 
-//     } else {
+    }
+  }} else {
 
-//       console.log('No user found with this id, default: no keywords')
-//       Article.find({}, function (err, result) {
-//         if (err) throw err;
-//         res.json({
-//           articles: result
-//         })
-//       });
-//     }
-//   })
-// })
+    console.log('No user found with this id, default: no keywords')
+    Article.find({}, function (err, result) {
+      if (err) throw err;
+      res.json({
+        articles: result
+      })
+    });
+  }
+})
+
+
+
+
 
 
 function returnArticles(userKeywords, callback) {
