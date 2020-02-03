@@ -98,9 +98,11 @@ router.get('/user/:id', function (req, res) {
     console.log(user)
     if (user && user.keywords) {
       returnArticles(user.keywords, (articlesToReturn) => {
-        console.log ("RETURN : ",articlesToReturn)
+        console.log("RETURN : ", articlesToReturn)
         console.log("user found with this id and has keywords")
-        res.json({articles: articlesToReturn})
+        res.json({
+          articles: articlesToReturn
+        })
       })
 
 
@@ -109,143 +111,51 @@ router.get('/user/:id', function (req, res) {
       console.log('No user found with this id, default: no keywords')
       Article.find({}, function (err, result) {
         if (err) throw err;
-        // console.log ("RESULT" + result)
-        res.json({articles: result})
+        res.json({
+          articles: result
+        })
       });
     }
   })
 })
 
 
-  function returnArticles(userKeywords, callback) {
-    // let articlesToTest=[]
-    let articlesToReturn=[]
+function returnArticles(userKeywords, callback) {
+  // let articlesToTest=[]
+  let articlesToReturn = []
 
-      //get every article to test
-      Article.find({}, (err, result) => {
-        // console.log("finding articles...")
-        // console.log(result)
-       
-        if (err) throw err;
-        for (let i = 0; i < userKeywords.length; i++) {
-          let keywordIsPresent = false;
-          for (let l = 0; l < result.length; l++) {
-            for (const key in result[l]) {
-              if (result[l].hasOwnProperty(key) && !keywordIsPresent) {
-                const value = result[l][key]
-                const regExpTest = new RegExp("(" + userKeywords[i] + ")", "gi")
-                // console.log("Keyword" ,userKeywords[i])
-                // console.log("Value ", value)
-                
-                if (value && ((value.title && regExpTest.test(value.title)) || (value.content && regExpTest.test(value.content)))) {
-                  keywordIsPresent = true;
-                  // console.log("test test test"+result[l])
-                  articlesToReturn.push(result[l])
-                }
-              }
+  //get every article to test
+  Article.find({}, (err, result) => {
+    if (err) throw err;
+    for (let i = 0; i < userKeywords.length; i++) {
+      let keywordIsPresent = false;
+      for (let l = 0; l < result.length; l++) {
+        for (const key in result[l]) {
+          if (result[l].hasOwnProperty(key) && !keywordIsPresent) {
+            const value = result[l][key]
+            const regExpTest = new RegExp("(" + userKeywords[i] + ")", "gi")
+            // console.log("Keyword" ,userKeywords[i])
+            // console.log("Value ", value)
+
+            if (value && ((value.title && regExpTest.test(value.title)) || (value.content && regExpTest.test(value.content)))) {
+              keywordIsPresent = true;
+              // console.log("test test test"+result[l])
+              articlesToReturn.push(result[l])
             }
           }
         }
-        // console.log("RETURN ", articlesToReturn)
-        callback(articlesToReturn) 
-      })
+      }
+    }
+    // console.log("RETURN ", articlesToReturn)
+    callback(articlesToReturn)
+  })
 
 
 
-  }
+}
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-// UNUSED
-router.get('/users/:id', function (req, res) {
-  let articlesToReturn = [];
-  // check if logged in
-  // if (!req.body.isLogged) {
-  // }
-
-  // if logged in, get user keywords
-  userKeywords = User.findById(req.params.id, 'keywords', (err, doc) => {
-    if (err) throw err
-
-    if (doc) {
-      userKeywords = doc.keywords
-
-    } else {
-      res.json({
-        err: 'No user found with this id.'
-      })
-    }
-  })
-
-  // scan rss content
-  let parser = new Parser();
-  (async () => {
-
-    // scan rss for every adresses
-    for (let j = 0; j < adressBook.length; j++) {
-      feed = await parser.parseURL(adressBook[j]);
-
-
-      //  check if key words exist within RSS content
-      feed.items.forEach(item => {
-        //set default image
-        item.image = "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Feed-icon.svg/1200px-Feed-icon.svg.png"
-        //find if article already exists in bdd
-        Article.findOne({
-          link: item.link
-        }, (err, article) => {
-          if (article) {
-            console.log(item.link + " already exists!")
-          } else {
-
-            let alreadyAdded = false;
-            for (let f = 0; f > itemAdded.length; f++) {
-              if (item.link === itemAdded[f]) {
-                alreadyAdded = true;
-                console.log(item.link + " already added!")
-              }
-            }
-            // check for every keywords in every fields
-            let keywordIsPresent = false;
-            for (let i = 0; i < userKeywords.length; i++) {
-              let imageSet = false
-              for (const key in item) {
-                if (item.hasOwnProperty(key) && !keywordIsPresent && !alreadyAdded) {
-                  const value = item[key];
-                  if ((new RegExp("(" + userKeywords[i] + ")", "gi").test(value))) {
-                    keywordIsPresent = true;
-
-                    // set image field
-                    if (imageSet === false) {
-                      let regExpImg = RegExp('(https.*?jpg|bmp|png|gif)', "gi").exec(value)
-                      if (regExpImg) {
-                        item.image = regExpImg[0]
-                      }
-                      imagetSet = true;
-
-                    }
-
-                    //Store article in dbb
-                    Article.create(item, (err, article) => {
-                      if (err) throw err
-                      else {
-                        itemAdded.push(item.link)
-                        console.log(item.link + " has been added successfully!")
-                      }
-                    })
-                  }
-                }
-              }
-            }
-          }
-        })
-      });
-    };
-  })();
-});
-
 
 // GET /articles/{id}
 // id: the Id of an article. The user MUST be logged in (OR NOT). Returns information about an article,
