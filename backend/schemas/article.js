@@ -8,10 +8,13 @@ let articleSchema = new Schema({
     type: String,
     required: true
   },
-  summary: String,
+  pubDate : Date,
+  comments : String,
+  content: String,
+  "content:encoded": String,
   source: String,
   date: Date,
-  url: {
+  link: {
     type: String,
     validate: {
       validator: validator.isURL,
@@ -19,6 +22,11 @@ let articleSchema = new Schema({
       isAsync: false
     }
   },
+  enclosure:
+   {
+     url: {type: String},
+     length: {type: String},
+     type: {type: String} },
   image: {
     type: String,
     validate: {
@@ -29,6 +37,7 @@ let articleSchema = new Schema({
   }
 }, {
   collection: 'articles' ,
+  categories: Array,
   timestamps: true
 });
 
