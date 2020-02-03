@@ -107,7 +107,7 @@ router.post('/', (req, res, next) => {
   let datas = {}
 
   if (url) datas.url = url
-  if (isFetchable) datas.isFetchable = isFetchable
+  if (isFetchable != null) datas.isFetchable = isFetchable
 
   Rss.create(datas, (err, rss) => {
     if (err) throw err
@@ -152,14 +152,10 @@ router.put('/:id', (req, res, next) => {
   // optionnal
   let isFetchable = req.body.isFetchable
 
-  if (!url) {
-    res.json({error: 'Bad request formatting, url is missing.'})
-  }
-
   let datas = {}
 
   if (url) datas.url = url
-  if (isFetchable) datas.isFetchable = isFetchable
+  if (isFetchable != null) datas.isFetchable = isFetchable
 
   Rss.findOneAndUpdate(req.params.id, datas, (err, rss) => {
     if (err) throw err
