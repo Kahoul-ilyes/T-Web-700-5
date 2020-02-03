@@ -2,8 +2,9 @@ const express = require('express')
 const path = require('path')
 const cookieParser = require('cookie-parser')
 const logger = require('morgan')
-const jwt = require("express-jwt");
-const jwksRsa = require("jwks-rsa");
+const jwt = require("express-jwt")
+const jwksRsa = require("jwks-rsa")
+const helmet = require('helmet')
 
 
 const mongoose = require('mongoose')
@@ -17,7 +18,6 @@ db.once('open', () => {
 });
 
 let indexRouter = require('./routes/index')
-let authRouter = require('./routes/auth/auth')
 let usersRouter = require('./routes/users/users')
 let cryptosRouter = require('./routes/cryptos/cryptos', )
 let coinsRouter = require('./routes/cryptos/coins')
@@ -31,6 +31,8 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 // app.use(express.static(path.join(__dirname, 'public')))
 app.use(express.static(path.join(__dirname, 'doc')))
+
+app.use(helmet())
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*")
@@ -62,8 +64,8 @@ const checkJwt = jwt({
 // middleware for checking jwt
 // app.use(checkJwt)
 
+
 app.use('/', indexRouter)
-app.use('/api/v0/auth', authRouter)
 app.use('/api/v0/users', usersRouter)
 app.use('/api/v0/cryptos', cryptosRouter)
 app.use('/api/v0/coins', coinsRouter)
