@@ -372,7 +372,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"_id\": \"567897656zqdjqld\",\n  \"msg\": \"User deleted successfully.\"\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"_id\": \"auth0|567897656zqdjqld\",\n  \"msg\": \"User deleted successfully.\"\n}",
           "type": "json"
         }
       ]
@@ -416,7 +416,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"user\": {\n    \"_id\": \"JzmHAD68çzqdld9\",\n    \"username\": \"Toto\",\n    \"email\": \"toto@yopmail.com\",\n    \"currency\": \"EUR\",\n    \"cryptos\": [],\n    \"keywords\": []\n  }\n}",
+          "content": "    HTTP/1.1 200 OK\n{\n  \"user\": {\n      \"created_at\": \"2020-01-28T12:40:23.511Z\",\n      \"email\": \"toto@yopmail.com\",\n      \"email_verified\": false,\n      \"identities\": [\n          {\n              \"user_id\": \"5e302bb72d8bd60e7a2b2f19\",\n              \"provider\": \"auth0\",\n              \"connection\": \"Username-Password-Authentication\",\n              \"isSocial\": false\n          }\n      ],\n      \"user_metadata\": {\n          \"currency\": \"USD\",\n          \"cryptos\": [],\n          \"keywords\": [\n              \"Bitcoin\",\n              \"dollar\",\n              \"Cointelegraph\"\n          ]\n      },\n      \"name\": \"toto@yopmail.com\",\n      \"nickname\": \"toto\",\n      \"picture\": \"https://s.gravatar.com/avatar/5e97dde8285093128059298e52eeeb55?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fto.png\",\n      \"updated_at\": \"2020-01-28T12:40:23.985Z\",\n      \"user_id\": \"auth0|5e302bb72d8bd60e7a2b2f19\",\n      \"username\": \"toto\",\n      \"last_ip\": \"163.5.170.74\",\n      \"last_login\": \"2020-01-28T12:40:23.985Z\",\n      \"logins_count\": 1\n  }\n}",
           "type": "json"
         }
       ]
@@ -535,7 +535,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "HTTP/1.1 200 OK\n{\n  \"users\": [\n    {\n      \"_id\": \"567897656zqdjqld\",\n      \"username\": \"Toto\",\n      \"email\": \"toto@yopmail.com\",\n      \"currency\": \"EUR\",\n      \"cryptos\": [],\n      \"keywords\": []\n    },\n    {\n      \"_id\": \"KA¨LDOASKA!çéà'\",\n      \"username\": \"Alice\",\n      \"email\": \"alice@yopmail.com\",\n      \"currency\": \"USD\",\n      \"cryptos\": [],\n      \"keywords\": []\n    }\n  ]\n}",
+          "content": "HTTP/1.1 200 OK\n{\n  \"users\": [\n    user1,\n    user2\n  ]\n}",
           "type": "json"
         }
       ]

@@ -1,7 +1,30 @@
 let express = require('express')
 let router = express.Router()
 
-let User = require('../../models/user')
+let axios = require('axios')
+
+const accessToken = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlJEVTVSVU5CUWpnM01FSkZSVEpFTURRMU9VWTNOVUk1UVVJd09UUXhSa1pHTkVZeU9UUTJOUSJ9.eyJpc3MiOiJodHRwczovL2Rldi1tNmZyeHA5dS5ldS5hdXRoMC5jb20vIiwic3ViIjoiNDd5TkRDVXhaTUkybEJOR0g2djBnVmJHZHZUVGROUnVAY2xpZW50cyIsImF1ZCI6Imh0dHBzOi8vZGV2LW02ZnJ4cDl1LmV1LmF1dGgwLmNvbS9hcGkvdjIvIiwiaWF0IjoxNTgwMjE5MjAyLCJleHAiOjE1ODAzMDU2MDIsImF6cCI6IjQ3eU5EQ1V4Wk1JMmxCTkdINnYwZ1ZiR2R2VFRkTlJ1Iiwic2NvcGUiOiJyZWFkOmNsaWVudF9ncmFudHMgY3JlYXRlOmNsaWVudF9ncmFudHMgZGVsZXRlOmNsaWVudF9ncmFudHMgdXBkYXRlOmNsaWVudF9ncmFudHMgcmVhZDp1c2VycyB1cGRhdGU6dXNlcnMgZGVsZXRlOnVzZXJzIGNyZWF0ZTp1c2VycyByZWFkOnVzZXJzX2FwcF9tZXRhZGF0YSB1cGRhdGU6dXNlcnNfYXBwX21ldGFkYXRhIGRlbGV0ZTp1c2Vyc19hcHBfbWV0YWRhdGEgY3JlYXRlOnVzZXJzX2FwcF9tZXRhZGF0YSBjcmVhdGU6dXNlcl90aWNrZXRzIHJlYWQ6Y2xpZW50cyB1cGRhdGU6Y2xpZW50cyBkZWxldGU6Y2xpZW50cyBjcmVhdGU6Y2xpZW50cyByZWFkOmNsaWVudF9rZXlzIHVwZGF0ZTpjbGllbnRfa2V5cyBkZWxldGU6Y2xpZW50X2tleXMgY3JlYXRlOmNsaWVudF9rZXlzIHJlYWQ6Y29ubmVjdGlvbnMgdXBkYXRlOmNvbm5lY3Rpb25zIGRlbGV0ZTpjb25uZWN0aW9ucyBjcmVhdGU6Y29ubmVjdGlvbnMgcmVhZDpyZXNvdXJjZV9zZXJ2ZXJzIHVwZGF0ZTpyZXNvdXJjZV9zZXJ2ZXJzIGRlbGV0ZTpyZXNvdXJjZV9zZXJ2ZXJzIGNyZWF0ZTpyZXNvdXJjZV9zZXJ2ZXJzIHJlYWQ6ZGV2aWNlX2NyZWRlbnRpYWxzIHVwZGF0ZTpkZXZpY2VfY3JlZGVudGlhbHMgZGVsZXRlOmRldmljZV9jcmVkZW50aWFscyBjcmVhdGU6ZGV2aWNlX2NyZWRlbnRpYWxzIHJlYWQ6cnVsZXMgdXBkYXRlOnJ1bGVzIGRlbGV0ZTpydWxlcyBjcmVhdGU6cnVsZXMgcmVhZDpydWxlc19jb25maWdzIHVwZGF0ZTpydWxlc19jb25maWdzIGRlbGV0ZTpydWxlc19jb25maWdzIHJlYWQ6aG9va3MgdXBkYXRlOmhvb2tzIGRlbGV0ZTpob29rcyBjcmVhdGU6aG9va3MgcmVhZDplbWFpbF9wcm92aWRlciB1cGRhdGU6ZW1haWxfcHJvdmlkZXIgZGVsZXRlOmVtYWlsX3Byb3ZpZGVyIGNyZWF0ZTplbWFpbF9wcm92aWRlciBibGFja2xpc3Q6dG9rZW5zIHJlYWQ6c3RhdHMgcmVhZDp0ZW5hbnRfc2V0dGluZ3MgdXBkYXRlOnRlbmFudF9zZXR0aW5ncyByZWFkOmxvZ3MgcmVhZDpzaGllbGRzIGNyZWF0ZTpzaGllbGRzIGRlbGV0ZTpzaGllbGRzIHJlYWQ6YW5vbWFseV9ibG9ja3MgZGVsZXRlOmFub21hbHlfYmxvY2tzIHVwZGF0ZTp0cmlnZ2VycyByZWFkOnRyaWdnZXJzIHJlYWQ6Z3JhbnRzIGRlbGV0ZTpncmFudHMgcmVhZDpndWFyZGlhbl9mYWN0b3JzIHVwZGF0ZTpndWFyZGlhbl9mYWN0b3JzIHJlYWQ6Z3VhcmRpYW5fZW5yb2xsbWVudHMgZGVsZXRlOmd1YXJkaWFuX2Vucm9sbG1lbnRzIGNyZWF0ZTpndWFyZGlhbl9lbnJvbGxtZW50X3RpY2tldHMgcmVhZDp1c2VyX2lkcF90b2tlbnMgY3JlYXRlOnBhc3N3b3Jkc19jaGVja2luZ19qb2IgZGVsZXRlOnBhc3N3b3Jkc19jaGVja2luZ19qb2IgcmVhZDpjdXN0b21fZG9tYWlucyBkZWxldGU6Y3VzdG9tX2RvbWFpbnMgY3JlYXRlOmN1c3RvbV9kb21haW5zIHJlYWQ6ZW1haWxfdGVtcGxhdGVzIGNyZWF0ZTplbWFpbF90ZW1wbGF0ZXMgdXBkYXRlOmVtYWlsX3RlbXBsYXRlcyByZWFkOm1mYV9wb2xpY2llcyB1cGRhdGU6bWZhX3BvbGljaWVzIHJlYWQ6cm9sZXMgY3JlYXRlOnJvbGVzIGRlbGV0ZTpyb2xlcyB1cGRhdGU6cm9sZXMgcmVhZDpwcm9tcHRzIHVwZGF0ZTpwcm9tcHRzIHJlYWQ6YnJhbmRpbmcgdXBkYXRlOmJyYW5kaW5nIHJlYWQ6bG9nX3N0cmVhbXMgY3JlYXRlOmxvZ19zdHJlYW1zIGRlbGV0ZTpsb2dfc3RyZWFtcyB1cGRhdGU6bG9nX3N0cmVhbXMiLCJndHkiOiJjbGllbnQtY3JlZGVudGlhbHMifQ.mm-z7uER8n-opiZHJr4bVbv8kw1jUsM5ZB1Gy5_DqtuSVKCvUc33c_Llso2O3PqkUJKqzoFLQOwSP1whp99O09o7bA2t9jqHrSnUO21hRgoLV59jlPiYbuLdMU9zIQxYbPrhzx2EszQQBsH8dB0ZOYJ1rO09LIX8eLiJ8_fRgeIYZfkkERXhQaLr20zjd7sIWaE9xhMUd7WdQyXJq6vE6-CnOGr7zZ5kiF-Yc90q6HPx5vB9yCiD5AW3f6n-7kVWSmIpd0xMvEoV4RjjYDcOCNPebMYvFAKWpOULVC4gzK_xoIqf24NmhdODD7YOl2UABzJty3zHVGfqp2lO0uePzg'
+
+axios.defaults.baseURL = 'https://dev-m6frxp9u.eu.auth0.com/api/v2/'
+axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
+
+
+
+function handleError(err) {
+  if (err.response) {
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx
+    return {err: err.response.data}
+  } else if (err.request) {
+    // The request was made but no response was received
+    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+    // http.ClientRequest in node.js
+    return {err: err.request}
+  } else {
+    // Something happened in setting up the request that triggered an Error
+    return {err: err.message}
+  }
+}
 
 /**
  * @apiDefine NoUserError
@@ -17,31 +40,18 @@ let User = require('../../models/user')
  *     HTTP/1.1 200 OK
  *     {
  *       "users": [
- *         {
- *           "_id": "567897656zqdjqld",
- *           "username": "Toto",
- *           "email": "toto@yopmail.com",
- *           "currency": "EUR",
- *           "cryptos": [],
- *           "keywords": []
- *         },
- *         {
- *           "_id": "KA¨LDOASKA!çéà'",
- *           "username": "Alice",
- *           "email": "alice@yopmail.com",
- *           "currency": "USD",
- *           "cryptos": [],
- *           "keywords": []
- *         }
+ *         user1,
+ *         user2
  *       ]
  *     }
  */
 router.get('/', (req, res, next) => {
-  User.find({}).exec((err, users) => {
-    if (err) throw err
-
-    if (users) res.send({ users: users})
-    else res.send({ users: []})
+  axios
+  .get('users')
+  .then(response => {
+    res.json({users: response.data})
+  }).catch(err => {
+    res.json(handleError(err))
   })
 })
 
@@ -54,29 +64,50 @@ router.get('/', (req, res, next) => {
  *
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
- *     {
- *       "user": {
- *         "_id": "JzmHAD68çzqdld9",
- *         "username": "Toto",
- *         "email": "toto@yopmail.com",
- *         "currency": "EUR",
- *         "cryptos": [],
- *         "keywords": []
- *       }
- *     }
+ * {
+ *   "user": {
+ *       "created_at": "2020-01-28T12:40:23.511Z",
+ *       "email": "toto@yopmail.com",
+ *       "email_verified": false,
+ *       "identities": [
+ *           {
+ *               "user_id": "5e302bb72d8bd60e7a2b2f19",
+ *               "provider": "auth0",
+ *               "connection": "Username-Password-Authentication",
+ *               "isSocial": false
+ *           }
+ *       ],
+ *       "user_metadata": {
+ *           "currency": "USD",
+ *           "cryptos": [],
+ *           "keywords": [
+ *               "Bitcoin",
+ *               "dollar",
+ *               "Cointelegraph"
+ *           ]
+ *       },
+ *       "name": "toto@yopmail.com",
+ *       "nickname": "toto",
+ *       "picture": "https://s.gravatar.com/avatar/5e97dde8285093128059298e52eeeb55?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fto.png",
+ *       "updated_at": "2020-01-28T12:40:23.985Z",
+ *       "user_id": "auth0|5e302bb72d8bd60e7a2b2f19",
+ *       "username": "toto",
+ *       "last_ip": "163.5.170.74",
+ *       "last_login": "2020-01-28T12:40:23.985Z",
+ *       "logins_count": 1
+ *   }
+ * }
  * @apiUse NoUserError
  */
 router.get('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
-  User.findById(req.params.id, '-password', (err, user) => {
-    if (err) throw err
-
-    if (user) {
-      res.json({user: user})
-    } else {
-      res.json({err: 'No user found with this id.'})
-    }
+  axios
+  .get(`users/${req.params.id}`)
+  .then(response => {
+    res.json({user: response.data})
+  }).catch(err => {
+    res.json(handleError(err))
   })
 })
 
@@ -124,22 +155,30 @@ router.post('/', (req, res, next) => {
     res.json({error: 'Bad request formatting, username, email or password is missing.'})
   }
 
-  let datas = {}
+  let datas = {
+    connection: "Username-Password-Authentication",
+    user_metadata: {
+      currency: "EUR",
+      cryptos: [],
+      keywords: []
+    },
+    verify_email: true
+  }
 
   if (username) datas.username = username
   if (email) datas.email = email
   if (password) datas.password = password
-  if (currency) datas.currency = currency
-  if (cryptos) datas.cryptos = cryptos
-  if (keywords) datas.keywords = keywords
+  if (currency) datas.user_metadata.currency = currency
+  if (cryptos) datas.user_metadata.cryptos = cryptos
+  if (keywords) datas.user_metadata.keywords = keywords
 
-  User.create(datas, (err, user) => {
-    if (err) throw err
-    else {
-      res.json({user: user, msg: 'User created successfully.'})
-    }
+  axios
+  .post('users', datas)
+  .then(response => {
+    res.json({user: response.data, msg: 'User created successfully.'})
+  }).catch(err => {
+    res.json(handleError(err))
   })
-
 })
 
 /**
@@ -170,7 +209,7 @@ router.post('/', (req, res, next) => {
  *     }
  * @apiUse NoUserError
  */
-router.put('/:id', (req, res, next) => {
+router.patch('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
   // mandatory
@@ -182,23 +221,23 @@ router.put('/:id', (req, res, next) => {
   let cryptos = req.body.cryptos
   let keywords = req.body.keywords
 
-  let datas = {}
+  let datas = {
+    user_metadata: {}
+  }
 
   if (username) datas.username = username
   if (email) datas.email = email
   if (password) datas.password = password
-  if (currency) datas.currency = currency
-  if (cryptos) datas.cryptos = cryptos
-  if (keywords) datas.keywords = keywords
+  if (currency) datas.user_metadata.currency = currency
+  if (cryptos) datas.user_metadata.cryptos = cryptos
+  if (keywords) datas.user_metadata.keywords = keywords
 
-  User.findOneAndUpdate(req.params.id, datas, (err, user) => {
-    if (err) throw err
-
-    if (user) {
-      res.json({user: user, msg: 'User updated successfully.'})
-    } else {
-      res.json({err: 'No user found with this id.'})
-    }
+  axios
+  .patch(`users/${req.params.id}`, datas)
+  .then(response => {
+    res.json({user: response.data, msg: 'User updated successfully.'})
+  }).catch(err => {
+    res.json(handleError(err))
   })
 })
 
@@ -212,22 +251,20 @@ router.put('/:id', (req, res, next) => {
  * @apiSuccessExample {json} Success-Response:
  *     HTTP/1.1 200 OK
  *     {
- *       "_id": "567897656zqdjqld",
+ *       "_id": "auth0|567897656zqdjqld",
  *       "msg": "User deleted successfully."
  *     }
  * @apiUse NoUserError
  */
 router.delete('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
-
-  User.findOneAndDelete(req.params.id, (err, user) => {
-    if (err) throw err
-
-    if (user) {
-      res.json({_id: req.params.id, msg: 'User deleted successfully.'})
-    } else {
-      res.json({err: 'No user found with this id.'})
-    }
+  console.log('coucou')
+  axios
+  .delete(`users/${req.params.id}`)
+  .then(response => {
+    res.json({_id: req.params.id, msg: 'User deleted successfully.'})
+  }).catch(err => {
+    res.json(handleError(err))
   })
 })
 
@@ -248,15 +285,12 @@ router.delete('/:id', (req, res, next) => {
 router.get('/:id/cryptos', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
-  User.findById(req.params.id, 'cryptos', (err, doc) => {
-    if (err) throw err
-    console.log(doc)
-
-    if (doc) {
-      res.json({cryptos: doc.cryptos})
-    } else {
-      res.json({err: 'No user found with this id.'})
-    }
+  axios
+  .get(`users/${req.params.id}`, params={include_fields: true, fields: user_metadata})
+  .then(response => {
+    res.json({cryptos: response.data.user_metadata.cryptos})
+  }).catch(err => {
+    res.json(handleError(err))
   })
 })
 
@@ -277,15 +311,12 @@ router.get('/:id/cryptos', (req, res, next) => {
 router.get('/:id/keywords', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
-  User.findById(req.params.id, 'keywords', (err, doc) => {
-    if (err) throw err
-    console.log(doc)
-
-    if (doc) {
-      res.json({keywords: doc.keywords})
-    } else {
-      res.json({err: 'No user found with this id.'})
-    }
+  axios
+  .get(`users/${req.params.id}`, params={include_fields: true, fields: 'user_metadata'})
+  .then(response => {
+    res.json({keywords: response.data.user_metadata.keywords})
+  }).catch(err => {
+    res.json(handleError(err))
   })
 })
 
