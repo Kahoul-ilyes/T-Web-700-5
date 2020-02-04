@@ -20,7 +20,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/5e396beecc473d49e9d64f98",
+    "url": "/:id",
     "title": "Get an article by ID",
     "name": "GetArticleByID",
     "group": "Articles",
