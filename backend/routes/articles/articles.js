@@ -22,7 +22,7 @@ let adressBook = defaultAdressBook
 //get rss feed and store it, aimed for a job
 
 /**
- * @api {get} /articles/rss Job to store articles in database from RSS feeds 
+ * @api {get} articles/rss Job to store articles in database from RSS feeds 
  * @apiName GetAndStoreRSSFeed
  * @apiGroup Articles
  *
@@ -175,7 +175,7 @@ Here for each article, you must provide at least:
  */
 router.get('/', function (req, res) {
   let userKeywordsCheck = req.query.keywords
-  if (userKeywordsCheck !== undefined | userKeywordsCheck !== null) {
+  if (userKeywordsCheck !== undefined & userKeywordsCheck !== null) {
     let userKeywords = req.query.keywords.replace(',', ' ')
     if (userKeywords.length > 0) {
 
