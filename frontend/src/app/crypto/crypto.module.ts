@@ -15,7 +15,6 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatIconModule} from '@angular/material/icon';
 import {CryptoPageComponent} from './crypto-page/crypto-page.component';
 import {MatExpansionModule} from '@angular/material/expansion';
-import {CryptoListComponent} from './cryptolist/crypto-list.component';
 import {CryptoModel} from './shared/crypto.model';
 
 /**
