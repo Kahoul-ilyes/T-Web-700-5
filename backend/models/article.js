@@ -1,5 +1,13 @@
 let mongoose = require('mongoose')
-mongoose.connect(`${process.env.mongoUrl}`, {useNewUrlParser: true, useUnifiedTopology: true})
+// connect to Mongo daemon
+mongoose
+    .connect(
+        `${process.env.MONGO_URL}`,
+        {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false}
+    )
+    .then(() => console.log('MongoDB Connected'))
+    .catch(err => console.log(err));
+
 let db = mongoose.connection
 let articleSchema = require('../schemas/article')
 

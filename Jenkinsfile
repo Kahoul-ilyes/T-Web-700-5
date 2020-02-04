@@ -5,6 +5,11 @@ pipeline {
     environment {
         CI = 'true'
         PRIVATE_NETWORK = 'private-network'
+        DOMAIN_AUTH0 = 'dev-m6frxp9u.eu.auth0.com'
+        AUDIENCE_AUTH0 = 'https://dev-m6frxp9u.eu.auth0.com/api/v2/'
+        CLIENT_ID = '47yNDCUxZMI2lBNGH6v0gVbGdvTTdNRu'
+        API_KEY_CRYPTO_COMPARE = credentials("API_KEY_CRYPTO_COMPARE")
+        CLIENT_SECRET = credentials("CLIENT_SECRET")
     }
     stages {
 

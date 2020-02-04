@@ -1,7 +1,7 @@
 [
   {
     "type": "get",
-    "url": "/rss",
+    "url": "/articles/rss",
     "title": "Job to store articles in database from RSS feeds",
     "name": "GetAndStoreRSSFeed",
     "group": "Articles",
@@ -20,7 +20,7 @@
   },
   {
     "type": "get",
-    "url": "/5e396beecc473d49e9d64f98",
+    "url": "/articles/:id",
     "title": "Get an article by ID",
     "name": "GetArticleByID",
     "group": "Articles",
@@ -52,7 +52,7 @@
   },
   {
     "type": "get",
-    "url": "/?keywords=ethereum,tesla",
+    "url": "/articles/?keywords=ethereum,tesla",
     "title": "Get articles by keywords",
     "name": "GetArticlesByKeywords",
     "group": "Articles",

@@ -25,7 +25,13 @@ export class CryptoModel {
   marketCap: number;
 
 
+public  changeCryptoValue(newCrypto: CryptoModel) {
+  this.currentPrice = newCrypto.currentPrice;
+  this.openingPrice = newCrypto.openingPrice;
+  this.highestPrice = newCrypto.highestPrice;
+  this.lowestPrice = newCrypto.lowestPrice;
 
+}
 
   getChangesValue() {
     return ((this.currentPrice - this.openingPrice) / this.openingPrice) ;

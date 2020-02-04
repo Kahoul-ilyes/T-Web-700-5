@@ -87,7 +87,7 @@ export class CryptoPageComponent implements OnInit {
     this.onPageChange(null);
 
     // tslint:disable-next-line:no-shadowed-variable
-    const timer = setInterval(() => this.refreshTable(), 2000);
+    const timer = setInterval(() => this.refreshTable(), 10000);
     const timout = setTimeout(() => this.displayFavorites(), 4000);
   }
 
@@ -114,9 +114,7 @@ export class CryptoPageComponent implements OnInit {
     this.cryptoService.getCryptosBySymbol(cryptoTab).subscribe(data => {
       // @ts-ignore cryptos n'est pas trouvé sinon
       for (const d of (data.cryptos)) {
-        this.cryptoListAllUsers[cryptoRef[d.symbol]] = new CryptoModel(d.isTradable, d._id, cryptoRef[d.symbol], d.name,
-          d.__v, d.createdAt, d.dateAvailability, d.logo, d.symbol, d.updatedAt, d.website,
-          d.currentPrice, d.lowestPrice, d.openingPrice, d.highestPrice, d.supply, d.marketCap);
+        this.cryptoListAllUsers[cryptoRef[d.symbol]].changeCryptoValue(d);
         this.dataSourceAllUsers.data = this.cryptoListAllUsers;
       }
     });
@@ -148,10 +146,10 @@ export class CryptoPageComponent implements OnInit {
 
   /** Tri de base, par capitalisation (prix* quantité) */
   sortList() {
-    this.cryptoListAllUsers = this.cryptoListAllUsers.sort((a, b) =>
+    this.cryptoListAllUsers.sort((a, b) =>
       b.currentPrice * b.marketCap - a.currentPrice * a.marketCap
     );
-    this.cryptoListFavorites = this.cryptoListFavorites.sort((a, b) =>
+    this.cryptoListFavorites.sort((a, b) =>
       b.currentPrice * b.marketCap - a.currentPrice * a.marketCap
     );
   }
@@ -159,7 +157,9 @@ export class CryptoPageComponent implements OnInit {
   refreshFavorites() {
     this.cryptoListFavorites = this.cryptoListFull.filter(crypto => this.userService.currentUser.cryptos.includes(crypto.symbol));
     console.log('favoritesdata ', this.dataSourceFavorites);
-    this.sortList();
+    this.cryptoListFavorites = this.cryptoListFavorites.sort((a, b) =>
+      b.currentPrice * b.marketCap - a.currentPrice * a.marketCap
+    );
     this.dataSourceFavorites.data = this.cryptoListFavorites;
   }
 

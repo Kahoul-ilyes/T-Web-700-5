@@ -7,15 +7,23 @@ services:
       - 80
     links:
       - mongo
+    networks:
+      - default
+      - private_network
     environment:
       - SERVER_PORT=80
       - VIRTUAL_HOST=${BACKEND_DOMAIN}
       - LETSENCRYPT_HOST=${BACKEND_DOMAIN}
+      - FRONTEND_URL=https://${FRONTEND_DOMAIN}
+      - MONGO_URL=mongodb://mongo:27017/cryptocodex
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile-staging
+    networks:
+      - default
+      - private_network
     expose:
       - 80
     restart: always
@@ -25,15 +33,12 @@ services:
 
   mongo:
     image: mongo
-    volumes:
-      - ./db_data:/data/db
     expose:
       - "27017"
-
-volumes:
-  db_data:
+    networks:
+      - default
 
 networks:
-  default:
-    external:
-      name: ${PRIVATE_NETWORK}
+  private_network:
+    external: true
+    name: ${PRIVATE_NETWORK}
