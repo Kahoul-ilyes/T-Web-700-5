@@ -71,8 +71,10 @@ export class UserService {
     return this.httpClient.get(this.URL +  '/api/v0/users/' + userId );
   }
 
-  public updateUser(userId: string, body: string) {
-    return this.httpClient.patch(encodeURI(this.URL +  '/api/v0/users/' + userId), body, { headers: { 'Access-Control-Allow-Methods': 'PATCH'} } );
+  public updateUser(userId: string, body) {
+    console.log('body' , body);
+
+    return this.httpClient.patch(this.URL +  '/api/v0/users/' + userId, body );
   }
 
   /**
