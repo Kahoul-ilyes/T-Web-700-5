@@ -291,6 +291,8 @@ router.patch('/:id', (req, res, next) => {
   if (cryptos) datas.user_metadata.cryptos = cryptos
   if (keywords) datas.user_metadata.keywords = keywords
 
+  console.log('DATAS :', datas)
+  
   axios
   .patch(`users/${req.params.id}`, datas)
   .then(response => {
