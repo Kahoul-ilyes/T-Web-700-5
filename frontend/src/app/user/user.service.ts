@@ -15,7 +15,7 @@ export class UserService {
   constructor(private httpClient: HttpClient, public auth: AuthService) {
 
     /*
-     Si l'user est connecté alors on consulte la bdd pou savoir si l'user est dedans, si oui on récupère ses data, sinon on l'initialize
+     Si l'user est connecté alors on consulte la bdd pour savoir si l'user est dedans, si oui on récupère ses data, sinon on l'initialise
      */
     this.usersubs = auth.userProfile$.subscribe(userAuthO => {
       if (userAuthO !== undefined && userAuthO !== null) {

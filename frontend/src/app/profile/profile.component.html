@@ -1,0 +1,19 @@
+<pre *ngIf="auth.userProfile$ | async as profile">
+{{ profile | json }}
+</pre>
+
+<div class="example-container">
+
+  <mat-form-field [floatLabel]="options.value.floatLabel">
+    <mat-label>Name</mat-label>
+    <input matInput placeholder="name" [value]="name">
+  </mat-form-field>
+
+  <mat-form-field [floatLabel]="options.value.floatLabel">
+    <mat-label>Email</mat-label>
+    <input matInput placeholder="email" [value]="email">
+  </mat-form-field>
+
+  <button mat-raised-button color="primary">Submit</button>
+</div>
+

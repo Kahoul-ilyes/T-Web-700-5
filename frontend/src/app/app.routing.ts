@@ -2,13 +2,14 @@ import { Routes, RouterModule } from '@angular/router';
 import {AuthGuard} from './auth.guard';
 import {CryptoPageComponent} from './crypto/crypto-page/crypto-page.component';
 import {ArticleListComponent} from './article/article-list/article-list.component';
-
+import {ProfileComponent} from "./profile/profile.component";
 
 
 const routes: Routes = [
   { path: '', component: CryptoPageComponent},
   { path: 'article', component: ArticleListComponent},
   { path: 'cryptos', component: CryptoPageComponent},
+  { path: 'profile', component: ProfileComponent},
 
 
 

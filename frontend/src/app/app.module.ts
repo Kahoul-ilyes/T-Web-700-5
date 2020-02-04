@@ -21,6 +21,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {UserModule} from './user/user.module';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {ArticleModule} from './article/article.module';
+import { ProfileComponent } from './profile/profile.component';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatSelectModule} from "@angular/material/select";
+import {MatInputModule} from "@angular/material/input";
 
 
 @NgModule({
@@ -39,10 +43,13 @@ import {ArticleModule} from './article/article.module';
     ReactiveFormsModule,
     HttpClientModule,
     appRoutingModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatInputModule
   ],
   declarations: [
-  ],
+  ProfileComponent],
   providers: [
   ],
   bootstrap: [AppComponent]
