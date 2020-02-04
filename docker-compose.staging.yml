@@ -33,15 +33,10 @@ services:
 
   mongo:
     image: mongo
-    volumes:
-      - ./db_data:/data/db
     expose:
       - "27017"
     networks:
       - default
-
-volumes:
-  db_data:
 
 networks:
   private_network:
