@@ -22,7 +22,7 @@ let adressBook = defaultAdressBook
 //get rss feed and store it, aimed for a job
 
 /**
- * @api {get} /rss Job to store articles in database from RSS feeds 
+ * @api {get} /articles/rss Job to store articles in database from RSS feeds 
  * @apiName GetAndStoreRSSFeed
  * @apiGroup Articles
  *
@@ -117,7 +117,7 @@ Here for each article, you must provide at least:
 -> an URL of the article’s page
 -> an URL of its image (if it exists) */
 /**
- * @api {get} /?keywords=ethereum,tesla Get articles by keywords
+ * @api {get} /articles/?keywords=ethereum,tesla Get articles by keywords
  * @apiName GetArticlesByKeywords
  * @apiGroup Articles
  *
@@ -263,7 +263,7 @@ router.get('/', function (req, res) {
 // -> the URL of its image (if it exists)
 
 /**
- * @api {get} /:id Get an article by ID
+ * @api {get} /articles/:id Get an article by ID
  * @apiName GetArticleByID
  * @apiGroup Articles
  *
