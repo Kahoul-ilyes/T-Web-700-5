@@ -13,7 +13,7 @@ pipeline {
                 script {
                     echo '[Environment]...'
                     if (env.BRANCH_NAME == 'master') {
-                        env.BACKEND_DOMAIN = "backend.${baseDomain}";
+                        env.BACKEND_DOMAIN = "${baseDomain}";
                         env.FRONTEND_DOMAIN = "${baseDomain}";
                     } else {
                         env.BACKEND_DOMAIN = "backend.${BRANCH_NAME}.${baseDomain}";
