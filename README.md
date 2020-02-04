@@ -15,8 +15,12 @@
      - Back => localhost:4000 \
      For the local the front use the dev deploy backend\
    
+   
    To dev locally use :
-  
-    $ cd backend && npm start
-    $ cd frontend && npm start
+   
+    $ docker-compose up --build -d
+    
+ <h4> FRONTEND </h4>
+ For api calles use api base url as follow
+    
       

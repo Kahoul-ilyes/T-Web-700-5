@@ -3,18 +3,24 @@ services:
   backend:
     build: ./backend
     restart: always
-    ports:
-      - "3000:3000"
+    expose:
+      - 80
     links:
       - mongo
+    environment:
+      - VIRTUAL_HOST=${BACKEND_DOMAIN}
+      - LETSENCRYPT_HOST=${BACKEND_DOMAIN}
 
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile-prod
+    expose:
+      - 80
     restart: always
-    ports:
-      - "80:80"
+    environment:
+      - VIRTUAL_HOST=${FRONTEND_DOMAIN}
+      - LETSENCRYPT_HOST=${FRONTEND_DOMAIN}
 
   mongo:
     image: mongo
@@ -25,3 +31,8 @@ services:
 
 volumes:
   db_data:
+
+networks:
+  default:
+    external:
+      name: ${PRIVATE_NETWORK}
