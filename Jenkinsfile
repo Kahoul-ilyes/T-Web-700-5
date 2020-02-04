@@ -10,16 +10,18 @@ pipeline {
 
         stage('Environment') {
             steps {
-                echo '[Environment]...'
-                if (env.BRANCH_NAME == 'master') {
-                    env.BACKEND_DOMAIN = "backend.${baseDomain}";
-                    env.FRONTEND_DOMAIN = "${baseDomain}";
-                } else {
-                    env.BACKEND_DOMAIN = "backend.${BRANCH_NAME}.${baseDomain}";
-                    env.FRONTEND_DOMAIN = "${BRANCH_NAME}.${baseDomain}";
+                script {
+                    echo '[Environment]...'
+                    if (env.BRANCH_NAME == 'master') {
+                        env.BACKEND_DOMAIN = "backend.${baseDomain}";
+                        env.FRONTEND_DOMAIN = "${baseDomain}";
+                    } else {
+                        env.BACKEND_DOMAIN = "backend.${BRANCH_NAME}.${baseDomain}";
+                        env.FRONTEND_DOMAIN = "${BRANCH_NAME}.${baseDomain}";
+                    }
+                    sh 'printenv'
+                    echo '...[Environment]'
                 }
-                sh 'printenv'
-                echo '...[Environment]'
             }
         }
         stage('Build') {
