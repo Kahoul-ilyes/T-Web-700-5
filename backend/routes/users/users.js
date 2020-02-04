@@ -3,12 +3,9 @@ let async = require('async/waterfall')
 let express = require('express')
 let router = express.Router()
 
-
-
 let axios = require('axios')
 
-axios.defaults.baseURL = `${process.env.AUTH0_AUDIENCE}`
-
+axios.defaults.baseURL = `${process.env.AUDIENCE_AUTH0}`
 
 function handleError(err) {
   if (err.response) {
@@ -48,7 +45,7 @@ const getAccessToken = (callback) => {
   const accessTokenDatas = {
     "client_id":`${process.env.CLIENT_ID}`,
     "client_secret": `${process.env.CLIENT_SECRET}`,
-    "audience": `${process.env.AUTH0_AUDIENCE}`,
+    "audience": `${process.env.AUDIENCE_AUTH0}`,
     "grant_type": "client_credentials"
   }
   axios

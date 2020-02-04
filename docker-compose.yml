@@ -7,6 +7,9 @@ services:
       - "3000:3000"
     links:
       - mongo
+    environment:
+      - FRONTEND_URL=http://localhost:4200
+      - MONGO_URL=mongodb://mongo:27017/cryptocodex
 
   frontend:
     build: ./frontend
