@@ -7,7 +7,7 @@ let router = express.Router()
 
 let axios = require('axios')
 
-axios.defaults.baseURL = `${process.env.audienceAuth0}`
+axios.defaults.baseURL = `${process.env.AUTH0_AUDIENCE}`
 
 
 function handleError(err) {
@@ -48,7 +48,7 @@ const getAccessToken = (callback) => {
   const accessTokenDatas = {
     "client_id":`${process.env.CLIENT_ID}`,
     "client_secret": `${process.env.CLIENT_SECRET}`,
-    "audience": `${process.env.audienceAuth0}`,
+    "audience": `${process.env.AUTH0_AUDIENCE}`,
     "grant_type": "client_credentials"
   }
   axios
