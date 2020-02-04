@@ -75,7 +75,7 @@ const checkJwt = jwt({
 });
 
 // middleware for checking jwt
-// app.use(checkJwt)
+app.use(checkJwt)
 
 
 app.use('/', indexRouter)

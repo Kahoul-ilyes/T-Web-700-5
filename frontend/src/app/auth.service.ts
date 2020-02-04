@@ -14,6 +14,7 @@ export class AuthService {
     createAuth0Client({
       domain: 'dev-m6frxp9u.eu.auth0.com',
       client_id: '3ess7PV40tRcUZdexg66wq0SMJQSTXLK',
+      audience: 'https://dev-m6frxp9u.eu.auth0.com/api/v2/',
       redirect_uri: `${window.location.origin}`
     })
   ) as Observable<Auth0Client>).pipe(
@@ -44,6 +45,12 @@ export class AuthService {
     this.localAuthSetup();
     // Handle redirect from Auth0 login
     this.handleAuthCallback();
+  }
+
+  getTokenSilently$(options?): Observable<string> {
+    return this.auth0Client$.pipe(
+      concatMap((client: Auth0Client) => from(client.getTokenSilently(options)))
+    );
   }
 
   // When calling, options can be passed if desired

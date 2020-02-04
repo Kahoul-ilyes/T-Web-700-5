@@ -2,7 +2,7 @@
 
 import { NgModule } from '@angular/core';
 
-import { appRoutingModule } from './app.routing';
+import { AppRoutingModule } from './app.routing';
 
 // App Module
 import { AppComponent } from './app.component';
@@ -38,7 +38,7 @@ import {ArticleModule} from './article/article.module';
     HttpClientModule,
     ReactiveFormsModule,
     HttpClientModule,
-    appRoutingModule,
+    AppRoutingModule,
     MatTooltipModule
   ],
   declarations: [
