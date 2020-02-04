@@ -3,13 +3,10 @@ let async = require('async/waterfall')
 let express = require('express')
 let router = express.Router()
 
-const accessToken = `${process.env.ACCESS_TOKEN_AUTH0}`
 let axios = require('axios')
 
 axios.defaults.baseURL = `${process.env.AUDIENCE_AUTH0}`
 
-axios.defaults.baseURL = `${process.env.AUDIENCE_AUTH0}`
-axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
 function handleError(err) {
   if (err.response) {
     // The request was made and the server responded with a status code
@@ -48,7 +45,7 @@ const getAccessToken = (callback) => {
   const accessTokenDatas = {
     "client_id":`${process.env.CLIENT_ID}`,
     "client_secret": `${process.env.CLIENT_SECRET}`,
-    "audience": `${process.env.AUTH0_AUDIENCE}`,
+    "audience": `${process.env.AUDIENCE_AUTH0}`,
     "grant_type": "client_credentials"
   }
   axios
