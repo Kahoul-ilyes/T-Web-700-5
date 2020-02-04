@@ -1,0 +1,16 @@
+<h1 mat-dialog-title>Add a new RSS</h1>
+<div mat-dialog-content>
+  <p>What is the url ?</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.rssUrl">
+  </mat-form-field>
+
+  <p>Is it fetchable ?</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.rssFetchable">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>No Thanks</button>
+  <button mat-button mat-dialog-close cdkFocusInitial>Ok</button>
+</div>

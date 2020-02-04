@@ -97,12 +97,12 @@ export class CryptoService {
    */
   constructor(private httpClient: HttpClient) {
     // console.log(localStorage.getItem('baseUpdated'));
-    if (localStorage.getItem('baseUpdated') === null) {
-      if (true) {
-        this.updateCoinList().subscribe((data) => {
-          localStorage.setItem('baseUpdated', 'true');
-        });
-      }
-    }
+    // if (localStorage.getItem('baseUpdated') === null) {
+    //   if (true) {
+    //     this.updateCoinList().subscribe((data) => {
+    //       localStorage.setItem('baseUpdated', 'true');
+    //     });
+    //   }
+    // }
   }
 }

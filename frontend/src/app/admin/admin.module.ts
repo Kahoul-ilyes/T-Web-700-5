@@ -8,6 +8,7 @@ import {MatInputModule} from '@angular/material/input';
 import {ReactiveFormsModule} from '@angular/forms';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatTableModule} from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -21,7 +22,8 @@ import {MatTableModule} from '@angular/material/table';
     MatInputModule,
     ReactiveFormsModule,
     MatTableModule,
-    MatTabsModule
+    MatTabsModule,
+    MatDialogModule
   ]
 })
 export class AdminModule { }

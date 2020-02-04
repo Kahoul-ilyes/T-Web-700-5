@@ -22,6 +22,7 @@ import {UserModule} from './user/user.module';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {ArticleModule} from './article/article.module';
 import { AdminModule } from './admin/admin.module';
+// import { addRssDialog } from './admin/admin.component';
 
 
 @NgModule({
@@ -44,8 +45,12 @@ import { AdminModule } from './admin/admin.module';
     AdminModule
   ],
   declarations: [
+    // addRssDialog
   ],
   providers: [
+  ],
+  entryComponents: [
+    // addRssDialog
   ],
   bootstrap: [AppComponent]
 })

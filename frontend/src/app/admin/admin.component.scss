@@ -3,17 +3,25 @@ table {
   width: 100%;
 }
 
-tr.mat-header-row {
-  display: flex;
-  flex-grow: 1;
-  align-items: center;
+.action-button {
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+  margin-left: 5vw;
+  width: 20vw;
+}
+
+.margin-auto {
+  margin-left: auto;
+  margin-right: auto;
+  width: 40%;
+}
+
+mat-header-cell {
   justify-content: center;
 }
 
-th.mat-header-cell {
-  width: 100%;
-  display: flex;
+mat-cell {
   justify-content: center;
-  align-items: center;
 }
+
 

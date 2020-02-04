@@ -13,11 +13,23 @@ export class RssService {
   url = environment.apiBaseUrl;
 
   getAllRss() {
-    return this.httpClient.get(this.url + '/api/v0/rss/');
+    return this.httpClient.get(`${this.url}/api/v0/rss`)
   }
 
   getRssById(id: string) {
-    return this.httpClient.get(this.url + '/api/v0/rss/' + id);
+    return this.httpClient.get(`${this.url}/api/v0/rss/${id}`)
+  }
+
+  updateRss(id: string, data: string) {
+    return this.httpClient.put(`${this.url}/api/v0/rss/${id}`, JSON.parse(data))
+  }
+  
+  addRss(data: string) {
+    return this.httpClient.post(`${this.url}/api/v0/rss/`, JSON.parse(data))
+  }
+
+  deleteRss(id: string) {
+    return this.httpClient.delete(`${this.url}/api/v0/rss/${id}`)
   }
 }
 
