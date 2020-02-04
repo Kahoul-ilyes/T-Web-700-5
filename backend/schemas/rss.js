@@ -17,7 +17,7 @@ let rssSchema = new Schema({
     }
   },
 }, {
-  collection: 'flux',
+  collection: 'rss',
   timestamps: true
 });
 
