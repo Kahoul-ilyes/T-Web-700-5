@@ -69,32 +69,11 @@ export class UserModel {
     return this.keywords.includes(keyword);
   }
   /** Format to JSON */
-  toJSON(): string {
-    let json = '{';
-    json += ' "username" : "' + this.username + '", ';
-    json += ' "email" : "' + this.email + '", ';
-
-    json += ' "cryptos" : [';
-    this.cryptos.forEach((crypto, val) => {
-      json += '"' + crypto + '"';
-      if (val !== this.cryptos.length - 1) {
-        json += ',';
-      }
-    });
-    json += '], ';
-
-    json += ' "keywords" : [';
-    this.keywords.forEach((keywords, val) => {
-
-      json += '"' + keywords + '"';
-      if (val !== this.keywords.length - 1) {
-        json += ',';
-      }
-    });
-    json += '] }';
-
-    console.log('json send ', json);
-    return json;
+  toJSON() {
+    return {
+      cryptos: this.cryptos,
+      keywords : this.keywords
+    };
   }
 }
 
