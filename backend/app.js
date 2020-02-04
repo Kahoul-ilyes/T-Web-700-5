@@ -11,7 +11,7 @@ const mongoose = require('mongoose')
 mongoose
     .connect(
         'mongodb://mongo:27017/express-mongo',
-        {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false}
+        {useNewUrlParser: true, useFindAndModify: false}
     )
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.log(err));
