@@ -9,7 +9,7 @@ services:
       - mongo
     environment:
       - FRONTEND_URL=http://localhost:4200
-      - MONGO_URL=mongodb://127.0.0.1/cryptocodex
+      - MONGO_URL=mongodb://mongo:27017/cryptocodex
 
   frontend:
     build: ./frontend

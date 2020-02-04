@@ -10,23 +10,23 @@ require('dotenv').config()
 
 
 const mongoose = require('mongoose')
-mongoose.connect(`${process.env.MONGO_URL}`, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
+// connect to Mongo daemon
+mongoose
+    .connect(
+        `${process.env.MONGO_URL}`,
+        {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false}
+    )
+    .then(() => console.log('MongoDB Connected'))
+    .catch(err => console.log(err));
 
 const db = mongoose.connection
+
 db.on('error', console.error.bind(console, 'Bdd connection error:'))
 db.once('open', () => {
   console.log('Bdd connected !')
   // we're connected!
 })
 
-// // connect to Mongo daemon
-// mongoose
-//     .connect(
-//         'mongodb://mongo:27017/express-mongo',
-//         {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false}
-//     )
-//     .then(() => console.log('MongoDB Connected'))
-//     .catch(err => console.log(err));
 
 let indexRouter = require('./routes/index')
 let usersRouter = require('./routes/users/users')
