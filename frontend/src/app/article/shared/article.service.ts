@@ -7,7 +7,9 @@ import {HttpClient} from '@angular/common/http';
   providedIn: 'root'
 })
 export class ArticleService {
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+    this.initArticle().subscribe(res => console.log('init RSS', res));
+  }
   ListAllArticle = new Array<ArticleModel>();
 
   url = environment.apiBaseUrl;
@@ -32,11 +34,19 @@ export class ArticleService {
 
   ];
 
-  getArticlesByKeywords(keywords: string) {
-
-
+  getArticlesByKeywords(keywords: string[]) {
+    let keywordChain = '';
+    if (keywords !== null) {
+      keywordChain += 'keywords=';
+      keywords.forEach(keyword => keywordChain += keyword + ',');
+    }
+    return this.httpClient.get(this.url + '/api/v0/' + keywordChain );
   }
 
+
+  initArticle() {
+    return this.httpClient.get(this.url + '/api/v0/rss');
+  }
   getArticleById(id: string) {
     return this.httpClient.get(this.url + '/api/v0/' + id );
   }
