@@ -46,9 +46,6 @@ export class UserModel {
 
   public addCrypto(symbol: string) {
     this.cryptos.push(symbol);
-    console.log('cryptos', this.cryptos$);
-
-
   }
 
   public addKeyword(keyword: string) {
@@ -68,8 +65,36 @@ export class UserModel {
     return this.cryptos.includes(symbol);
   }
 
-  public(keyword: string): boolean {
+  public containsKeyWords(keyword: string): boolean {
     return this.keywords.includes(keyword);
   }
+  /** Format to JSON */
+  toJSON(): string {
+    let json = '{';
+    json += ' "username" : "' + this.username + '", ';
+    json += ' "email" : "' + this.email + '", ';
 
+    json += ' "cryptos" : [';
+    this.cryptos.forEach((crypto, val) => {
+      json += '"' + crypto + '"';
+      if (val !== this.cryptos.length - 1) {
+        json += ',';
+      }
+    });
+    json += '], ';
+
+    json += ' "keywords" : [';
+    this.keywords.forEach((keywords, val) => {
+
+      json += '"' + keywords + '"';
+      if (val !== this.keywords.length - 1) {
+        json += ',';
+      }
+    });
+    json += '] }';
+
+    console.log('json send ', json);
+    return json;
+  }
 }
+
