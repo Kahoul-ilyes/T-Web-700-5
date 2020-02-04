@@ -7,7 +7,7 @@ import {environment} from '../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-/** Gestion des appels a la parti crypto du server et à l'API de CryptoCompare  */
+/** Gestion des appels a la parti crypto du server et   */
 export class CryptoService {
 
   optionRequete = {
@@ -16,17 +16,6 @@ export class CryptoService {
   };
   /** Main URL, a changer à la fin des test */
   URL = environment.apiBaseUrl;
-
-  // URL = 'http://35.214.83.191:4000';
-  /** url du site de crypto, a delete après les test */
-  url = 'https://min-api.cryptocompare.com/data/blockchain/histo/day?fsym=BTC&api_key=';
-  /** Clé du site de crypto */
-  apiKey = '31255fdff90cdeb050d6efa71f6e84917ed11d573e7dffcc76999f1c30ec58ab';
-
-  /** Récupère des valeurs directement dpuis l'API, pour des test */
-  public getDataFromApi() {
-    return this.httpClient.get(this.url + this.apiKey );
-  }
 
   /**
    * Creation d'une nouvelle crypto en base
@@ -107,12 +96,13 @@ export class CryptoService {
    * @param httpClient pour la communication avec les APIs
    */
   constructor(private httpClient: HttpClient) {
-    console.log(localStorage.getItem('baseUpdated'));
-  //  if (localStorage.getItem('baseUpdated') === null) {
-    if (true) {
-      this.updateCoinList().subscribe((data) => {
-        localStorage.setItem('baseUpdated', 'true');
-      });
+    // console.log(localStorage.getItem('baseUpdated'));
+    if (localStorage.getItem('baseUpdated') === null) {
+      if (true) {
+        this.updateCoinList().subscribe((data) => {
+          localStorage.setItem('baseUpdated', 'true');
+        });
+      }
     }
   }
 }

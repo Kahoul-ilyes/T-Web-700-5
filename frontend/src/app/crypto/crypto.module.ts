@@ -8,7 +8,6 @@ import {MatInputModule} from '@angular/material/input';
 
 // For Http request
 import {HttpClientModule} from '@angular/common/http';
-import { CryptoGraphComponent } from './crypto-graph/crypto-graph.component';
 import {CryptoService} from './shared/crypto.service';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
@@ -16,14 +15,13 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatIconModule} from '@angular/material/icon';
 import {CryptoPageComponent} from './crypto-page/crypto-page.component';
 import {MatExpansionModule} from '@angular/material/expansion';
-import {CryptoListComponent} from './cryptolist/crypto-list.component';
 import {CryptoModel} from './shared/crypto.model';
 
 /**
  * Module pour tout ce qui concerne les crypto, affichage des listes de crypto et des stats
  */
 @NgModule({
-  declarations: [CryptoListComponent, CryptoGraphComponent, CryptoPageComponent],
+  declarations: [ CryptoPageComponent],
   exports: [
     CryptoPageComponent,
     HttpClientModule
@@ -42,7 +40,6 @@ import {CryptoModel} from './shared/crypto.model';
   ]
 })
 export class CryptoModule {
-  cryptoListFull: CryptoModel[];
 
   constructor(private cryptoService: CryptoService) { }
 }
