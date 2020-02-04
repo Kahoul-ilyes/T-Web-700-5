@@ -713,7 +713,7 @@ define({ "api": [
     "groupTitle": "User"
   },
   {
-    "type": "put",
+    "type": "patch",
     "url": "/users/:id",
     "title": "Update an existing user",
     "name": "PutUser",

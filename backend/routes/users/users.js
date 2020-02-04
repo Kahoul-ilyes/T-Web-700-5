@@ -241,7 +241,7 @@ router.post('/', (req, res, next) => {
 })
 
 /**
- * @api {put} /users/:id Update an existing user
+ * @api {patch} /users/:id Update an existing user
  * @apiName PutUser
  * @apiGroup User
  * 
