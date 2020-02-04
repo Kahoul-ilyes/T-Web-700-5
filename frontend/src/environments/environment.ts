@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiBaseUrl: "https://backend.develop.t-web.epitech.castornaut.com/"
+  apiBaseUrl: "localhost:3000"
 };
 
 /*
