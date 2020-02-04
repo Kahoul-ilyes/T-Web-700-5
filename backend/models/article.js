@@ -1,5 +1,5 @@
 let mongoose = require('mongoose')
-mongoose.connect('mongodb://127.0.0.1/cryptocodex', {useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(`${process.env.mongoUrl}`, {useNewUrlParser: true, useUnifiedTopology: true})
 let db = mongoose.connection
 let articleSchema = require('../schemas/article')
 
