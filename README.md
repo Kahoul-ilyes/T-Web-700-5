@@ -3,16 +3,16 @@
   The front have apiBaseUrl env var as backend base url.
 
  Production :     
-    - Front => http://35.214.83.191 \
-    - Backend => http://35.214.83.191:3000
+    - Front => https://t-web.epitech.castornaut.com/ \
+    - Backend => https://backend.t-web.epitech.castornaut.com/
  
   Development :     
-     - Front => http://35.214.83.191:4200 \
-     - Backend => http://35.214.83.191:4000
+     - Front => https://develop.t-web.epitech.castornaut.com/ \
+     - Backend => https://backend.develop.t-web.epitech.castornaut.com/
      
   Local: \
      - Front => localhost:4200 \
-     - Back => localhost:4000 \
+     - Back => localhost:3000 \
      For the local the front use the dev deploy backend\
    
    
@@ -21,6 +21,6 @@
     $ docker-compose up --build -d
     
  <h4> FRONTEND </h4>
- For api calles use api base url as follow
+ For api calles use apiBaseUrl variable in environment.ts
     
       
