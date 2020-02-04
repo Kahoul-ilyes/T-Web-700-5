@@ -36,9 +36,9 @@
 
   <!-- Symbol Column -->
   <ng-container matColumnDef="value" >
-     <th mat-header-cell *matHeaderCellDef> Current Price </th>
-     <td mat-cell *matCellDef="let element"> {{element.currentPrice | currency }} </td>
-   </ng-container>
+    <th mat-header-cell *matHeaderCellDef> Current Price </th>
+    <td mat-cell *matCellDef="let element"> {{element.currentPrice | currency }} </td>
+  </ng-container>
 
   <ng-container matColumnDef="capitalization">
     <th mat-header-cell *matHeaderCellDef> Total Vol. </th>
@@ -54,8 +54,8 @@
     <th mat-header-cell *matHeaderCellDef></th>
     <td mat-cell  class="" *matCellDef="let element" >
       <div  *ngIf="auth.loggedIn">
-      <i *ngIf="userService.currentUser.containsCrypto(element.symbol)" (click)="removeCrypto(element.symbol)" class="material-icons">favorite</i>
-      <i *ngIf="!userService.currentUser.containsCrypto(element.symbol)" (click)="addCrypto(element.symbol)" class="material-icons">favorite_border</i>
+        <i *ngIf="userService.currentUser.containsCrypto(element.symbol)" (click)="removeCrypto(element.symbol)" class="material-icons">favorite</i>
+        <i *ngIf="!userService.currentUser.containsCrypto(element.symbol)" (click)="addCrypto(element.symbol)" class="material-icons">favorite_border</i>
       </div>
     </td>
   </ng-container>
@@ -68,8 +68,11 @@
   <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 </table>
 <mat-paginator
+  [className]=""
   [pageSizeOptions]="[25, 5, 10, 100]"
-  (page)="onPageChange($event)"></mat-paginator>
+  (page)="onPageChange($event)">
+
+</mat-paginator>
 
 
 
