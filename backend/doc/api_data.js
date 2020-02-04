@@ -1,6 +1,76 @@
 define({ "api": [
   {
     "type": "get",
+    "url": "/rss",
+    "title": "Job to store articles in database from RSS feeds",
+    "name": "GetAndStoreRSSFeed",
+    "group": "Articles",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n    {\n    \"msg\": \"0 added successfully!\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/articles/articles.js",
+    "groupTitle": "Articles"
+  },
+  {
+    "type": "get",
+    "url": "/5e396beecc473d49e9d64f98",
+    "title": "Get an article by ID",
+    "name": "GetArticleByID",
+    "group": "Articles",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "id",
+            "description": "<p>article's unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n    {\n {\n    \"article\": {\n        \"_id\": \"5e396beecc473d49e9d64f98\",\n        \"title\": \"Le Bitcoin atteindra 250 000 Dollars en 2023 ?\",\n        \"link\": \"https://blocknews.fr/le-bitcoin-atteindra-250-000-dollars-en-2023/\",\n        \"pubDate\": \"2019-05-19T14:22:43.000Z\",\n        \"content:encoded\": \"\\n<p>Alors que Bitcoin repart vers le Nord en atteignant les 8 300 $ il y a quelques jours, <strong>Tim Draper</strong> fondateur du fonds capital-risque <strong>Draper Fisher Jurvetson</strong> partage ses prévisions optimistes sur la futur valeur du BTC.<br></p>\\n\\n\\n\\n<p>Après avoir misé sur <strong>Tesla</strong> et <strong>Skype</strong> à ses débuts, l’investisseur milliardaire avait acheté en 2014 lors d’une enchère 30 000 Bitcoin aux services <strong>Américains Marshals</strong> pour une valeur avoisinant les 19 millions de dollars.</p>\\n\\n\\n\\n<p>Il investit fin 2018 dans la Start-up <strong>OpenNode</strong> qui développe une plateforme de paiement bitcoin avec le <strong>Lightning Network. </strong><br></p>\\n\\n\\n\\n<h2><strong>250 000 Dollars en 2023</strong><br></h2>\\n\\n\\n\\n<p>D&rsquo;après lui, Bitcoin représentera environ 5% du marché mondial dans 4 ans,</p>\\n\\n\\n\\n<blockquote class=\\\"wp-block-quote\\\"><p>C&rsquo;est une meilleure monnaie, elle est décentralisée, elle est accessible est transparente, tout le monde sait ce qui se passe sur la blockchain.</p></blockquote>\\n\\n\\n\\n<p></p>\\n\\n\\n\\n<h4><strong>Une vision plus objective et argumenté que celle de John McAfee </strong><br></h4>\\n\\n\\n\\n<p><strong>Une monnaie qui simplifie les échanges ?</strong><br></p>\\n\\n\\n\\n<blockquote class=\\\"wp-block-quote\\\"><p>Je souhaite éventuellement disposer d&rsquo;un fonds où je reçois en bitcoin et je finance tout le monde en bitcoin, ils paient leurs employés et leurs fournisseurs en bitcoins, puis je paye mes investisseurs en bitcoin… Car je n&rsquo;aurais alors besoin d&rsquo;aucune comptabilité, d&rsquo;aucune comptabilité légale, d&rsquo;aucune comptabilité, pas de garde &#8211; tout serait fait.<br></p></blockquote>\\n\\n\\n\\n<p><strong>Des technologies qui pourraient bouleverser les Etats ?</strong><br></p>\\n\\n\\n\\n<p>Il insiste sur le fait que les cryptomonnaies une fois regroupées avec d’autres technologies pourraient révolutionner le fonctionnement des gouvernements et des administrations.</p>\\n\\n\\n\\n<blockquote class=\\\"wp-block-quote\\\"><p>Vous pouvez remplacer l&rsquo;intégralité des bureaucrates par une intelligence artificielle, un contrat intelligent et la blockchain.</p></blockquote>\\n<p>L’article <a rel=\\\"nofollow\\\" href=\\\"https://blocknews.fr/le-bitcoin-atteindra-250-000-dollars-en-2023/\\\">Le Bitcoin atteindra 250 000 Dollars en 2023 ?</a> est apparu en premier sur <a rel=\\\"nofollow\\\" href=\\\"https://blocknews.fr\\\">Blocknews</a>.</p>\\n\",\n        \"comments\": \"https://blocknews.fr/le-bitcoin-atteindra-250-000-dollars-en-2023/#respond\",\n        \"content\": \"<p>La lune ne sera qu'une escale pour le Bitcoin d’après Tim Draper. </p>\\n<p>L’article <a rel=\\\"nofollow\\\" href=\\\"https://blocknews.fr/le-bitcoin-atteindra-250-000-dollars-en-2023/\\\">Le Bitcoin atteindra 250 000 Dollars en 2023 ?</a> est apparu en premier sur <a rel=\\\"nofollow\\\" href=\\\"https://blocknews.fr\\\">Blocknews</a>.</p>\\n\",\n        \"image\": \"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Feed-icon.svg/1200px-Feed-icon.svg.png\",\n        \"createdAt\": \"2020-02-04T13:04:46.109Z\",\n        \"updatedAt\": \"2020-02-04T13:04:46.109Z\",\n        \"__v\": 0\n    }\n}\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/articles/articles.js",
+    "groupTitle": "Articles"
+  },
+  {
+    "type": "get",
+    "url": "/?keywords=ethereum,tesla",
+    "title": "Get articles by keywords",
+    "name": "GetArticlesByKeywords",
+    "group": "Articles",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n    {\n    \"articles\": [\n        {\n            \"enclosure\": {\n                \"url\": \"http://images.cointelegraph.com/images/528_aHR0cHM6Ly9zMy5jb2ludGVsZWdyYXBoLmNvbS9zdG9yYWdlL3VwbG9hZHMvdmlldy9iZTdkMjgyMTQ3NzFlZjFiNDhjNGRjNGExMjg1NmVmMC5qcGc=.jpg\",\n                \"length\": \"528\",\n                \"type\": \"image/jpg\"\n            },\n            \"_id\": \"5e3848eb4993f6607cbddc89\",\n            \"title\": \"Bitcoin Futures: Volatility ‘Coming’ as BitMEX Hits $1B Open Interest\",\n            \"link\": \"https://cointelegraph.com/news/bitcoin-futures-volatility-coming-as-bitmex-hits-1b-open-interest\",\n            \"pubDate\": \"2020-02-03T10:17:00.000Z\",\n            \"content\": \"\\n                <img src=\\\"https://images.cointelegraph.com/images/528_aHR0cHM6Ly9zMy5jb2ludGVsZWdyYXBoLmNvbS9zdG9yYWdlL3VwbG9hZHMvdmlldy9iZTdkMjgyMTQ3NzFlZjFiNDhjNGRjNGExMjg1NmVmMC5qcGc=.jpg\\\"><p>Bitcoin should see a “significant” price move on the back of futures strength, one analyst believes</p>\\n            \",\n            \"image\": \"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Feed-icon.svg/1200px-Feed-icon.svg.png\",\n            \"createdAt\": \"2020-02-03T16:23:07.120Z\",\n            \"updatedAt\": \"2020-02-03T16:23:07.120Z\",\n            \"__v\": 0\n        },\n        {\n            \"enclosure\": {\n                \"url\": \"http://images.cointelegraph.com/images/528_aHR0cHM6Ly9zMy5jb2ludGVsZWdyYXBoLmNvbS9zdG9yYWdlL3VwbG9hZHMvdmlldy9lY2U5MTJkMGU5NGU1NTkyNzRkNzZiM2QwZDRiNDJmZC5qcGc=.jpg\",\n                \"length\": \"528\",\n                \"type\": \"image/jpg\"\n            },\n            \"_id\": \"5e305c87fb9c575ebb88e993\",\n            \"title\": \"New Research Shows Bitcoin-Denominated Payments Still a ‘Fantasy’\",\n            \"link\": \"https://cointelegraph.com/news/new-research-shows-bitcoin-denominated-payments-still-a-fantasy\",\n            \"pubDate\": \"2020-01-27T12:23:00.000Z\",\n            \"content\": \"\\n                <img src=\\\"https://images.cointelegraph.com/images/528_aHR0cHM6Ly9zMy5jb2ludGVsZWdyYXBoLmNvbS9zdG9yYWdlL3VwbG9hZHMvdmlldy9lY2U5MTJkMGU5NGU1NTkyNzRkNzZiM2QwZDRiNDJmZC5qcGc=.jpg\\\"><p>A recent report by BitMEX states that the increasing decimal precision of Bitcoin outputs means that it is far from unit of account status</p>\\n            \",\n            \"image\": \"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Feed-icon.svg/1200px-Feed-icon.svg.png\",\n            \"createdAt\": \"2020-01-28T16:08:39.777Z\",\n            \"updatedAt\": \"2020-01-28T16:08:39.777Z\",\n            \"__v\": 0\n        },\n        {\n            \"_id\": \"5e305b9dfc98015dbb8101e6\",\n            \"title\": \"Le Bitcoin atteindra 250 000 Dollars en 2023 ?\",\n            \"link\": \"https://blocknews.fr/le-bitcoin-atteindra-250-000-dollars-en-2023/\",\n            \"pubDate\": \"2019-05-19T14:22:43.000Z\",\n            \"content:encoded\": \"\\n<p>Alors que Bitcoin repart vers le Nord en atteignant les 8 300 $ il y a quelques jours, <strong>Tim Draper</strong> fondateur du fonds capital-risque <strong>Draper Fisher Jurvetson</strong> partage ses prévisions optimistes sur la futur valeur du BTC.<br></p>\\n\\n\\n\\n<p>Après avoir misé sur <strong>Tesla</strong> et <strong>Skype</strong> à ses débuts, l’investisseur milliardaire avait acheté en 2014 lors d’une enchère 30 000 Bitcoin aux services <strong>Américains Marshals</strong> pour une valeur avoisinant les 19 millions de dollars.</p>\\n\\n\\n\\n<p>Il investit fin 2018 dans la Start-up <strong>OpenNode</strong> qui développe une plateforme de paiement bitcoin avec le <strong>Lightning Network. </strong><br></p>\\n\\n\\n\\n<h2><strong>250 000 Dollars en 2023</strong><br></h2>\\n\\n\\n\\n<p>D&rsquo;après lui, Bitcoin représentera environ 5% du marché mondial dans 4 ans,</p>\\n\\n\\n\\n<blockquote class=\\\"wp-block-quote\\\"><p>C&rsquo;est une meilleure monnaie, elle est décentralisée, elle est accessible est transparente, tout le monde sait ce qui se passe sur la blockchain.</p></blockquote>\\n\\n\\n\\n<p></p>\\n\\n\\n\\n<h4><strong>Une vision plus objective et argumenté que celle de John McAfee </strong><br></h4>\\n\\n\\n\\n<p><strong>Une monnaie qui simplifie les échanges ?</strong><br></p>\\n\\n\\n\\n<blockquote class=\\\"wp-block-quote\\\"><p>Je souhaite éventuellement disposer d&rsquo;un fonds où je reçois en bitcoin et je finance tout le monde en bitcoin, ils paient leurs employés et leurs fournisseurs en bitcoins, puis je paye mes investisseurs en bitcoin… Car je n&rsquo;aurais alors besoin d&rsquo;aucune comptabilité, d&rsquo;aucune comptabilité légale, d&rsquo;aucune comptabilité, pas de garde &#8211; tout serait fait.<br></p></blockquote>\\n\\n\\n\\n<p><strong>Des technologies qui pourraient bouleverser les Etats ?</strong><br></p>\\n\\n\\n\\n<p>Il insiste sur le fait que les cryptomonnaies une fois regroupées avec d’autres technologies pourraient révolutionner le fonctionnement des gouvernements et des administrations.</p>\\n\\n\\n\\n<blockquote class=\\\"wp-block-quote\\\"><p>Vous pouvez remplacer l&rsquo;intégralité des bureaucrates par une intelligence artificielle, un contrat intelligent et la blockchain.</p></blockquote>\\n<p>L’article <a rel=\\\"nofollow\\\" href=\\\"https://blocknews.fr/le-bitcoin-atteindra-250-000-dollars-en-2023/\\\">Le Bitcoin atteindra 250 000 Dollars en 2023 ?</a> est apparu en premier sur <a rel=\\\"nofollow\\\" href=\\\"https://blocknews.fr\\\">Blocknews</a>.</p>\\n\",\n            \"comments\": \"https://blocknews.fr/le-bitcoin-atteindra-250-000-dollars-en-2023/#respond\",\n            \"content\": \"<p>La lune ne sera qu'une escale pour le Bitcoin d’après Tim Draper. </p>\\n<p>L’article <a rel=\\\"nofollow\\\" href=\\\"https://blocknews.fr/le-bitcoin-atteindra-250-000-dollars-en-2023/\\\">Le Bitcoin atteindra 250 000 Dollars en 2023 ?</a> est apparu en premier sur <a rel=\\\"nofollow\\\" href=\\\"https://blocknews.fr\\\">Blocknews</a>.</p>\\n\",\n            \"image\": \"https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Feed-icon.svg/1200px-Feed-icon.svg.png\",\n            \"createdAt\": \"2020-01-28T16:04:45.177Z\",\n            \"updatedAt\": \"2020-01-28T16:04:45.177Z\",\n            \"__v\": 0\n        }\n    ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/articles/articles.js",
+    "groupTitle": "Articles"
+  },
+  {
+    "type": "get",
     "url": "/coins/",
     "title": "Get the available coin list and update database",
     "name": "GetCoin",
