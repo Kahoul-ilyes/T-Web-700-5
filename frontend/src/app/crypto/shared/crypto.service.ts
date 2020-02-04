@@ -12,9 +12,7 @@ export class CryptoService {
 
   optionRequete = {
     headers: new HttpHeaders({
-      'Access-Control-Allow-Origin': '*',
-      'mon-entete-personnalise': 'maValeur'
-    })
+      'Access-Control-Allow-Origin': '*'})
   };
   /** Main URL, a changer à la fin des test */
   URL = environment.apiBaseUrl;

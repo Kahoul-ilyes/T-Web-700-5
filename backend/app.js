@@ -19,6 +19,15 @@ db.once('open', () => {
   // we're connected!
 })
 
+// // connect to Mongo daemon
+// mongoose
+//     .connect(
+//         'mongodb://mongo:27017/express-mongo',
+//         {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false}
+//     )
+//     .then(() => console.log('MongoDB Connected'))
+//     .catch(err => console.log(err));
+
 let indexRouter = require('./routes/index')
 let usersRouter = require('./routes/users/users')
 let cryptosRouter = require('./routes/cryptos/cryptos', )
