@@ -72,7 +72,7 @@ export class UserService {
   }
 
   public updateUser(userId: string, body: string) {
-    return this.httpClient.put(this.URL +  '/api/v0/users/' + userId, body );
+    return this.httpClient.patch(encodeURI(this.URL +  '/api/v0/users/' + userId), body, { headers: { 'Access-Control-Allow-Methods': 'PATCH'} } );
   }
 
   /**
