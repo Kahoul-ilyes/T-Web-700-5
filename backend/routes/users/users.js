@@ -1,15 +1,15 @@
+let async = require('async/waterfall')
+
 let express = require('express')
 let router = express.Router()
 
+const accessToken = `${process.env.ACCESS_TOKEN_AUTH0}`
 let axios = require('axios')
 
-const accessToken = `${process.env.ACCESS_TOKEN_AUTH0}`
+axios.defaults.baseURL = `${process.env.AUDIENCE_AUTH0}`
 
 axios.defaults.baseURL = `${process.env.AUDIENCE_AUTH0}`
 axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
-
-
-
 function handleError(err) {
   if (err.response) {
     // The request was made and the server responded with a status code
@@ -24,6 +24,42 @@ function handleError(err) {
     // Something happened in setting up the request that triggered an Error
     return {err: err.message}
   }
+}
+
+function logHandleError(err) {
+  if (err.response) {
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx
+    console.error(err.response.data)
+  } else if (err.request) {
+    // The request was made but no response was received
+    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+    // http.ClientRequest in node.js
+    console.error(err.request)
+  } else {
+    // Something happened in setting up the request that triggered an Error
+    console.error(err.message)
+  }
+}
+
+// get access token
+const getAccessToken = (callback) => {
+  console.log('retrieving accesstoken')
+  const accessTokenDatas = {
+    "client_id":`${process.env.CLIENT_ID}`,
+    "client_secret": `${process.env.CLIENT_SECRET}`,
+    "audience": `${process.env.AUTH0_AUDIENCE}`,
+    "grant_type": "client_credentials"
+  }
+  axios
+  .post('https://dev-m6frxp9u.eu.auth0.com/oauth/token', accessTokenDatas)
+  .then(response => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.access_token}`
+    callback(null)
+  }).catch(err=> {
+    logHandleError(err)
+    callback(null)
+  })
 }
 
 /**
@@ -46,12 +82,20 @@ function handleError(err) {
  *     }
  */
 router.get('/', (req, res, next) => {
-  axios
-  .get('users')
-  .then(response => {
-    res.json({users: response.data})
-  }).catch(err => {
-    res.json(handleError(err))
+  async([
+    getAccessToken,
+    function(callback) {
+      axios
+      .get('users')
+      .then(response => {
+        callback(null, {users: response.data})
+      }).catch(err => {
+        callback(err)
+      })
+    }
+  ], function(err, result) {
+    if (err) res.json(handleError(err))
+    else res.json(result)
   })
 })
 
@@ -109,21 +153,33 @@ router.get('/', (req, res, next) => {
 router.get('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
-  axios
-  .get(`users/${req.params.id}`)
-  .then(response => {
-    let user = response.data
-    // get user roles
-    axios
-    .get(`users/${req.params.id}/roles`)
-    .then(response => {
-      res.json({user: user, roles: response.data})
-    }).catch(err => {
-      res.json(handleError(err))
-    })
-  }).catch(err => {
-    res.json(handleError(err))
+  async([
+    getAccessToken,
+    function(callback) {
+      axios
+      .get(`users/${req.params.id}`)
+      .then(response => {
+        let user = response.data
+        callback(null, user)
+      }).catch(err => {
+        callback(err)
+      })
+    },
+    function(user, callback) {
+      // get user roles
+      axios
+      .get(`users/${user.user_id}/roles`)
+      .then(response => {
+        callback(null, {user: user, roles: response.data})
+      }).catch(err => {
+        callback(err)
+      })
+    }
+  ], function(err, result) {
+    if (err) res.json(handleError(err))
+    else res.json(result)
   })
+  
 })
 
 /**
@@ -144,29 +200,40 @@ router.get('/:id', (req, res, next) => {
 router.post('/:id/initialize', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
-  let datas = {
-    user_metadata: {
-      currency: "EUR",
-      cryptos: [],
-      keywords: []
+  async([
+    getAccessToken,
+    function(callback) {
+      let datas = {
+        user_metadata: {
+          currency: "EUR",
+          cryptos: [],
+          keywords: []
+        }
+      }
+    
+      axios
+      .patch(`users/${req.params.id}`, datas)
+      .then(response => {
+        // the user metadata are succesffuly initialize
+        let user = response.data
+        callback(null, user)
+      }).catch(err => {
+        callback(err)
+      })
+    },
+    function(user, callback) {
+      // now initialize the user's role
+      axios
+      .post(`users/${user.user_id}/roles`, { roles: ['rol_659MJW4SYZOZZK7c'] })
+      .then(response => {
+        callback(null, {user: user, roles: ['basic'], msg: 'User initialized successfully.'})
+      }).catch(err => {
+        callback(err)
+      })
     }
-  }
-
-  axios
-  .patch(`users/${req.params.id}`, datas)
-  .then(response => {
-    // the user metadata are succesffuly initialize
-    let user = response.data
-    // now initialize the user's role
-    axios
-    .post(`users/${user.user_id}/roles`, { roles: ['rol_659MJW4SYZOZZK7c'] })
-    .then(response => {
-      res.json({user: user, msg: 'User initialized successfully.'})
-    }).catch(err => {
-      res.json(handleError(err))
-    })
-  }).catch(err => {
-    res.json(handleError(err))
+  ], function(err, result) {
+    if (err) res.json(handleError(err))
+    else res.json(result)
   })
 })
 
@@ -214,29 +281,38 @@ router.post('/', (req, res, next) => {
     res.json({error: 'Bad request formatting, username, email or password is missing.'})
   }
 
-  let datas = {
-    connection: "Username-Password-Authentication",
-    user_metadata: {
-      currency: "EUR",
-      cryptos: [],
-      keywords: []
-    },
-    verify_email: true
-  }
+  async([
+    getAccessToken,
+    function(callback) {
+      
+      let datas = {
+        connection: "Username-Password-Authentication",
+        user_metadata: {
+          currency: "EUR",
+          cryptos: [],
+          keywords: []
+        },
+        verify_email: true
+      }
 
-  if (username) datas.username = username
-  if (email) datas.email = email
-  if (password) datas.password = password
-  if (currency) datas.user_metadata.currency = currency
-  if (cryptos) datas.user_metadata.cryptos = cryptos
-  if (keywords) datas.user_metadata.keywords = keywords
+      if (username) datas.username = username
+      if (email) datas.email = email
+      if (password) datas.password = password
+      if (currency) datas.user_metadata.currency = currency
+      if (cryptos) datas.user_metadata.cryptos = cryptos
+      if (keywords) datas.user_metadata.keywords = keywords
 
-  axios
-  .post('users', datas)
-  .then(response => {
-    res.json({user: response.data, msg: 'User created successfully.'})
-  }).catch(err => {
-    res.json(handleError(err))
+      axios
+      .post('users', datas)
+      .then(response => {
+        callback(null, {user: response.data, msg: 'User created successfully.'})
+      }).catch(err => {
+        callback(err)
+      })
+    }
+  ], function(err, result) {
+    if (err) res.json(handleError(err))
+    else res.json(result)
   })
 })
 
@@ -271,32 +347,40 @@ router.post('/', (req, res, next) => {
 router.patch('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
-  // mandatory
-  let username = req.body.username
-  let email = req.body.email
-  let password = req.body.password
-  // optionnal
-  let currency = req.body.currency
-  let cryptos = req.body.cryptos
-  let keywords = req.body.keywords
+  async([
+    getAccessToken,
+    function(callback) {
+      // mandatory
+      let username = req.body.username
+      let email = req.body.email
+      let password = req.body.password
+      // optionnal
+      let currency = req.body.currency
+      let cryptos = req.body.cryptos
+      let keywords = req.body.keywords
 
-  let datas = {
-    user_metadata: {}
-  }
+      let datas = {
+        user_metadata: {}
+      }
 
-  if (username) datas.username = username
-  if (email) datas.email = email
-  if (password) datas.password = password
-  if (currency) datas.user_metadata.currency = currency
-  if (cryptos) datas.user_metadata.cryptos = cryptos
-  if (keywords) datas.user_metadata.keywords = keywords
+      if (username) datas.username = username
+      if (email) datas.email = email
+      if (password) datas.password = password
+      if (currency) datas.user_metadata.currency = currency
+      if (cryptos) datas.user_metadata.cryptos = cryptos
+      if (keywords) datas.user_metadata.keywords = keywords
 
-  axios
-  .patch(`users/${req.params.id}`, datas)
-  .then(response => {
-    res.json({user: response.data, msg: 'User updated successfully.'})
-  }).catch(err => {
-    res.json(handleError(err))
+      axios
+      .patch(`users/${req.params.id}`, datas)
+      .then(response => {
+        callback(null, {user: response.data, msg: 'User updated successfully.'})
+      }).catch(err => {
+        callback(err)
+      })
+    }
+  ], function(err, result) {
+    if (err) res.json(handleError(err))
+    else res.json(result)
   })
 })
 
@@ -317,13 +401,21 @@ router.patch('/:id', (req, res, next) => {
  */
 router.delete('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
-  console.log('coucou')
-  axios
-  .delete(`users/${req.params.id}`)
-  .then(response => {
-    res.json({_id: req.params.id, msg: 'User deleted successfully.'})
-  }).catch(err => {
-    res.json(handleError(err))
+
+  async([
+    getAccessToken,
+    function(callback) {
+      axios
+      .delete(`users/${req.params.id}`)
+      .then(response => {
+        callback(null, {_id: req.params.id, msg: 'User deleted successfully.'})
+      }).catch(err => {
+        callback(err)
+      })
+    }
+  ], function(err, result) {
+    if (err) res.json(handleError(err))
+    else res.json(result)
   })
 })
 
@@ -344,12 +436,20 @@ router.delete('/:id', (req, res, next) => {
 router.get('/:id/cryptos', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
-  axios
-  .get(`users/${req.params.id}`, params={include_fields: true, fields: user_metadata})
-  .then(response => {
-    res.json({cryptos: response.data.user_metadata.cryptos})
-  }).catch(err => {
-    res.json(handleError(err))
+  async([
+    getAccessToken,
+    function(callback) {
+      axios
+      .get(`users/${req.params.id}`, params={include_fields: true, fields: 'user_metadata'})
+      .then(response => {
+        callback(null, {cryptos: response.data.user_metadata.cryptos})
+      }).catch(err => {
+        callback(err)
+      })
+    }
+  ], function(err, result) {
+    if (err) res.json(handleError(err))
+    else res.json(result)
   })
 })
 
@@ -370,12 +470,20 @@ router.get('/:id/cryptos', (req, res, next) => {
 router.get('/:id/keywords', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
-  axios
-  .get(`users/${req.params.id}`, params={include_fields: true, fields: 'user_metadata'})
-  .then(response => {
-    res.json({keywords: response.data.user_metadata.keywords})
-  }).catch(err => {
-    res.json(handleError(err))
+  async([
+    getAccessToken,
+    function(callback) {
+      axios
+      .get(`users/${req.params.id}`, params={include_fields: true, fields: 'user_metadata'})
+      .then(response => {
+        callback(null, {keywords: response.data.user_metadata.keywords})
+      }).catch(err => {
+        callback(err)
+      })
+    }
+  ], function(err, result) {
+    if (err) res.json(handleError(err))
+    else res.json(result)
   })
 })
 
