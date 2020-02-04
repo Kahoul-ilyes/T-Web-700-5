@@ -1,6 +1,7 @@
 let express = require('express')
 let router = express.Router()
 let Article = require('../../models/article')
+let Rss = require('../../models/rss')
 let Parser = require('rss-parser')
 //test feed read module
 // let feed = require('feed-read')
@@ -13,12 +14,15 @@ let defaultAdressBook = [
 ]
 //adressbook + user added adresses
 let adressBook = defaultAdressBook
+
+
+
 // check if article is already added this time
 
 //get rss feed and store it, aimed for a job
 
 /**
- * @api {get} /rss Job to store articles in database from RSS feeds
+ * @api {get} /rss Job to store articles in database from RSS feeds 
  * @apiName GetAndStoreRSSFeed
  * @apiGroup Articles
  *
@@ -31,6 +35,17 @@ let adressBook = defaultAdressBook
 
 
 router.get('/rss/', function (req, res) {
+
+  Rss.find({}, async function (err, result) {
+    if (err) throw err;
+    result.forEach(item => {
+      if (!adressBook.includes(item.url)) {
+        adressBook.push(item.url)
+      }
+
+    })
+  })
+  console.log("adress book status ", adressBook)
   let articleAddedCount = 0
   // scan rss content
   let parser1 = new Parser();
@@ -38,6 +53,7 @@ router.get('/rss/', function (req, res) {
 
     // scan rss for every adresses
     for (let j = 0; j < adressBook.length; j++) {
+      console.log("checking on ", adressBook[j])
       feed = await parser1.parseURL(adressBook[j]);
       feed.items.forEach(item => {
         //set default image
@@ -169,7 +185,11 @@ router.get('/', function (req, res) {
         //     articles: articlesToReturn
         //   })
         // })
-        Article.find({ $text: { $search: userKeywords } }, (err, result) => {
+        Article.find({
+          $text: {
+            $search: userKeywords
+          }
+        }, (err, result) => {
           if (err) throw err;
           res.json({
             articles: result
@@ -243,7 +263,7 @@ router.get('/', function (req, res) {
 // -> the URL of its image (if it exists)
 
 /**
- * @api {get} /5e396beecc473d49e9d64f98 Get an article by ID
+ * @api {get} /:id Get an article by ID
  * @apiName GetArticleByID
  * @apiGroup Articles
  *
@@ -274,19 +294,18 @@ router.get('/:id', function (req, res, next) {
   })
 
   Article.findById(
-    req.params.id
-  , (err, article) => {
-    if (err) throw err
-    if (article) {
-      res.json({
-        article
-      })
-    } else {
-      res.json({
-        err: 'No article found with this id.'
-      })
-    }
-  })
+    req.params.id, (err, article) => {
+      if (err) throw err
+      if (article) {
+        res.json({
+          article
+        })
+      } else {
+        res.json({
+          err: 'No article found with this id.'
+        })
+      }
+    })
 })
 
 // delete an article
