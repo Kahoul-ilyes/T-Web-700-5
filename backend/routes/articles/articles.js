@@ -92,17 +92,21 @@ Here for each article, you must provide at least:
 router.get('/', function (req, res) {
   let userKeywordsCheck = req.query.keywords
   if (userKeywordsCheck !== undefined | userKeywordsCheck !== null) {
-    let userKeywords = req.query.keywords.split(',')
+    let userKeywords = req.query.keywords.replace(',', ' ')
     if (userKeywords.length > 0) {
 
       if (userKeywords) {
-        returnArticles(userKeywords, (articlesToReturn) => {
+        // returnArticles(userKeywords, (articlesToReturn) => {
+        //   res.json({
+        //     articles: articlesToReturn
+        //   })
+        // })
+        Article.find({ $text: { $search: userKeywords } }, (err, result) => {
+          if (err) throw err;
           res.json({
-            articles: articlesToReturn
+            articles: result
           })
         })
-
-
       }
     }
   } else {
@@ -121,40 +125,40 @@ router.get('/', function (req, res) {
 
 
 
+// RIP
+// function returnArticles(userKeywords, callback) {
+//   // let articlesToTest=[]
+//   let articlesToReturn = []
 
-function returnArticles(userKeywords, callback) {
-  // let articlesToTest=[]
-  let articlesToReturn = []
+//   //get every article to test
+//   Article.find({}, (err, result) => {
+//     if (err) throw err;
+//     for (let i = 0; i < userKeywords.length; i++) {
+//       let keywordIsPresent = false;
+//       for (let l = 0; l < result.length; l++) {
+//         for (const key in result[l]) {
+//           if (result[l].hasOwnProperty(key) && !keywordIsPresent) {
+//             const value = result[l][key]
+//             const regExpTest = new RegExp("(" + userKeywords[i] + ")", "gi")
+//             // console.log("Keyword" ,userKeywords[i])
+//             // console.log("Value ", value)
 
-  //get every article to test
-  Article.find({}, (err, result) => {
-    if (err) throw err;
-    for (let i = 0; i < userKeywords.length; i++) {
-      let keywordIsPresent = false;
-      for (let l = 0; l < result.length; l++) {
-        for (const key in result[l]) {
-          if (result[l].hasOwnProperty(key) && !keywordIsPresent) {
-            const value = result[l][key]
-            const regExpTest = new RegExp("(" + userKeywords[i] + ")", "gi")
-            // console.log("Keyword" ,userKeywords[i])
-            // console.log("Value ", value)
-
-            if (value && ((value.title && regExpTest.test(value.title)) || (value.content && regExpTest.test(value.content)))) {
-              keywordIsPresent = true;
-              console.log("test test test" + result[l])
-              articlesToReturn.push(result[l])
-            }
-          }
-        }
-      }
-    }
-    // console.log("RETURN ", articlesToReturn)
-    callback(articlesToReturn)
-  })
+//             if (value && ((value.title && regExpTest.test(value.title)) || (value.content && regExpTest.test(value.content)) || (value["content:encoded"] && regExpTest.test(value["content:encoded"])))) {
+//               keywordIsPresent = true;
+//               console.log("test test test" + result[l])
+//               articlesToReturn.push(result[l])
+//             }
+//           }
+//         }
+//       }
+//     }
+//     // console.log("RETURN ", articlesToReturn)
+//     callback(articlesToReturn)
+//   })
 
 
 
-}
+// }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
