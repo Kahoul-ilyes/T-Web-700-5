@@ -70,10 +70,13 @@ router.get('/rss/', function (req, res) {
             for (const key in item) {
               if (item.hasOwnProperty(key)) {
                 const value = item[key];
+                // console.log (value)
                 if (imageSet === false) {
-                  let regExpImg = RegExp('"(https.*?png|bmp|jpg|gif)"', "gi").exec(value)
+                  let regExpImg = RegExp('(https?.*?(?:png|bmp|jpg|gif))', "i").exec(value)
+                  // console.log("REGEXPIMG",regExpImg)
                   if (regExpImg) {
                     item.image = regExpImg[0]
+                    console.log("REGEXEXEX ",regExpImg[0])
                   }
                   imagetSet = true;
                 }
