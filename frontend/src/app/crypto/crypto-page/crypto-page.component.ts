@@ -21,6 +21,12 @@ export class CryptoPageComponent implements OnInit {
 
   }
 
+
+
+
+
+
+
   getAllCryptos() {
     return this.cryptoListTotal;
   }

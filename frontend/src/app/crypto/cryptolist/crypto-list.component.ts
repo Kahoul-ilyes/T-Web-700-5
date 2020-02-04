@@ -111,11 +111,16 @@ export class CryptoListComponent implements OnInit {
 
   addCrypto(symbol: string) {
     this.userService.currentUser.addCrypto(symbol);
+    // tslint:disable-next-line:max-line-length
+    this.userService.updateUser(this.userService.currentUser.id, this.userService.currentUser.toJSON()).subscribe(res => console.log('update result' , res));
+
     this.filterList();
   }
 
   removeCrypto(symbol: string) {
     this.userService.currentUser.removeCrypto(symbol);
+    // tslint:disable-next-line:max-line-length
+    this.userService.updateUser(this.userService.currentUser.id, this.userService.currentUser.toJSON()).subscribe(res => console.log('update result' , res));
     this.filterList();
   }
 
