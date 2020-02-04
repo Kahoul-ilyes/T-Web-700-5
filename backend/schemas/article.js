@@ -41,4 +41,6 @@ let articleSchema = new Schema({
   timestamps: true
 });
 
+articleSchema.index({title: 'text', content: 'text', "content:encoded": 'text'})
+
 module.exports = articleSchema
