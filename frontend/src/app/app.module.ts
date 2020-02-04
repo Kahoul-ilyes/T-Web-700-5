@@ -21,6 +21,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {UserModule} from './user/user.module';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {ArticleModule} from './article/article.module';
+import { AdminModule } from './admin/admin.module';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import {ArticleModule} from './article/article.module';
     ReactiveFormsModule,
     HttpClientModule,
     appRoutingModule,
-    MatTooltipModule
+    MatTooltipModule,
+    AdminModule
   ],
   declarations: [
   ],
