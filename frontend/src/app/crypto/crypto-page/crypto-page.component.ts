@@ -87,7 +87,7 @@ export class CryptoPageComponent implements OnInit {
     this.onPageChange(null);
 
     // tslint:disable-next-line:no-shadowed-variable
-    const timer = setInterval(() => this.refreshTable(), 2000);
+    const timer = setInterval(() => this.refreshTable(), 10000);
     const timout = setTimeout(() => this.displayFavorites(), 4000);
   }
 
