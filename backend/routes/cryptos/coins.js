@@ -26,7 +26,7 @@ router.get('/', (req, res, next) => {
     url: 'https://min-api.cryptocompare.com/data/all/coinlist',
     method: 'get',
     headers: {
-      authorization: `Apikey ${process.env.apiKeyCryptoCompare}`
+      authorization: `Apikey ${process.env.API_KEY_CRYPTO_COMPARE}`
     } 
   }).then((res) => {
     // console.log(res.data.Data)

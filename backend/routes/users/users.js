@@ -3,9 +3,9 @@ let router = express.Router()
 
 let axios = require('axios')
 
-const accessToken = `${process.env.accessTokenAuth0}`
+const accessToken = `${process.env.ACCESS_TOKEN_AUTH0}`
 
-axios.defaults.baseURL = `${process.env.audienceAuth0}`
+axios.defaults.baseURL = `${process.env.AUDIENCE_AUTH0}`
 axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`
 
 

@@ -11,6 +11,8 @@ services:
       - SERVER_PORT=80
       - VIRTUAL_HOST=${BACKEND_DOMAIN}
       - LETSENCRYPT_HOST=${BACKEND_DOMAIN}
+      - FRONTEND_URL=https://${FRONTEND_DOMAIN}
+      - MONGO_URL=mongodb://mongo:27017/cryptocodex
 
   frontend:
     build:
