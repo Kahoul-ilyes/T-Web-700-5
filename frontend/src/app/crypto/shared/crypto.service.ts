@@ -58,6 +58,13 @@ export class CryptoService {
   }
 
   /**
+   * Récupération de toute les cryptos
+   */
+  public getAllCryptosAvailable() {
+    return this.httpClient.get<any[]>(this.URL + '/api/v0/cryptos?available=true');
+  }
+
+  /**
    * Récupération des cryptos dont l'id est fourni
    * @param idCrypto id de la crypto a get
    */
