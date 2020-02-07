@@ -30,6 +30,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { AddRssComponent } from './admin/add-rss/add-rss.component';
 import { MatFormFieldModule, MatFormFieldControl } from '@angular/material/form-field';
+import { AddCryptoComponent } from './admin/add-crypto/add-crypto.component';
 
 
 @NgModule({
@@ -64,14 +65,16 @@ import { MatFormFieldModule, MatFormFieldControl } from '@angular/material/form-
   ],
   declarations: [
     // addRssDialog,
-    AddRssComponent
+    AddRssComponent,
+    AddCryptoComponent
   ],
   providers: [
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
   ],
   entryComponents: [
     // addRssDialog
-    AddRssComponent
+    AddRssComponent,
+    AddCryptoComponent
   ],
   bootstrap: [AppComponent]
 })

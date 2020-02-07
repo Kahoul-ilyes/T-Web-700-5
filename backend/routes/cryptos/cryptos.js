@@ -168,6 +168,30 @@ router.get('/', (req, res, next) => {
 })
 
 /**
+ * @api {get} /cryptos/count(?available=true) Count all cryptos
+ * @apiName CountCryptos
+ * @apiGroup Crypto
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "count": 4500
+ *     }
+ */
+router.get('/count', (req, res, next) => {
+
+  let available = true
+
+  if (req.query.available) {
+    available = Boolean(req.query.available)
+  }
+  
+  Crypto.countDocuments({}, (err, nb) => {
+    res.send({count: nb})
+  })
+})
+
+/**
  * @api {get} /cryptos/:id Request a crypto
  * @apiName GetCrypto
  * @apiGroup Crypto

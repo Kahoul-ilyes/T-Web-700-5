@@ -6,13 +6,14 @@ import {RssService} from './shared/rss.service'
 // import {UserService} from '../user/user.service'
 
 import {MatTableDataSource} from '@angular/material/table'
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog'
 
 import { AddRssComponent } from './add-rss/add-rss.component' 
-import { CryptoModel } from '../crypto/shared/crypto.model';
-import { CryptoService } from '../crypto/shared/crypto.service';
+import { AddCryptoComponent } from './add-crypto/add-crypto.component' 
+import { CryptoModel } from '../crypto/shared/crypto.model'
+import { CryptoService } from '../crypto/shared/crypto.service'
 // import { MatSort } from '@angular/material/sort';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator'
 
 @Component({
   selector: 'app-admin',
@@ -35,7 +36,7 @@ export class AdminComponent implements OnInit {
   dataSourceCrypto = new MatTableDataSource(this.cryptoArray)
 
   // limit & offset for crypto list
-  cryptoArrayLength: Number = 0
+  totalCryptosLength: Number = 0
   limit: Number = 25
   offset: Number = 0
   available: Boolean = true
@@ -56,7 +57,7 @@ export class AdminComponent implements OnInit {
    */
   onPageChange($event: PageEvent) {
     console.log($event)
-    this.cryptoArrayLength = $event.length
+    this.totalCryptosLength = $event.length
     this.limit = $event.pageSize
     this.offset = $event.pageIndex * $event.pageSize
 
@@ -71,13 +72,17 @@ export class AdminComponent implements OnInit {
       for (const d of (data.rss)) {
         this.rssArray.push( new RssModel(d._id, d.isFetchable, d.url))
       }
-      this.cryptoArrayLength = this.rssArray.length
+      this.totalCryptosLength = this.rssArray.length
       this.dataSourceRss = new MatTableDataSource(this.rssArray)
     })
   }
   
   fetchAllCrypto() {
     this.cryptoArray = []
+    this.cryptoService.countCryptos(true).subscribe(data => {
+      this.totalCryptosLength = data['count']
+    })
+    
     this.cryptoService.getAllCryptosWithParams(this.available, this.limit, this.offset).subscribe(data => {
       // @ts-ignore cryptos n'est pas trouvé sinon
       for (const d of (data.cryptos)) {
@@ -111,6 +116,12 @@ export class AdminComponent implements OnInit {
 
   openAddRssDialog(): void {
     const dialogRef = this.dialog.open(AddRssComponent, {
+      width: '250px'
+    });
+  }
+
+  openAddCryptoDialog(): void {
+    const dialogRef = this.dialog.open(AddCryptoComponent, {
       width: '250px'
     });
   }

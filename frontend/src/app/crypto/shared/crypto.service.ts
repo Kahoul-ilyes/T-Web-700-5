@@ -71,6 +71,10 @@ export class CryptoService {
     return this.httpClient.get<any[]>(this.URL + `/api/v0/cryptos?available=${available}&limit=${limit}&offset=${offset}`);
   }
 
+  public countCryptos(available: Boolean = true) {
+    return this.httpClient.get<any[]>(this.URL + `/api/v0/cryptos/count?available=${available}`);
+  }
+
   /**
    * Récupération des cryptos dont l'id est fourni
    * @param idCrypto id de la crypto a get
