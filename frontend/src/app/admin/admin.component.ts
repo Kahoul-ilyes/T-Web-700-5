@@ -11,7 +11,8 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
 import { AddRssComponent } from './add-rss/add-rss.component' 
 import { CryptoModel } from '../crypto/shared/crypto.model';
 import { CryptoService } from '../crypto/shared/crypto.service';
-import { MatSort } from '@angular/material/sort';
+// import { MatSort } from '@angular/material/sort';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-admin',
@@ -19,6 +20,8 @@ import { MatSort } from '@angular/material/sort';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
+  // @ViewChild(MatSort, {static: true}) sort: MatSort;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   // Rss table datas
   displayedColumnsRss: string[] = ['id', 'url', 'actions']
@@ -31,13 +34,34 @@ export class AdminComponent implements OnInit {
   dataSourceRss = new MatTableDataSource(this.rssArray)
   dataSourceCrypto = new MatTableDataSource(this.cryptoArray)
 
-  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  // limit & offset for crypto list
+  cryptoArrayLength: Number = 0
+  limit: Number = 25
+  offset: Number = 0
+  available: Boolean = true
+  pageEvent: PageEvent;
+  pageSizeOptions: number[] = [25, 5, 10, 100];
 
   constructor(public rssService: RssService, public cryptoService: CryptoService, public dialog: MatDialog) { }
 
   ngOnInit() {
     this.fetchAllRss()
-    // this.fetchAllCrypto()
+    this.fetchAllCrypto()
+    this.dataSourceCrypto.paginator = this.paginator;
+    this.paginator._changePageSize(25);
+  }
+
+  /**
+   * Fonction appelé a chaque changement de pages
+   */
+  onPageChange($event: PageEvent) {
+    console.log($event)
+    this.cryptoArrayLength = $event.length
+    this.limit = $event.pageSize
+    this.offset = $event.pageIndex * $event.pageSize
+
+    this.fetchAllCrypto()
+
   }
 
   fetchAllRss() {
@@ -47,13 +71,14 @@ export class AdminComponent implements OnInit {
       for (const d of (data.rss)) {
         this.rssArray.push( new RssModel(d._id, d.isFetchable, d.url))
       }
+      this.cryptoArrayLength = this.rssArray.length
       this.dataSourceRss = new MatTableDataSource(this.rssArray)
     })
   }
   
   fetchAllCrypto() {
     this.cryptoArray = []
-    this.cryptoService.getAllCryptos().subscribe(data => {
+    this.cryptoService.getAllCryptosWithParams(this.available, this.limit, this.offset).subscribe(data => {
       // @ts-ignore cryptos n'est pas trouvé sinon
       for (const d of (data.cryptos)) {
         this.cryptoArray.push( new CryptoModel(d.isTradable, d.isAvailable, d._id, this.cryptoArray.length, d.name,
