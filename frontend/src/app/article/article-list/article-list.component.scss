@@ -1,16 +1,28 @@
 .example-card {
-  width: 300px;
+  width: 500px;
   margin: 20px;
 }
 .main-display{
-  margin-right: 30px;
-  margin-left: 30px;
+  margin-left: 5%;
+  margin-right: 5%;
 }
-.flex-display{
+.mat-card-content{
+ margin: 25px
+}
+.article-list-image{
+  width:90px;
+  margin : 10px;
+}
+img{
+  width: 150px;
+  position: center;
+}
 
+
+.flex-display{
   display: flex;
   flex-wrap: wrap;
-
+  background-color: #d6f4ff;
 }
 .example-header-image {
   background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');

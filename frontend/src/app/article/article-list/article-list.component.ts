@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ArticleService} from '../shared/article.service';
+import {ArticleModel} from '../shared/article.model';
 
 @Component({
   selector: 'app-article-list',
@@ -7,19 +8,32 @@ import {ArticleService} from '../shared/article.service';
   styleUrls: ['./article-list.component.scss']
 })
 export class ArticleListComponent implements OnInit {
-  constructor(public article: ArticleService) { }
+  constructor(public articleService: ArticleService) { }
 
-  displayedArticle = this.article.ARTICLETEST;
+  displayedArticle = new Array<ArticleModel>();
   keyWordsCollect = ['Test', 'Word', 'Words'];
 
   ngOnInit() {
+    console.log('Article start');
+    this.articleService.getArticlesByKeywords(null).subscribe(
+      res => {
+        console.log('return' , res);
+        // @ts-ignore
+        if (res.articles !== null && res.articles !== undefined) {
+          // @ts-ignore
+          for (const article of res.articles) {
+            this.displayedArticle.push(new ArticleModel(article.title, '', article.content, article.date, article.image, article._id ));
+          }
+        }
+      });
   }
 
-  reduceForm(content: string) {
+  firstText(content: string) {
+
     if (content.length < 80) {
-      return content;
+      return content.split('p>')[1] + '.';
     } else {
-      return content.substring(0, 75) + '...';
+      return content.split('p>')[1].slice(0, length - 2).split('.')[0] + '...';
     }
   }
 }

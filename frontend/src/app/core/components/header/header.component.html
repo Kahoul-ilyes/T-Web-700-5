@@ -6,7 +6,7 @@
 
   <button [routerLink]="'profile'" *ngIf="auth.loggedIn" mat-button color="primary">Profile</button>
   <button [routerLink]="'cryptos'" mat-button color="primary">Cryptos</button>
-  <button [routerLink]="'article'"  mat-button color="primary">News</button>
+  <button [routerLink]="'articles'"  mat-button color="primary">News</button>
   <button (click)="auth.login()" *ngIf="!auth.loggedIn" mat-button color="primary">Login</button>
   <button (click)="auth.logout()" *ngIf="auth.loggedIn" mat-button color="primary">Logout</button>
 </mat-toolbar>
