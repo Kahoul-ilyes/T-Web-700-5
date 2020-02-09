@@ -95,6 +95,11 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  /**
+   * Set a flux RSS fetchable or unfetchable
+   * @param id 
+   * @param fetchable 
+   */
   fetchRss(id: string, fetchable: boolean) {
     console.log(id)
     this.rssService.updateRss(id, JSON.stringify({ 'isFetchable': fetchable })).subscribe(res => {
@@ -102,15 +107,34 @@ export class AdminComponent implements OnInit {
     })
   }
 
+  /**
+   * Ass RSS
+   * @param url 
+   * @param fetchable 
+   */
   addRss(url: string, fetchable: boolean) {
     this.rssService.addRss(JSON.stringify({ 'url': url, 'isFetchable': fetchable })).subscribe(res => {
       this.fetchAllRss()
     })
   }
 
+  /**
+   * Delete a RSS
+   * @param id 
+   */
   deleteRss(id: string) {
     this.rssService.deleteRss(id).subscribe(res => {
       this.fetchAllRss()
+    })
+  }
+
+  /**
+   * Delete a crypto
+   * @param id 
+   */
+  deleteCrypto(id: string) {
+    this.cryptoService.deleteCrypto(id).subscribe(res => {
+      this.fetchAllCrypto()
     })
   }
   

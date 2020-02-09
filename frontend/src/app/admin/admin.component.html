@@ -49,7 +49,7 @@
               <mat-cell *matCellDef="let crypto">
                 <!-- <button *ngIf="crypto.isTradable" mat-stroked-button color="warn" class="action-button margin-auto" (click)="fetch(rss.id, false)">Unfetch</button>
                 <button *ngIf="!crypto.isTradable" mat-stroked-button color="primary" class="action-button margin-auto" (click)="fetch(rss.id, true)">Fetch</button> -->
-                <button mat-raised-button color="warn" class="action-button margin-auto" (click)="delete(rss.id)">Delete</button>
+                <button mat-raised-button color="warn" class="action-button margin-auto" (click)="deleteCrypto(crypto.id)">Delete</button>
               </mat-cell>
             </ng-container>
 
