@@ -1,6 +1,7 @@
 
 export class CryptoModel {
   isTradable: boolean;
+  isAvailable: boolean;
   id: string;
   idTab: number;
 
@@ -43,8 +44,9 @@ public  changeCryptoValue(newCrypto: CryptoModel) {
   }
 
   // tslint:disable-next-line:max-line-length
-  constructor(isTradable , id, idTab,  name , v, createdAt , dateAvailability, logo, symbol, updatedAt, website, currentPrice, lowestPrice, openingPrice, highestPrice, supply, marketCap) {
+  constructor(isTradable , isAvailable, id, idTab,  name , v, createdAt , dateAvailability, logo, symbol, updatedAt, website, currentPrice, lowestPrice, openingPrice, highestPrice, supply, marketCap) {
     this.isTradable = isTradable;
+    this.isAvailable = isAvailable;
     this.id = id;
     this.idTab = idTab;
     this.name = name;

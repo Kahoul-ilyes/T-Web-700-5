@@ -77,7 +77,7 @@ router.get('/subscribe', (req, res, next) => {
 })
 
 /**
- * @api {get} /cryptos(?cryptos=BTC,ETH)(?ids=ObjectID1,ObjectID2,ObjectID3) Request all cryptos
+ * @api {get} /cryptos(?cryptos=BTC,ETH)(?ids=ObjectID1,ObjectID2,ObjectID3)(?available=true)(&offset=0)(&limit=1000) Request all cryptos
  * @apiName GetCryptos
  * @apiGroup Crypto
  *
@@ -122,27 +122,72 @@ router.get('/', (req, res, next) => {
 
   let query = {}
   let cryptosToRetrieve = []
+  let available = null
+  let offset = 0
+  let limit = 0
+
+  let request = null
   if (req.query.cryptos) {
     cryptosToRetrieve = req.query.cryptos.split(',')
   } else if (req.query.ids) {
     cryptosToRetrieve = req.query.ids.split(',')
+  } else if (req.query.available) {
+    available = Boolean(req.query.available)
   }
 
+  
   if (cryptosToRetrieve.length > 0) {
     if (Array.isArray(cryptosToRetrieve)) {
       if (req.query.cryptos) {
         query = {symbol: { $in: cryptosToRetrieve }}
       } else if (req.query.ids) {
         query = {_id: { $in: cryptosToRetrieve }}
+      } else if (available != null) {
+        query = { isAvailable: available }
       }
     }
   }
+  
+  request = Crypto.find(query)
+  
+  if (req.query.limit) {
+    limit = parseInt(req.query.limit)
+    request = request.limit(limit)
+  }
+  if (req.query.offset) {
+    offset = parseInt(req.query.offset)
+    request = request.skip(offset)
+  }
 
-  Crypto.find(query).collation( { locale: 'fr', strength: 1 } ).exec((err, cryptos) => {
+  request.collation( { locale: 'fr', strength: 1 } ).exec((err, cryptos) => {
     if (err) throw err
 
     if (cryptos) res.send({ cryptos: cryptos})
     else res.send({ cryptos: []})
+  })
+})
+
+/**
+ * @api {get} /cryptos/count(?available=true) Count all cryptos
+ * @apiName CountCryptos
+ * @apiGroup Crypto
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "count": 4500
+ *     }
+ */
+router.get('/count', (req, res, next) => {
+
+  let available = true
+
+  if (req.query.available) {
+    available = Boolean(req.query.available)
+  }
+  
+  Crypto.countDocuments({}, (err, nb) => {
+    res.send({count: nb})
   })
 })
 

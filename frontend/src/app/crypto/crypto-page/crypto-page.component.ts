@@ -62,7 +62,7 @@ export class CryptoPageComponent implements OnInit {
     this.cryptoService.getAllCryptos().subscribe(data => {
       // @ts-ignore cryptos n'est pas trouvé sinon
       for (const d of (data.cryptos)) {
-        this.cryptoListFull.push( new CryptoModel(d.isTradable, d._id, this.cryptoListFull.length, d.name,
+        this.cryptoListFull.push( new CryptoModel(d.isTradable, d.isAvailable, d._id, this.cryptoListFull.length, d.name,
           d.__v, d.createdAt, d.dateAvailability, d.logo, d.symbol, d.updatedAt, d.website,
           d.currentPrice, d.lowestPrice, d.openingPrice, d.highestPrice, d.supply, d.marketCap));
       }
@@ -166,6 +166,11 @@ export class CryptoPageComponent implements OnInit {
   /** filtre les cryptos selon leur valeurs */
   isTradable(element: CryptoModel, index, array) {
     return (element.isTradable);
+  }
+
+  /** filtre les cryptos selon leur valeurs */
+  isAvailable(element: CryptoModel, index, array) {
+    return (element.isAvailable);
   }
 
   /** Filtre lié a l'input de recherche

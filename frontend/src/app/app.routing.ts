@@ -3,6 +3,7 @@ import {AuthGuard} from './auth.guard';
 import {CryptoPageComponent} from './crypto/crypto-page/crypto-page.component';
 import {ArticleListComponent} from './article/article-list/article-list.component';
 import {ArticlePageComponent} from './article/article-page/article-page.component';
+import { AdminComponent } from './admin/admin.component';
 
 import {ProfileComponent} from './profile/profile.component';
 
@@ -13,7 +14,8 @@ const routes: Routes = [
   { path: 'article/:id', component: ArticlePageComponent},
 
   { path: 'cryptos', component: CryptoPageComponent},
-  { path: 'profile', component: ProfileComponent},
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
+  { path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
 
 
 

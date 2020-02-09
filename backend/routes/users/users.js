@@ -180,6 +180,52 @@ router.get('/:id', (req, res, next) => {
 })
 
 /**
+ * @api {get} /users/:id Request an user's roles
+ * @apiName GetUserRoles
+ * @apiGroup User
+ *
+ * @apiParam {ObjectId} id User's unique ID.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ * {
+ *   "roles": ['basic', 'admin']
+ * }
+ * @apiUse NoUserError
+ */
+router.get('/:id/roles', (req, res, next) => {
+  if (!req.params.id) res.json({err: 'Please provide an id param.'})
+
+  async([
+    getAccessToken,
+    function(callback) {
+      axios
+      .get(`users/${req.params.id}`)
+      .then(response => {
+        let user = response.data
+        callback(null, user)
+      }).catch(err => {
+        callback(err)
+      })
+    },
+    function(user, callback) {
+      // get user roles
+      axios
+      .get(`users/${req.params.id}/roles`)
+      .then(response => {
+        callback(null, {user: user, roles: response.data})
+      }).catch(err => {
+        callback(err)
+      })
+    }
+  ], function(err, result) {
+    if (err) res.json(handleError(err))
+    else res.json(result)
+  })
+  
+})
+
+/**
  * @api {post} /users/:id/initialize Initialize a new user
  * @apiName InitializeUser
  * @apiGroup User
