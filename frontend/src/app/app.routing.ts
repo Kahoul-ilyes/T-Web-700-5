@@ -15,7 +15,7 @@ const routes: Routes = [
 
   { path: 'cryptos', component: CryptoPageComponent},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
-  { path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
+  { path: 'admin', component: AdminComponent},
 
 
 

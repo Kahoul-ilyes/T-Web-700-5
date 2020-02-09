@@ -37,7 +37,7 @@ let adressBook = defaultAdressBook
 router.get('/rss/', function (req, res) {
 
   Rss.find({}, async function (err, result) {
-    if (err) throw err;
+    if (err) res.json({err: err})
     result.forEach(item => {
       if (!adressBook.includes(item.url)) {
         adressBook.push(item.url)
@@ -84,7 +84,7 @@ router.get('/rss/', function (req, res) {
             }
             //store in dbb
             Article.create(item, (err, article) => {
-              if (err) throw err
+              if (err) res.json({err: err})
               else {
                 console.log(item.link + " has been added successfully!")
                 articleAddedCount++
@@ -193,7 +193,7 @@ router.get('/', function (req, res) {
             $search: userKeywords
           }
         }, (err, result) => {
-          if (err) throw err;
+          if (err) res.json({err: err})
           res.json({
             articles: result
           })
@@ -204,7 +204,7 @@ router.get('/', function (req, res) {
 
     console.log('No user found with this id, default: no keywords')
     Article.find({}, function (err, result) {
-      if (err) throw err;
+      if (err) res.json({err: err})
       res.json({
         articles: result
       })
@@ -298,7 +298,7 @@ router.get('/:id', function (req, res, next) {
 
   Article.findById(
     req.params.id, (err, article) => {
-      if (err) throw err
+      if (err) res.json({err: err})
       if (article) {
         res.json({
           article
@@ -318,7 +318,7 @@ router.delete('/:id', (req, res, next) => {
   })
 
   Article.findOneAndDelete(req.params.id, (err, article) => {
-    if (err) throw err
+    if (err) res.json({err: err})
 
     if (article) {
       res.json({

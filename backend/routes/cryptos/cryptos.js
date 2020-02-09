@@ -160,7 +160,7 @@ router.get('/', (req, res, next) => {
   }
 
   request.collation( { locale: 'fr', strength: 1 } ).exec((err, cryptos) => {
-    if (err) throw err
+    if (err) res.json({err: err})
 
     if (cryptos) res.send({ cryptos: cryptos})
     else res.send({ cryptos: []})
@@ -223,7 +223,7 @@ router.get('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
   Crypto.findById(req.params.id, (err, crypto) => {
-    if (err) throw err
+    if (err) res.json({err: err})
 
     if (crypto) {
       res.json({crypto: crypto})
@@ -310,7 +310,7 @@ router.post('/', (req, res, next) => {
 
 
   Crypto.create(datas, (err, crypto) => {
-    if (err) throw err
+    if (err) res.json({err: err})
     
     if (crypto) {
       res.json({crypto: crypto, msg: 'Crypto created successfully.'})
@@ -386,7 +386,7 @@ router.put('/:id', (req, res, next) => {
   if (isAvailable) datas.isAvailable = isAvailable
 
   Crypto.findOneAndUpdate(req.params.id, datas, (err, crypto) => {
-    if (err) throw err
+    if (err) res.json({err: err})
 
     if (crypto) {
       res.json({crypto: crypto, msg: 'Crypto updated successfully.'})
@@ -415,7 +415,7 @@ router.delete('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
   Crypto.findOneAndDelete(req.params.id, (err, crypto) => {
-    if (err) throw err
+    if (err) res.json({err: err})
 
     if (crypto) {
       res.json({_id: req.params.id, msg: 'Crypto deleted successfully.'})
@@ -448,8 +448,7 @@ router.get('/:id/prices', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
   Crypto.findById(req.params.id, 'currentPrice openingPrice lowestPrice highestPrice', (err, doc) => {
-    if (err) throw err
-    console.log(doc)
+    if (err) res.json({err: err})
 
     if (doc) {
       res.json({

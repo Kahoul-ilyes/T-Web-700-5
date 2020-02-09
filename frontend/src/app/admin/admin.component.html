@@ -3,7 +3,7 @@
   <mat-tab-group mat-align-tabs="center">
       <mat-tab label="Rss">
 
-          <button mat-raised-button color="primary" class="action-button" (click)="openAddRssDialog()">Add rss</button>
+          <button mat-raised-button color="primary" class="action-button" (refreshRss)="fetchAllRss($event)" (click)="openAddRssDialog()">Add rss</button>
 
           <mat-table [dataSource]="dataSourceRss" class="mat-elevation-z8">
             <ng-container matColumnDef="id">

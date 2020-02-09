@@ -1,23 +1,21 @@
 <h1 mat-dialog-title color="primary">Add a new RSS</h1>
 <div mat-dialog-content>
   <form [formGroup]="addRssForm">
-    <!-- <mat-label>Url ?</mat-label>
-    <mat-form-field class="full-width" appearance="outline">
-      <input matInput placeholder="Url" formControlName="url" required>
+    <mat-form-field class="full-width" appearance="standard">
+      <mat-label>Url ?</mat-label>
+      <input matInput type="url" placeholder="Url" formControlName="url" required />
       <mat-error *ngIf="addRssForm.controls['url'].hasError('required')">
         Url is <strong>required</strong>
       </mat-error>
     </mat-form-field>
-    <mat-label>Fetchable ?</mat-label>
-    <mat-form-field class="full-width" appearance="outline">
-      <mat-radio-group formControlName="fetchable" aria-label="Select an option">
-        <mat-radio-button value="false">No</mat-radio-button>
-        <mat-radio-button value="true" selected="selected" selected>Yes</mat-radio-button>
-      </mat-radio-group>
-    </mat-form-field> -->
+    <label>Fetchable ?</label><br>
+    <mat-radio-group formControlName="fetchable" aria-label="Select an option">
+      <mat-radio-button value="false">No</mat-radio-button>
+      <mat-radio-button value="true" selected="selected" selected>Yes</mat-radio-button>
+    </mat-radio-group>
   </form>
 </div>
 <div mat-dialog-actions>
   <button mat-button mat-dialog-close color="warn" (click)="close()">No Thanks</button>
-  <button mat-button mat-dialog-close cdkFocusInitial color="primary" (click)="save()">Ok</button>
+  <button mat-button mat-dialog-close cdkFocusInitial color="primary" (click)="save()" [disabled]="!addRssForm.valid">Ok</button>
 </div>

@@ -65,7 +65,6 @@ import { MatFormFieldModule, MatFormFieldControl } from '@angular/material/form-
     ReactiveFormsModule,
   ],
   declarations: [
-    // addRssDialog,
     ProfileComponent,
     AddRssComponent,
     AddCryptoComponent
@@ -74,7 +73,6 @@ import { MatFormFieldModule, MatFormFieldControl } from '@angular/material/form-
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
   ],
   entryComponents: [
-    // addRssDialog
     AddRssComponent,
     AddCryptoComponent
   ],

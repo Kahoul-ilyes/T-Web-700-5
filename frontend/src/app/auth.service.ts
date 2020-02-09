@@ -37,6 +37,7 @@ export class AuthService {
   userProfile$ = this.userProfileSubject$.asObservable();
   // Create a local property for login status
   loggedIn: boolean = null;
+  isAdmin: boolean = null;
 
   constructor(private router: Router) {
     // On initial load, check authentication state with authorization server

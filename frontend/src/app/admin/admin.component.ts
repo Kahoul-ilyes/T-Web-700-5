@@ -66,6 +66,7 @@ export class AdminComponent implements OnInit {
   }
 
   fetchAllRss() {
+    console.log('event emitetd so fetch all rss')
     this.rssArray = []
     this.rssService.getAllRss().subscribe(data => {
       // @ts-ignore cryptos n'est pas trouvé sinon
@@ -124,6 +125,10 @@ export class AdminComponent implements OnInit {
     const dialogRef = this.dialog.open(AddCryptoComponent, {
       width: '250px'
     });
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   this.fetchAllRss()
+    // });
   }
 
 }
