@@ -18,15 +18,13 @@ export class UserService {
      Si l'user est connecté alors on consulte la bdd pour savoir si l'user est dedans, si oui on récupère ses data, sinon on l'initialise
      */
     this.usersubs = auth.userProfile$.subscribe(userAuthO => {
-      if (userAuthO !== undefined && userAuthO !== null) {
+      if (userAuthO) {
         this.getUser(userAuthO.sub).subscribe(res => {
           // @ts-ignore
           const setUser = res.user;
           const roles = res['roles'];
           // tslint:disable-next-line:max-line-length
-          if (setUser !== undefined && setUser.user_metadata !== null && setUser.user_metadata.cryptos !== undefined && setUser.user_metadata.keywords !== undefined ) {
-            
-            
+          if (setUser !== undefined && setUser.user_metadata !== null && setUser.user_metadata.cryptos !== undefined && setUser.user_metadata.keywords !== undefined ) {  
             this.currentUser = new UserModel(setUser.user_id,
               setUser.username, setUser.email, setUser.user_metadata.currency,
               setUser.user_metadata.cryptos, setUser.user_metadata.keywords, []);

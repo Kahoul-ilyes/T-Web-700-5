@@ -7,6 +7,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {Subscription} from 'rxjs';
 import {MatSort, MatSortable, Sort} from '@angular/material/sort';
+import { CurrencyService } from '../shared/currency.service';
 
 
 
@@ -19,7 +20,6 @@ import {MatSort, MatSortable, Sort} from '@angular/material/sort';
 export class CryptoPageComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
-
 
 
   cryptoOnPage: CryptoModel[];
@@ -38,6 +38,10 @@ export class CryptoPageComponent implements OnInit {
 
   cryptoListFavorites: CryptoModel[];
 
+  // Currency
+  currencyCode = 'USD';
+  rate = 1.0;
+
   /** Liste complète de toute les cryptos */
   cryptoListFull: CryptoModel[];
   /** Systeme d'affichage d'angular mat */
@@ -51,7 +55,21 @@ export class CryptoPageComponent implements OnInit {
 
 
   ngOnInit() {
-    this.displayedColumns = ['acronym', 'name', 'logo', 'value', 'capitalization', 'evolution', 'favorite'];
+
+    // add timeout to wait for the current logged user to be set
+    setTimeout(()=> {
+      // get the user currency, call the currency converter api and change the rate
+      if (this.userService.currentUser && this.userService.currentUser.currency && this.userService.currentUser.currency != "" && this.userService.currentUser.currency != this.currencyCode) {
+        this.currencyService.getRate('USD', this.userService.currentUser.currency).subscribe(res => {
+          if (res && res['status'] == 'success') {
+            this.currencyCode = this.userService.currentUser.currency;
+            this.rate = parseInt(res["rates"][this.currencyCode]["rate"] )
+          }  
+        })
+      }
+    }, 1000);
+
+    this.displayedColumns = ['logo', 'acronym', 'name', 'value', 'capitalization', 'evolution', 'favorite'];
 
     this.dataSourceAllUsers.paginator = this.paginator;
     this.cryptoListAllUsers = new Array<CryptoModel>();
@@ -200,6 +218,6 @@ export class CryptoPageComponent implements OnInit {
   }
 
 
-  constructor(public auth: AuthService, public cryptoService: CryptoService, public userService: UserService) { }
+  constructor(public auth: AuthService, public cryptoService: CryptoService, public userService: UserService, public currencyService: CurrencyService) { }
 
 }

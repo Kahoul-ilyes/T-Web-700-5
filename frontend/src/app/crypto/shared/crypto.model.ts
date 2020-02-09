@@ -21,8 +21,8 @@ export class CryptoModel {
   openingPrice: number;
   /** Prix d'achat récent le plus élevée  */
   highestPrice: number;
-    /** envois le pourcentage d'évolution de la valeur depuis le début de la session */
-    supply: number;
+  /** envois le pourcentage d'évolution de la valeur depuis le début de la session */
+  supply: number;
   marketCap: number;
 
 
