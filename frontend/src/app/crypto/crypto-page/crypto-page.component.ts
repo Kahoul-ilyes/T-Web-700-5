@@ -39,7 +39,7 @@ export class CryptoPageComponent implements OnInit {
   cryptoListFavorites: CryptoModel[];
 
   // Currency
-  currencyCode = 'USD';
+  currencyCode = 'EUR';
   rate = 1.0;
 
   /** Liste complète de toute les cryptos */
