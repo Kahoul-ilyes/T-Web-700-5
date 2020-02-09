@@ -213,45 +213,6 @@ router.get('/', function (req, res) {
 })
 
 
-
-
-
-// RIP
-// function returnArticles(userKeywords, callback) {
-//   // let articlesToTest=[]
-//   let articlesToReturn = []
-
-//   //get every article to test
-//   Article.find({}, (err, result) => {
-//     if (err) throw err;
-//     for (let i = 0; i < userKeywords.length; i++) {
-//       let keywordIsPresent = false;
-//       for (let l = 0; l < result.length; l++) {
-//         for (const key in result[l]) {
-//           if (result[l].hasOwnProperty(key) && !keywordIsPresent) {
-//             const value = result[l][key]
-//             const regExpTest = new RegExp("(" + userKeywords[i] + ")", "gi")
-//             // console.log("Keyword" ,userKeywords[i])
-//             // console.log("Value ", value)
-
-//             if (value && ((value.title && regExpTest.test(value.title)) || (value.content && regExpTest.test(value.content)) || (value["content:encoded"] && regExpTest.test(value["content:encoded"])))) {
-//               keywordIsPresent = true;
-//               console.log("test test test" + result[l])
-//               articlesToReturn.push(result[l])
-//             }
-//           }
-//         }
-//       }
-//     }
-//     // console.log("RETURN ", articlesToReturn)
-//     callback(articlesToReturn)
-//   })
-
-
-
-// }
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // GET /articles/{id}
@@ -295,10 +256,11 @@ router.get('/:id', function (req, res, next) {
   if (!req.params.id) res.json({
     err: 'Please provide an id param.'
   })
-
+  else {
   Article.findById(
     req.params.id, (err, article) => {
       if (err) res.json({err: err})
+      else {
       if (article) {
         res.json({
           article
@@ -307,8 +269,8 @@ router.get('/:id', function (req, res, next) {
         res.json({
           err: 'No article found with this id.'
         })
-      }
-    })
+      }}
+    })}
 })
 
 // delete an article
