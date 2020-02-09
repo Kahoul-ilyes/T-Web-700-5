@@ -29,7 +29,7 @@
 
       </mat-tab>
       <mat-tab label="Cryptos">
-          <button mat-raised-button color="primary" class="action-button" (click)="openAddCryptoDialog()">Add crypto</button>
+          <button mat-raised-button color="primary" class="action-button" (refreshCrypto)="fetchAllCrypto($event)" (click)="openAddCryptoDialog()">Add crypto</button>
 
           <mat-table [dataSource]="dataSourceCrypto" matSort class="mat-elevation-z8">
             <ng-container matColumnDef="id">

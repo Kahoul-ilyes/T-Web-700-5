@@ -1,10 +1,10 @@
 <!-- header -->
 <mat-toolbar>
   <img src="">
-  <span routerLink="/">Crypto Infos</span>
+  <span routerLink="/">Coin Codex</span>
   <span class="example-spacer"></span>
 
-  <button *ngIf="auth.loggedIn && auth.isAdmin" [routerLink]="'admin'" mat-button color="primary">Admin</button>
+  <button *ngIf="auth.loggedIn && auth.isAdmin" [routerLink]="'admin'" mat-button color="warn">Admin</button>
   <button [routerLink]="'profile'" *ngIf="auth.loggedIn" mat-button color="primary">Profile</button>
   <button [routerLink]="'cryptos'" mat-button color="primary">Cryptos</button>
   <button [routerLink]="'articles'"  mat-button color="primary">News</button>

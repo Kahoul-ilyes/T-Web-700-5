@@ -32,6 +32,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule, MatFormFieldControl } from '@angular/material/form-field';
+import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -56,6 +57,7 @@ import { MatFormFieldModule, MatFormFieldControl } from '@angular/material/form-
     MatRadioModule,
     MatInputModule,
     MatFormFieldModule,
+    MatSnackBarModule,
     // Http requests modules
     HttpClientModule,
     HttpClientModule,
@@ -70,7 +72,8 @@ import { MatFormFieldModule, MatFormFieldControl } from '@angular/material/form-
     AddCryptoComponent
   ],
   providers: [
-    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
+    {provide: MAT_SNACK_BAR_DEFAULT_OPTIONS, useValue: {duration: 2500}}
   ],
   entryComponents: [
     AddRssComponent,

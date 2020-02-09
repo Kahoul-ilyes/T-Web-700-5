@@ -22,7 +22,7 @@ export class CryptoService {
    * @param body une crypto
    */
   public createCrypto(body: string) {
-    return this.httpClient.post(this.URL + '/api/v0/cryptos/', body);
+    return this.httpClient.post(this.URL + '/api/v0/cryptos/', JSON.parse(body));
   }
 
   /**
@@ -100,7 +100,7 @@ export class CryptoService {
    * @param body les changements sur la crypto
    */
   public updateCrypto(idCrypto: string , body: string) {
-    return this.httpClient.put(this.URL + '/api/v0/cryptos/', body);
+    return this.httpClient.put(this.URL + '/api/v0/cryptos/', JSON.parse(body));
   }
 
   /** Mise a jour de la liste des cryptos de la BDD */

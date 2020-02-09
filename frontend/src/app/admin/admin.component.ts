@@ -43,7 +43,7 @@ export class AdminComponent implements OnInit {
   pageEvent: PageEvent;
   pageSizeOptions: number[] = [25, 5, 10, 100];
 
-  constructor(public rssService: RssService, public cryptoService: CryptoService, public dialog: MatDialog) { }
+  constructor(public rssService: RssService, public cryptoService: CryptoService, public dialogRss: MatDialog, public dialogCrypto: MatDialog) { }
 
   ngOnInit() {
     this.fetchAllRss()
@@ -66,7 +66,6 @@ export class AdminComponent implements OnInit {
   }
 
   fetchAllRss() {
-    console.log('event emitetd so fetch all rss')
     this.rssArray = []
     this.rssService.getAllRss().subscribe(data => {
       // @ts-ignore cryptos n'est pas trouvé sinon
@@ -108,17 +107,6 @@ export class AdminComponent implements OnInit {
   }
 
   /**
-   * Ass RSS
-   * @param url 
-   * @param fetchable 
-   */
-  addRss(url: string, fetchable: boolean) {
-    this.rssService.addRss(JSON.stringify({ 'url': url, 'isFetchable': fetchable })).subscribe(res => {
-      this.fetchAllRss()
-    })
-  }
-
-  /**
    * Delete a RSS
    * @param id 
    */
@@ -140,19 +128,23 @@ export class AdminComponent implements OnInit {
   
 
   openAddRssDialog(): void {
-    const dialogRef = this.dialog.open(AddRssComponent, {
-      width: '250px'
+    const dialogRef = this.dialogRss.open(AddRssComponent, {
+      width: '400px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.fetchAllRss()
     });
   }
 
   openAddCryptoDialog(): void {
-    const dialogRef = this.dialog.open(AddCryptoComponent, {
-      width: '250px'
+    const dialogRef = this.dialogCrypto.open(AddCryptoComponent, {
+      width: '400px'
     });
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   this.fetchAllRss()
-    // });
+    dialogRef.afterClosed().subscribe(result => {
+      this.fetchAllCrypto()
+    });
   }
 
 }

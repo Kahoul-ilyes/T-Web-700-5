@@ -1,9 +1,56 @@
 <h1 mat-dialog-title color="primary">Add a new crypto</h1>
 <div mat-dialog-content>
   <form [formGroup]="addCryptoForm">
+      <mat-form-field class="full-width" appearance="standard">
+        <mat-label>Name ?</mat-label>
+        <input matInput placeholder="Name" formControlName="name" required />
+        <mat-error *ngIf="addCryptoForm.controls['name'].hasError('required')">
+          Name is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width" appearance="standard">
+        <mat-label>Symbol ?</mat-label>
+        <input matInput placeholder="Symbol" formControlName="symbol" required />
+        <mat-error *ngIf="addCryptoForm.controls['symbol'].hasError('required')">
+          Symbol is <strong>required</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width" appearance="standard">
+        <mat-label>Logo ?</mat-label>
+        <input matInput type="url" placeholder="Logo" formControlName="logo" />
+        <mat-error *ngIf="addCryptoForm.controls['symbol'].hasError('pattern')">
+          Logo is <strong>not an url</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width" appearance="standard">
+        <mat-label>Website ?</mat-label>
+        <input matInput type="url" placeholder="Website" formControlName="website" />
+        <mat-error *ngIf="addCryptoForm.controls['symbol'].hasError('pattern')">
+          Website is <strong>not an url</strong>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="full-width" appearance="standard">
+        <mat-label>Supply ?</mat-label>
+        <input matInput type="number" placeholder="0" formControlName="supply" />
+      </mat-form-field>
+      <mat-form-field class="full-width" appearance="standard">
+        <mat-label>Market Cap ?</mat-label>
+        <input matInput type="number" placeholder="0" formControlName="marketCap" />
+      </mat-form-field>
+      <label>Available ?</label><br>
+      <mat-radio-group formControlName="available" aria-label="Select an option">
+        <mat-radio-button value="false">No</mat-radio-button>
+        <mat-radio-button value="true" selected="selected" selected>Yes</mat-radio-button>
+      </mat-radio-group>
+      <br>
+      <label>Tradable ?</label><br>
+      <mat-radio-group formControlName="tradable" aria-label="Select an option">
+        <mat-radio-button value="false">No</mat-radio-button>
+        <mat-radio-button value="true" selected="selected" selected>Yes</mat-radio-button>
+      </mat-radio-group>
   </form>
 </div>
 <div mat-dialog-actions>
   <button mat-button mat-dialog-close color="warn" (click)="close()">No Thanks</button>
-  <button mat-button mat-dialog-close cdkFocusInitial color="primary" (click)="save()">Ok</button>
+  <button mat-button mat-dialog-close cdkFocusInitial color="primary" (click)="save()" [disabled]="!addCryptoForm.valid">Ok</button>
 </div>

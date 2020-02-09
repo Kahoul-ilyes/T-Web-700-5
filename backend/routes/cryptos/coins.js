@@ -57,9 +57,10 @@ router.get('/', (req, res, next) => {
         }
         Crypto.findOneAndUpdate({name: name}, datas, {upsert: true, runValidators: true}, (err, crypto) => {
           if (err) res.json({err: err})
-
-          if (crypto) {
-            console.log(`Crypto ${name} added/updated successfully.`)
+          else {
+            if (crypto) {
+              console.log(`Crypto ${name} added/updated successfully.`)
+            }
           }
         })
         
