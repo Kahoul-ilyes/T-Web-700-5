@@ -9,7 +9,7 @@ import {environment} from '../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class UserService {
 
-  currentUser = new UserModel('', '', '', '', new Array(), new Array());
+  currentUser = new UserModel('', '', '', '', new Array(), new Array(), new Array());
   private usersubs: Subscription;
 
   constructor(private httpClient: HttpClient, public auth: AuthService) {
@@ -22,11 +22,15 @@ export class UserService {
         this.getUser(userAuthO.sub).subscribe(res => {
           // @ts-ignore
           const setUser = res.user;
+          const roles = res['roles'];
           // tslint:disable-next-line:max-line-length
           if (setUser !== undefined && setUser.user_metadata !== null && setUser.user_metadata.cryptos !== undefined && setUser.user_metadata.keywords !== undefined ) {
+            
+            
             this.currentUser = new UserModel(setUser.user_id,
               setUser.username, setUser.email, setUser.user_metadata.currency,
-              setUser.user_metadata.cryptos, setUser.user_metadata.keywords );
+              setUser.user_metadata.cryptos, setUser.user_metadata.keywords, []);
+            this.currentUser.setRoles(roles)
           } else {
             this.initializeUser(userAuthO.sub).subscribe(initializedRes => {
               // @ts-ignore
@@ -35,7 +39,9 @@ export class UserService {
               if (setNewUser !== undefined && setNewUser.user_metadata !== null && setNewUser.user_metadata.cryptos !== undefined && setNewUser.user_metadata.keywords !== undefined ) {
                 this.currentUser = new UserModel(setNewUser.user_id,
                   setNewUser.username, setUser.email, setNewUser.user_metadata.currency,
-                  setNewUser.user_metadata.cryptos, setNewUser.user_metadata.keywords );
+                  setNewUser.user_metadata.cryptos, setNewUser.user_metadata.keywords, []);
+
+                this.currentUser.setRoles(['basic'])
               }
             });
           }

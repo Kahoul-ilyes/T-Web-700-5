@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: '', component: CryptoPageComponent},
   { path: 'article', component: ArticleListComponent},
   { path: 'cryptos', component: CryptoPageComponent},
-  { path: 'admin', component: AdminComponent},
+  { path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
 
 
 
