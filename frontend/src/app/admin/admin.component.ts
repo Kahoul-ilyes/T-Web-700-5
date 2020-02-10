@@ -66,6 +66,9 @@ export class AdminComponent implements OnInit {
 
   }
 
+  /**
+   * Fetch all rss
+   */
   fetchAllRss() {
     this.rssArray = []
     this.rssService.getAllRss().subscribe(data => {
@@ -78,6 +81,9 @@ export class AdminComponent implements OnInit {
     })
   }
   
+  /**
+   * Fetch all crypto by availabily, limit and offset
+   */
   fetchAllCrypto() {
     this.cryptoArray = []
     this.cryptoService.countCryptos(true).subscribe(data => {
@@ -118,6 +124,17 @@ export class AdminComponent implements OnInit {
   }
 
   /**
+   * Set a crypto available or unavailable
+   * @param id 
+   * @param fetchable 
+   */
+  availableCrypto(id: string, available: boolean) {
+    this.cryptoService.updateCrypto(id, JSON.stringify({ 'isAvailable': available })).subscribe(res => {
+      this.fetchAllCrypto()
+    })
+  }
+
+  /**
    * Delete a crypto
    * @param id 
    */
@@ -126,8 +143,10 @@ export class AdminComponent implements OnInit {
       this.fetchAllCrypto()
     })
   }
-  
 
+  /**
+   * Open the add rss dialog
+   */
   openAddRssDialog(): void {
     const dialogRef = this.dialogRss.open(AddRssComponent, {
       width: '400px'
@@ -138,6 +157,9 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  /**
+   * Open the add crypto dialog
+   */
   openAddCryptoDialog(): void {
     const dialogRef = this.dialogCrypto.open(AddCryptoComponent, {
       width: '400px'

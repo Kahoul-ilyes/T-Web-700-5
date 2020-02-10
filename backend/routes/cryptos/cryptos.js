@@ -310,8 +310,8 @@ router.post('/', (req, res, next) => {
     if (highestPrice) datas.website = highestPrice
     if (supply) datas.supply = supply
     if (marketCap) datas.marketCap = marketCap
-    if (isTradable) datas.isTradable = isTradable
-    if (isAvailable) datas.isAvailable = isAvailable
+    if (isTradable != null) datas.isTradable = isTradable
+    if (isAvailable != null) datas.isAvailable = isAvailable
 
 
     Crypto.create(datas, (err, crypto) => {
@@ -389,10 +389,10 @@ router.put('/:id', (req, res, next) => {
     if (highestPrice) datas.website = highestPrice
     if (supply) datas.supply = supply
     if (marketCap) datas.marketCap = marketCap
-    if (isTradable) datas.isTradable = isTradable
-    if (isAvailable) datas.isAvailable = isAvailable
+    if (isTradable != null) datas.isTradable = isTradable
+    if (isAvailable != null) datas.isAvailable = isAvailable
 
-    Crypto.findOneAndUpdate(req.params.id, datas, (err, crypto) => {
+    Crypto.findByIdAndUpdate(req.params.id, datas, (err, crypto) => {
       if (err) res.json({err: err})
       else {
         if (crypto) {
