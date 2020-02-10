@@ -22,7 +22,7 @@ export class ArticleListComponent implements OnInit {
         if (res.articles !== null && res.articles !== undefined) {
           // @ts-ignore
           for (const article of res.articles) {
-            this.displayedArticle.push(new ArticleModel(article.title, '', article.content, article.date, article.image, article._id ));
+            this.displayedArticle.push(new ArticleModel(article.title, '', article.content, article.date, article.image, article._id, article.link));
           }
         }
       });
