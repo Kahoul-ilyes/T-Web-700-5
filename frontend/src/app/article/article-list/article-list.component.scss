@@ -19,13 +19,24 @@
 text-align: end}
 
 
+.example-card {
+  width: 30%;
+}
+
 
 .flex-display{
   display: flex;
   flex-wrap: wrap;
-  background-color: #d6f4ff;
 }
 .example-header-image {
   background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
   background-size: cover;
+}
+
+.crypto-param-inputs {
+  display: flex;
+}
+
+.crypto-param-inputs > p:nth-child(1) {
+  margin-right: 10vh;
 }
