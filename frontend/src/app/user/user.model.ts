@@ -23,7 +23,7 @@ export class UserModel {
 
   keywords$  = of(this.keywords);
 
-  roles: Array<String>
+  roles: Array<string>;
   /**
    * Constructeur complet
    */
@@ -34,16 +34,16 @@ export class UserModel {
     this.currency = currency;
     this.cryptos = cryptos;
     this.keywords = keywords;
-    this.roles = roles
+    this.roles = roles;
   }
 
   /**
    * Set user roles
-   * @param roles 
+   * @param roles
    */
   public setRoles(roles) {
     for (const r of roles) {
-      this.roles.push(r.name)
+      this.roles.push(r.name);
     }
   }
 
@@ -51,14 +51,14 @@ export class UserModel {
    * Return true if the user is an admin, oherwise return false
    */
   public isAdmin(): boolean {
-    return this.roles.indexOf('admin') > -1 ? true : false
+    return this.roles.indexOf('admin') > -1 ? true : false;
   }
 
   /**
    * Return true if the user is a basic user, oherwise return false
    */
   public isBasic(): boolean {
-    return this.roles.indexOf('basic') > -1 ? true : false
+    return this.roles.indexOf('basic') > -1 ? true : false;
   }
 
   /** Renvois true si keywords n'estp as vide */
@@ -84,7 +84,7 @@ export class UserModel {
   }
 
   public removeKeyword(keyword: string) {
-    this.cryptos.splice(this.keywords.lastIndexOf(keyword), 1);
+    this.keywords.splice(this.keywords.lastIndexOf(keyword), 1);
   }
 
 
@@ -94,6 +94,15 @@ export class UserModel {
 
   public containsKeyWords(keyword: string): boolean {
     return this.keywords.includes(keyword);
+  }
+  public setUser(id, username, email, currency, cryptos, keywords, roles) {
+    this.id = id;
+    this.username = username;
+    this.email = email;
+    this.currency = currency;
+    this.cryptos = cryptos;
+    this.keywords = keywords;
+    this.roles = roles;
   }
   /** Format to JSON */
   toJSON() {
