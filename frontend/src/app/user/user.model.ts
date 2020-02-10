@@ -53,7 +53,7 @@ export class UserModel {
    * Return true if the user is an admin, oherwise return false
    */
   public isAdmin(): boolean {
-    if (this.roles === undefined) {return false ; }
+    if (this.roles === undefined) return false;
     return this.roles.indexOf('admin') > -1 ? true : false;
 
   }

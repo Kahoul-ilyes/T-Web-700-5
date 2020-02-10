@@ -16,14 +16,14 @@ import {MatIconModule} from '@angular/material/icon';
 import {CryptoPageComponent} from './crypto-page/crypto-page.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {CryptoModel} from './shared/crypto.model';
-import { CryptoEditComponent } from './crypto-edit/crypto-edit.component';
+// import { CryptoEditComponent } from './crypto-edit/crypto-edit.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 /**
  * Module pour tout ce qui concerne les crypto, affichage des listes de crypto et des stats
  */
 @NgModule({
-  declarations: [ CryptoPageComponent, CryptoEditComponent],
+  declarations: [ CryptoPageComponent],
   exports: [
     CryptoPageComponent,
     HttpClientModule

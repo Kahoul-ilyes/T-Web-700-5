@@ -18,11 +18,4 @@ export class AdminGuard implements CanActivate {
   ): Observable<boolean> | Promise<boolean|UrlTree> | boolean {
     return this.userService.currentUser.isAdmin();
   }
-
-
-
-
-
-
-
 }
