@@ -45,9 +45,10 @@ const getAccessToken = (callback) => {
   const accessTokenDatas = {
     "client_id":`${process.env.CLIENT_ID}`,
     "client_secret": `${process.env.CLIENT_SECRET}`,
-    "audience": `${process.env.AUDIENCE_AUTH0}`,
+    "audience": `${process.env.AUTH0_AUDIENCE}`,
     "grant_type": "client_credentials"
   }
+  console.log(accessTokenDatas)
   axios
   .post('https://dev-m6frxp9u.eu.auth0.com/oauth/token', accessTokenDatas)
   .then(response => {
