@@ -95,6 +95,15 @@ export class UserModel {
   public containsKeyWords(keyword: string): boolean {
     return this.keywords.includes(keyword);
   }
+  public setUser(id, username, email, currency, cryptos, keywords, roles) {
+    this.id = id;
+    this.username = username;
+    this.email = email;
+    this.currency = currency;
+    this.cryptos = cryptos;
+    this.keywords = keywords;
+    this.roles = roles;
+  }
   /** Format to JSON */
   toJSON() {
     return {
