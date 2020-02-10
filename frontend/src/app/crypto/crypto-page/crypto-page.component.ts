@@ -88,7 +88,7 @@ export class CryptoPageComponent implements OnInit {
 
     // tslint:disable-next-line:no-shadowed-variable
     const timer = setInterval(() => this.refreshTable(), 1000);
-    // const timout = setTimeout(() => this.displayFavorites(), 1000);
+    const timout = setTimeout(() => this.displayFavorites(), 1000);
   }
 
 
@@ -187,7 +187,7 @@ export class CryptoPageComponent implements OnInit {
   refreshFavorites() {
     this.filterList()
     // this.sortList()
-    this.dataSourceFavorites.data = this.favoriteList;
+    this.dataSourceFavorites = new MatTableDataSource(this.favoriteList);
   }
 
   /** filtre les cryptos selon leur valeurs */
