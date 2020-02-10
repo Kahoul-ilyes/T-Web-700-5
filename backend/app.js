@@ -11,22 +11,13 @@ require('dotenv').config()
 
 const mongoose = require('mongoose')
 // connect to Mongo daemon
-mongoose
-    .connect(
-        `${process.env.MONGO_URL}`,
-        {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false}
-    )
-    .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.log(err));
-
-const db = mongoose.connection
-
-db.on('error', console.error.bind(console, 'Bdd connection error:'))
-db.once('open', () => {
-  console.log('Bdd connected !')
-  // we're connected!
-})
-
+// mongoose
+//     .connect(
+//         `${process.env.MONGO_URL}`,
+//         {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false}
+//     )
+//     .then(() => console.log('MongoDB Connected'))
+//     .catch(err => console.log(err));
 
 let indexRouter = require('./routes/index')
 let usersRouter = require('./routes/users/users')
@@ -55,8 +46,8 @@ app.use((req, res, next) => {
 
 // Set up Auth0 configuration
 const authConfig = {
-  domain: `${process.env.DOMAIN_AUTH0}`,
-  audience: `${process.env.AUDIENCE_AUTH0}`
+  domain: `${process.env.AUTH0_DOMAIN}`,
+  audience: `${process.env.AUTH0_AUDIENCE}`
 };
 
 // Define middleware that validates incoming bearer tokens

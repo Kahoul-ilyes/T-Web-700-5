@@ -5,7 +5,7 @@ let router = express.Router()
 
 let axios = require('axios')
 
-axios.defaults.baseURL = `${process.env.AUDIENCE_AUTH0}`
+axios.defaults.baseURL = `${process.env.AUTH0_AUDIENCE}`
 
 function handleError(err) {
   if (err.response) {
@@ -41,14 +41,13 @@ function logHandleError(err) {
 
 // get access token
 const getAccessToken = (callback) => {
-  console.log('retrieving accesstoken')
   const accessTokenDatas = {
     "client_id":`${process.env.CLIENT_ID}`,
     "client_secret": `${process.env.CLIENT_SECRET}`,
     "audience": `${process.env.AUTH0_AUDIENCE}`,
     "grant_type": "client_credentials"
   }
-  console.log(accessTokenDatas)
+
   axios
   .post('https://dev-m6frxp9u.eu.auth0.com/oauth/token', accessTokenDatas)
   .then(response => {
@@ -249,9 +248,9 @@ router.post('/:id/initialize', (req, res, next) => {
     function(callback) {
       let datas = {
         user_metadata: {
-          currency: "EUR",
-          cryptos: [],
-          keywords: []
+          "currency": "EUR",
+          "cryptos": [],
+          "keywords": []
         }
       }
     
