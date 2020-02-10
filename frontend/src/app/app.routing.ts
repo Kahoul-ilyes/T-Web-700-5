@@ -6,6 +6,8 @@ import {ArticlePageComponent} from './article/article-page/article-page.componen
 import { AdminComponent } from './admin/admin.component';
 
 import {ProfileComponent} from './profile/profile.component';
+import {UserService} from './user/user.service';
+import {AdminGuard} from './admin.guard';
 
 
 const routes: Routes = [
@@ -15,7 +17,8 @@ const routes: Routes = [
 
   { path: 'cryptos', component: CryptoPageComponent},
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard]},
-  { path: 'admin', component: AdminComponent},
+  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard]
+  },
 
 
 
