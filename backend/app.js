@@ -8,17 +8,6 @@ const helmet = require('helmet')
 
 require('dotenv').config()
 
-
-const mongoose = require('mongoose')
-// connect to Mongo daemon
-// mongoose
-//     .connect(
-//         `${process.env.MONGO_URL}`,
-//         {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false}
-//     )
-//     .then(() => console.log('MongoDB Connected'))
-//     .catch(err => console.log(err));
-
 let indexRouter = require('./routes/index')
 let usersRouter = require('./routes/users/users')
 let cryptosRouter = require('./routes/cryptos/cryptos', )

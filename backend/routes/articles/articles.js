@@ -47,7 +47,6 @@ router.get('/rss/', function (req, res) {
 
     })
   })
-  console.log("adress book status ", adressBook)
   let articleAddedCount = 0
   // scan rss content
   let parser1 = new Parser();
@@ -55,7 +54,6 @@ router.get('/rss/', function (req, res) {
 
     // scan rss for every adresses
     for (let j = 0; j < adressBook.length; j++) {
-      console.log("checking on ", adressBook[j])
       feed = await parser1.parseURL(adressBook[j]);
       feed.items.forEach(item => {
         //set default image
@@ -72,13 +70,10 @@ router.get('/rss/', function (req, res) {
             for (const key in item) {
               if (item.hasOwnProperty(key)) {
                 const value = item[key];
-                // console.log (value)
                 if (imageSet === false) {
                   let regExpImg = RegExp('(https?.*?(?:png|bmp|jpg|gif))', "i").exec(value)
-                  // console.log("REGEXPIMG",regExpImg)
                   if (regExpImg) {
                     item.image = regExpImg[0]
-                    console.log("REGEXEXEX ", regExpImg[0])
                   }
                   imagetSet = true;
                 }
@@ -102,7 +97,6 @@ router.get('/rss/', function (req, res) {
 
   })()
   .then(function (result) {
-    console.log(articleAddedCount + ' added successfully!')
     res.json({
       msg: articleAddedCount + ' added successfully!'
     })
@@ -207,8 +201,6 @@ router.get('/', function (req, res) {
       }
     }
   } else {
-
-    console.log('No user found with this id, default: no keywords')
     Article.find({}, function (err, result) {
       if (err) res.json({
         err: err

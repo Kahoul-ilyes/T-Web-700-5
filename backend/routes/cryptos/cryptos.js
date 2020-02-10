@@ -292,8 +292,6 @@ router.post('/', (req, res, next) => {
   let isTradable = req.body.isTradable
   let isAvailable = req.body.isAvailable
 
-  console.log(req.body)
-
   if (!name || !symbol) {
     res.json({error: 'Bad request formatting, name or symbol is missing.'})
   } else {
@@ -423,7 +421,6 @@ router.put('/:id', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
   else {
-    console.log('crypto id to suppress', req.params.id)
     Crypto.findByIdAndDelete(req.params.id, (err, crypto) => {
       if (err) res.json({err: err})
       else {
