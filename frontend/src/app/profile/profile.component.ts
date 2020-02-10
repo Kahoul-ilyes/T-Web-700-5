@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { AuthService } from '../auth.service';
 import {UserService} from "../user/user.service";
 
@@ -9,21 +9,25 @@ import {UserService} from "../user/user.service";
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
-  options: FormGroup;
-  name= this.userService.currentUser.username;
-  email= this.userService.currentUser.email;
+  // options: FormGroup;
+  profileForm = this.fb.group({
+    name: [null, Validators.required],
+    email: [null, Validators.required],
+  });
 
+currentUser=null
 
-  constructor(public auth: AuthService,public userService : UserService, fb: FormBuilder) {
-    this.options = fb.group({
-      hideRequired: false,
-      floatLabel: 'auto',
-    });
-  }
+  constructor(public auth: AuthService,public userService : UserService, private fb: FormBuilder) { }
 
-  ngOnInit() {
-    this.name= this.userService.currentUser.username;
-    this.email= this.userService.currentUser.email;
+  ngOnInit() { 
+    this.auth.userProfile$.subscribe(userAuthO => {
+      if (userAuthO) {
+        this.userService.getUser(userAuthO.sub).subscribe(res => {
+          this.currentUser= res["user"]
+          console.log(res)
+          console.log(this.currentUser)
+        })
+      }})
   }
 
 }
