@@ -308,7 +308,7 @@ router.delete('/:id', (req, res, next) => {
       err: 'Please provide a valid id param, 24 digit.'
     })
   else
-    Article.findOneAndDelete(req.params.id, (err, article) => {
+    Article.findByIdAndDelete(req.params.id, (err, article) => {
       if (err) res.json({
         err: err
       })

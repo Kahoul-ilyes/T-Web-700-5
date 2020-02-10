@@ -423,7 +423,8 @@ router.put('/:id', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
   else {
-    Crypto.findOneAndDelete(req.params.id, (err, crypto) => {
+    console.log('crypto id to suppress', req.params.id)
+    Crypto.findByIdAndDelete(req.params.id, (err, crypto) => {
       if (err) res.json({err: err})
       else {
         if (crypto) {

@@ -49,6 +49,7 @@ export class AdminComponent implements OnInit {
     this.fetchAllRss()
     this.fetchAllCrypto()
     this.dataSourceCrypto.paginator = this.paginator;
+    this.paginator.length = this.totalCryptosLength.valueOf()
     this.paginator._changePageSize(25);
   }
 

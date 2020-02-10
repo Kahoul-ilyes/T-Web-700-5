@@ -158,7 +158,7 @@ router.put('/:id', (req, res, next) => {
   if (url) datas.url = url
   if (isFetchable != null) datas.isFetchable = isFetchable
 
-  Rss.findOneAndUpdate(req.params.id, datas, (err, rss) => {
+  Rss.findByIdAndUpdate(req.params.id, datas, (err, rss) => {
     if (err) res.json({err: err})
     else {
       if (rss) {
@@ -188,7 +188,7 @@ router.put('/:id', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
-  Rss.findOneAndDelete(req.params.id, (err, rss) => {
+  Rss.findByIdAndDelete(req.params.id, (err, rss) => {
     if (err) res.json({err: err})
 
     if (rss) {
