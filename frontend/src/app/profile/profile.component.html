@@ -6,38 +6,26 @@
   <form class="example-container" [formGroup]="profileForm">
   <!-- ToDo -->
   <mat-form-field class="full-width" appearance="standard">
-    <mat-label>Keywords</mat-label>
-    <input matInput placeholder="keywords" [value]="keywords">
-  </mat-form-field>
-
-   <!-- ToDo -->
-  <mat-form-field class="full-width" appearance="standard">
-    <mat-label>Cryptos</mat-label>
-    <input matInput placeholder="cryptos" [value]="cryptos">
-  </mat-form-field>
-
-  <!-- ToDo -->
-  <mat-form-field class="full-width" appearance="standard">
     <mat-label>Currency</mat-label>
-    <input matInput placeholder="currency" [value]="currency">
+    <input matInput placeholder="currency" formControlName="currency">
   </mat-form-field>
 
   <!-- ToDo -->
   <mat-form-field class="full-width" appearance="standard">
     <mat-label>Name</mat-label>
-    <input matInput placeholder="name" [value]="profile.name" formControlName="name" required>
+    <input matInput placeholder="name" formControlName="name" required>
   </mat-form-field>
 
   <!-- ToDo -->
-  <mat-form-field class="full-width" appearance="standard">
+  <mat-form-field class="full-width" appearance="standard" >
     <mat-label>Email</mat-label>
-    <input matInput placeholder="email" [value]="profile.email">
+    <input matInput placeholder="email" formControlName="email" required>
   </mat-form-field>
 
   <!-- ToDo -->
   <mat-form-field class="full-width" appearance="standard">
     <mat-label>Password</mat-label>
-    <input matInput placeholder="password" [value]="password">
+    <input matInput placeholder="Change password" >
   </mat-form-field>
 
   <button mat-raised-button color="primary">Submit</button>
