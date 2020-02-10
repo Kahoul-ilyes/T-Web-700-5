@@ -10,7 +10,7 @@ import {ArticleModel} from '../shared/article.model';
 })
 export class ArticlePageComponent implements OnInit {
 
-  article = new ArticleModel('', '', '', '', '', '');
+  article = new ArticleModel('', '', '', '', '', '', '');
   display: boolean;
   constructor(  private route: ActivatedRoute,
                 private router: Router, private articleService: ArticleService) { }
@@ -24,7 +24,7 @@ export class ArticlePageComponent implements OnInit {
         const articleRes  = res.article;
 
         // tslint:disable-next-line:max-line-length
-        this.article = new ArticleModel(articleRes.title, '', articleRes['content:encoded'], articleRes.pubDatedate, articleRes.image, articleRes._id);
+        this.article = new ArticleModel(articleRes.title, '', articleRes['content:encoded'], articleRes.pubDatedate, articleRes.image, articleRes._id, articleRes.link);
         this.display = true;
         console.log('result get by id' , res);
       });

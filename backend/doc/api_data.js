@@ -1,7 +1,39 @@
 define({ "api": [
   {
+    "type": "delete",
+    "url": "/articles/:id",
+    "title": "Delete an article by ID",
+    "name": "DeleteArticleByID",
+    "group": "Articles",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "id",
+            "description": "<p>article's unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n    {\n    \"_id\": \"5e399a82b2745b6f3ad4e8ac\",\n    \"msg\": \"Article deleted successfully.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/articles/articles.js",
+    "groupTitle": "Articles"
+  },
+  {
     "type": "get",
-    "url": "/articles/rss",
+    "url": "articles/rss",
     "title": "Job to store articles in database from RSS feeds",
     "name": "GetAndStoreRSSFeed",
     "group": "Articles",
@@ -87,6 +119,25 @@ define({ "api": [
     "version": "0.0.0",
     "filename": "routes/cryptos/coins.js",
     "groupTitle": "Coin"
+  },
+  {
+    "type": "get",
+    "url": "/cryptos/count(?available=true)",
+    "title": "Count all cryptos",
+    "name": "CountCryptos",
+    "group": "Crypto",
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "HTTP/1.1 200 OK\n{\n  \"count\": 4500\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/cryptos/cryptos.js",
+    "groupTitle": "Crypto"
   },
   {
     "type": "delete",
@@ -222,7 +273,7 @@ define({ "api": [
   },
   {
     "type": "get",
-    "url": "/cryptos(?cryptos=BTC,ETH)(?ids=ObjectID1,ObjectID2,ObjectID3)",
+    "url": "/cryptos(?cryptos=BTC,ETH)(?ids=ObjectID1,ObjectID2,ObjectID3)(?available=true)(&offset=0)(&limit=1000)",
     "title": "Request all cryptos",
     "name": "GetCryptos",
     "group": "Crypto",
@@ -683,6 +734,50 @@ define({ "api": [
         {
           "title": "Success-Response:",
           "content": "HTTP/1.1 200 OK\n{\n  \"keywords\": []\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "version": "0.0.0",
+    "filename": "routes/users/users.js",
+    "groupTitle": "User",
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "UserNotFound",
+            "description": "<p>Please provide an id param.</p>"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "get",
+    "url": "/users/:id",
+    "title": "Request an user's roles",
+    "name": "GetUserRoles",
+    "group": "User",
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "ObjectId",
+            "optional": false,
+            "field": "id",
+            "description": "<p>User's unique ID.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "    HTTP/1.1 200 OK\n{\n  \"roles\": ['basic', 'admin']\n}",
           "type": "json"
         }
       ]
