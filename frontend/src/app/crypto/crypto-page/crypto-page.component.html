@@ -48,7 +48,7 @@
 
       <ng-container matColumnDef="capitalization">
         <th mat-header-cell *matHeaderCellDef> Total Vol. </th>
-        <td mat-cell  class="" *matCellDef="let element" > {{ element.currentPrice * element.marketCap | currency : currencyCode }}   </td>
+        <td mat-cell  class="" *matCellDef="let element" > {{ element.currentPrice * element.marketCap * rate | currency : currencyCode }}   </td>
       </ng-container>
 
       <ng-container matColumnDef="evolution">
@@ -124,12 +124,12 @@
       <!-- Symbol Column -->
       <ng-container matColumnDef="value" >
         <th mat-header-cell *matHeaderCellDef> Current Price </th>
-        <td mat-cell *matCellDef="let element"> {{element.currentPrice | currency }} </td>
+        <td mat-cell *matCellDef="let element"> {{element.currentPrice * rate | currency : currencyCode }} </td>
       </ng-container>
 
       <ng-container matColumnDef="capitalization">
         <th mat-header-cell *matHeaderCellDef> Total Vol. </th>
-        <td mat-cell  class="" *matCellDef="let element" > {{element.currentPrice * element.marketCap | currency }}   </td>
+        <td mat-cell  class="" *matCellDef="let element" > {{element.currentPrice * element.marketCap * rate | currency : currencyCode }}   </td>
       </ng-container>
 
       <ng-container matColumnDef="evolution">

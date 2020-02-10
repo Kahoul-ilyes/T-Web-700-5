@@ -21,7 +21,6 @@ export class CryptoPageComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-
   cryptoOnPage: CryptoModel[];
   cryptoSymbolDisplayed = '';
   displayedColumns: string[];
@@ -56,18 +55,25 @@ export class CryptoPageComponent implements OnInit {
 
   ngOnInit() {
 
-    // add timeout to wait for the current logged user to be set
-    setTimeout(()=> {
-      // get the user currency, call the currency converter api and change the rate
-      if (this.userService.currentUser && this.userService.currentUser.currency && this.userService.currentUser.currency != "" && this.userService.currentUser.currency != this.currencyCode) {
-        this.currencyService.getRate('USD', this.userService.currentUser.currency).subscribe(res => {
-          if (res && res['status'] == 'success') {
-            this.currencyCode = this.userService.currentUser.currency;
-            this.rate = parseInt(res["rates"][this.currencyCode]["rate"] )
-          }  
+    // update currency to use
+    this.auth.userProfile$.subscribe(res => {
+      if (res && res.sub) {
+        // get user
+        this.userService.getUser(res.sub).subscribe(res2 => {
+          // get the user currency, call the currency converter api and change the rate
+          if (res2 && res2['user'] && res2['user']['user_metadata'] && res2['user']['user_metadata']['currency'] != "" && res2['user']['user_metadata']['currency']) {
+            this.currencyService.getCurrencies().subscribe(res3 => {
+              if (res3 && res3['currencies'] && this.currencyCode in res3['currencies']) {
+                this.currencyCode = res2['user']['user_metadata']['currency'];
+              } else {
+                this.currencyCode = 'EUR';
+              }
+            })
+          }
         })
       }
-    }, 1000);
+    })
+
 
     this.displayedColumns = ['logo', 'acronym', 'name', 'value', 'capitalization', 'evolution', 'favorite'];
 
@@ -86,6 +92,12 @@ export class CryptoPageComponent implements OnInit {
       }
       this.initDataSource();
     });
+
+    this.currencyService.getRate('USD', this.currencyCode).subscribe(res => {
+      if (res && res['status'] == 'success') {
+        this.rate = parseFloat(res["rates"][this.currencyCode]["rate"]);
+      }  
+    })
   }
 
 

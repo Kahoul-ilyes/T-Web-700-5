@@ -8,8 +8,8 @@ import {RssService} from './shared/rss.service'
 import {MatTableDataSource} from '@angular/material/table'
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog'
 
-import { AddRssComponent } from './add-rss/add-rss.component'
-import { AddCryptoComponent } from './add-crypto/add-crypto.component'
+import { AddRssComponent } from './add-rss/add-rss.component' 
+import { AddCryptoComponent } from './add-crypto/add-crypto.component' 
 import { CryptoModel } from '../crypto/shared/crypto.model'
 import { CryptoService } from '../crypto/shared/crypto.service'
 // import { MatSort } from '@angular/material/sort';
@@ -27,7 +27,7 @@ export class AdminComponent implements OnInit {
   // Rss table datas
   displayedColumnsRss: string[] = ['id', 'url', 'actions']
   rssArray: RssModel[] = []
-
+  
   // Crypto table datas
   displayedColumnsCrypto: string[] = ['id', 'name', 'price', 'actions']
   cryptoArray: CryptoModel[] = []
@@ -63,8 +63,12 @@ export class AdminComponent implements OnInit {
     this.offset = $event.pageIndex * $event.pageSize
 
     this.fetchAllCrypto()
+
   }
 
+  /**
+   * Fetch all rss
+   */
   fetchAllRss() {
     this.rssArray = []
     this.rssService.getAllRss().subscribe(data => {
@@ -76,13 +80,16 @@ export class AdminComponent implements OnInit {
       this.dataSourceRss = new MatTableDataSource(this.rssArray)
     })
   }
-
+  
+  /**
+   * Fetch all crypto by availabily, limit and offset
+   */
   fetchAllCrypto() {
     this.cryptoArray = []
     this.cryptoService.countCryptos(true).subscribe(data => {
       this.totalCryptosLength = data['count']
     })
-
+    
     this.cryptoService.getAllCryptosWithParams(this.available, this.limit, this.offset).subscribe(data => {
       // @ts-ignore cryptos n'est pas trouvé sinon
       for (const d of (data.cryptos)) {
@@ -96,8 +103,8 @@ export class AdminComponent implements OnInit {
 
   /**
    * Set a flux RSS fetchable or unfetchable
-   * @param id
-   * @param fetchable
+   * @param id 
+   * @param fetchable 
    */
   fetchRss(id: string, fetchable: boolean) {
     console.log(id)
@@ -108,7 +115,7 @@ export class AdminComponent implements OnInit {
 
   /**
    * Delete a RSS
-   * @param id
+   * @param id 
    */
   deleteRss(id: string) {
     this.rssService.deleteRss(id).subscribe(res => {
@@ -117,8 +124,19 @@ export class AdminComponent implements OnInit {
   }
 
   /**
+   * Set a crypto available or unavailable
+   * @param id 
+   * @param fetchable 
+   */
+  availableCrypto(id: string, available: boolean) {
+    this.cryptoService.updateCrypto(id, JSON.stringify({ 'isAvailable': available })).subscribe(res => {
+      this.fetchAllCrypto()
+    })
+  }
+
+  /**
    * Delete a crypto
-   * @param id
+   * @param id 
    */
   deleteCrypto(id: string) {
     this.cryptoService.deleteCrypto(id).subscribe(res => {
@@ -126,7 +144,9 @@ export class AdminComponent implements OnInit {
     })
   }
 
-
+  /**
+   * Open the add rss dialog
+   */
   openAddRssDialog(): void {
     const dialogRef = this.dialogRss.open(AddRssComponent, {
       width: '400px'
@@ -137,6 +157,9 @@ export class AdminComponent implements OnInit {
     });
   }
 
+  /**
+   * Open the add crypto dialog
+   */
   openAddCryptoDialog(): void {
     const dialogRef = this.dialogCrypto.open(AddCryptoComponent, {
       width: '400px'

@@ -18,14 +18,22 @@ export class CurrencyService {
     })
   };
   /** Main URL, a changer à la fin des test */
-  URL = 'https://currency-converter5.p.rapidapi.com/currency/convert';
+  URL = 'https://currency-converter5.p.rapidapi.com/currency';
+
+
+  /**
+   * Get all currencies available
+   */
+  public getCurrencies() {
+    return this.httpClient.get(this.URL + '/list', this.optionRequete);
+  }
 
   /**
    * Récupération d'une crypto du server
    * @param idCrypto id de la crypto a get
    */
   public getRate(from: string, to: string) {
-    return this.httpClient.get(this.URL + `?from=${from}&to=${to}`);
+    return this.httpClient.get(this.URL + `/convert?format=json&amount=1&from=${from}&to=${to}`, this.optionRequete);
   }
 
   /**

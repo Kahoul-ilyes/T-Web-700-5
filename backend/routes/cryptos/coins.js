@@ -29,7 +29,6 @@ router.get('/', (req, res, next) => {
       authorization: `Apikey ${process.env.API_KEY_CRYPTO_COMPARE}`
     } 
   }).then((res) => {
-    // console.log(res.data.Data)
     let coins = res.data.Data;
     for (const key in coins) {
       if (coins.hasOwnProperty(key)) {
@@ -42,7 +41,6 @@ router.get('/', (req, res, next) => {
         let isTradable = coin.IsTrading
         let dateAvailability = coin.ContentCreatedOn
         let supply = 0
-        // console.log(coin.TotalCoinSupply)
         if (coin.TotalCoinsMined && coin.TotalCoinsMined != null && coin.TotalCoinsMined !== "N/A")
           supply = coin.TotalCoinsMined
 
