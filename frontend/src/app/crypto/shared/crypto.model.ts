@@ -55,7 +55,7 @@ export class CryptoModel {
     this.symbol = symbol;
     this.updatedAt = new Date(updatedAt as string);
     this.website = website;
-    if (currentPrice !== undefined) {
+    if (marketCap !== undefined) {
       this.currentPrice = currentPrice;
       this.lowestPrice = lowestPrice;
       this.openingPrice = openingPrice;
@@ -63,11 +63,11 @@ export class CryptoModel {
       this.marketCap = marketCap;
 
     } else {
-      this.currentPrice = 0;
-      this.lowestPrice = 0;
-      this.openingPrice = 0;
-      this.highestPrice = 0;
-      this.marketCap = 0;
+      this.currentPrice = -1;
+      this.lowestPrice = -1;
+      this.openingPrice = -1;
+      this.highestPrice = -1;
+      this.marketCap = -1;
     }
     this.supply = supply;
   }

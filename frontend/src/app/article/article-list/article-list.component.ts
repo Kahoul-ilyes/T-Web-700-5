@@ -70,10 +70,7 @@ export class ArticleListComponent implements OnInit {
       this.keywordsSelected.push(eventKeyWord);
     }
     this.refreshArticleList();
-
-
   }
-
 
   refreshArticleList() {
 

@@ -16,6 +16,7 @@ export class ArticleService {
 
 
   getArticlesByKeywords(keywords: string[]) {
+
     let keywordChain = '';
     if (keywords !== null) {
       keywordChain += '?keywords=';

@@ -45,12 +45,12 @@ export class CryptoPageComponent implements OnInit {
   private dataSourceFavorites = new MatTableDataSource(this.favoriteList);
 
   displayFav = false;
-  
+
   // limit & offset for crypto list
-  totalCryptosLength: Number = 0
-  limit: Number = 25
-  offset: Number = 0
-  available: Boolean = true
+  totalCryptosLength: Number = 0;
+  limit: Number = 25;
+  offset: Number = 0;
+  available: Boolean = true;
   pageEvent: PageEvent;
   pageSizeOptions: number[] = [25, 5, 10, 100];
 
@@ -62,50 +62,56 @@ export class CryptoPageComponent implements OnInit {
         // get user
         this.userService.getUser(res.sub).subscribe(res2 => {
           // get the user currency, call the currency converter api and change the rate
-          if (res2 && res2['user'] && res2['user']['user_metadata'] && res2['user']['user_metadata']['currency'] != "" && res2['user']['user_metadata']['currency']) {
+          // @ts-ignore
+          if (res2 && res2.user && res2.user.user_metadata && res2.user.user_metadata.currency !== '' && res2.user.user_metadata.currency) {
             this.currencyService.getCurrencies().subscribe(res3 => {
-              if (res3 && res3['currencies'] && this.currencyCode in res3['currencies']) {
-                this.currencyCode = res2['user']['user_metadata']['currency'];
+              // @ts-ignore
+              if (res3 && res3.currencies && this.currencyCode in res3.currencies) {
+                // @ts-ignore
+                this.currencyCode = res2.user.user_metadata.currency;
               } else {
                 this.currencyCode = 'EUR';
               }
-            })
+            });
           }
-        })
+        });
       }
-    })
+    });
 
     this.currencyService.getRate('USD', this.currencyCode).subscribe(res => {
-      if (res && res['status'] == 'success') {
-        this.rate = parseFloat(res["rates"][this.currencyCode]["rate"]);
-      }  
-    })
+      // @ts-ignore
+      if (res && res.status === 'success') {
+        // @ts-ignore
+        this.rate = parseFloat(res.rates[this.currencyCode].rate);
+      }
+    });
 
     this.dataSourceCryptos.paginator = this.paginator;
     this.paginator.length = this.totalCryptosLength.valueOf();
     this.paginator._changePageSize(25);
-    
+
 
     // tslint:disable-next-line:no-shadowed-variable
     const timer = setInterval(() => this.refreshTable(), 1000);
-    const timout = setTimeout(() => this.displayFavorites(), 1000);
+    const timout = setTimeout(() => this.refreshFavorites(), 2000);
   }
-
 
   private fetchCryptos() {
     this.cryptoList = [];
 
     this.cryptoService.countCryptos(true).subscribe(data => {
-      this.totalCryptosLength = data['count']
-    })
+      // @ts-ignore
+      this.totalCryptosLength = data.count;
+    });
 
     this.cryptoService.getAllCryptosWithParams(this.available, this.limit, this.offset).subscribe(data => {
       // @ts-ignore cryptos n'est pas trouvé sinon
       for (const d of (data.cryptos)) {
+        // tslint:disable-next-line:max-line-length
         this.cryptoList.push( new CryptoModel(d.isTradable, d.isAvailable, d._id, d.name, d.createdAt, d.dateAvailability, d.logo, d.symbol, d.updatedAt, d.website,
           d.currentPrice, d.lowestPrice, d.openingPrice, d.highestPrice, d.supply, d.marketCap));
       }
-      
+
       this.dataSourceCryptos = new MatTableDataSource(this.cryptoList);
 
       // subscribe ticker for crypto displayed
@@ -115,16 +121,16 @@ export class CryptoPageComponent implements OnInit {
   }
 
 
-  displayFavorites() {
-    this.refreshFavorites();
-    this.displayFav = true;
-  }
+  /* displayFavorites() {
+     this.refreshFavorites();
+     this.displayFav = true;
+   }*/
 
   getCryptosBySymbol(): string[] {
-    let ret = [];
+    const ret = [];
 
     for (const crypto of this.cryptoList) {
-      ret.push(crypto.symbol)
+      ret.push(crypto.symbol);
     }
 
     return ret;
@@ -147,7 +153,7 @@ export class CryptoPageComponent implements OnInit {
    * Update toutes les 2 sec des datas affichées
    */
   refreshTable(): void {
-    this.fetchCryptos()
+    this.fetchCryptos();
   }
 
   addCrypto(symbol: string) {
@@ -185,9 +191,18 @@ export class CryptoPageComponent implements OnInit {
   }
 
   refreshFavorites() {
-    this.filterList()
-    // this.sortList()
-    this.dataSourceFavorites = new MatTableDataSource(this.favoriteList);
+    if(this.userService.currentUser.cryptos.length > 0) {
+      this.cryptoService.getCryptosBySymbol(this.userService.currentUser.cryptos).subscribe(data => {
+        this.favoriteList = new Array<CryptoModel>();
+        // @ts-ignore
+        for (const d of (data.cryptos)) {
+          // tslint:disable-next-line:max-wline-length max-line-length
+          this.favoriteList.push(new CryptoModel(d.isTradable, d.isAvailable, d._id, d.name, d.createdAt, d.dateAvailability, d.logo, d.symbol, d.updatedAt, d.website,
+            d.currentPrice, d.lowestPrice, d.openingPrice, d.highestPrice, d.supply, d.marketCap));
+        }
+        this.dataSourceFavorites = new MatTableDataSource(this.favoriteList);
+      });
+    }
   }
 
   /** filtre les cryptos selon leur valeurs */
@@ -200,9 +215,6 @@ export class CryptoPageComponent implements OnInit {
     return (element.isAvailable);
   }
 
-  /** Filtre lié a l'input de recherche
-   * TODO: Se lance 2 fois a chaque filtre, a corriger
-   */
   applyInputFilter(target: EventTarget) {
     // @ts-ignore
     this.dataSourceCryptos.filter = target.value.trim().toLowerCase();
@@ -220,14 +232,15 @@ export class CryptoPageComponent implements OnInit {
    * Fonction appelé a chaque changement de pages
    */
   onPageChange($event: PageEvent) {
-    this.totalCryptosLength = $event.length
-    this.limit = $event.pageSize
-    this.offset = $event.pageIndex * $event.pageSize
+    this.totalCryptosLength = $event.length;
+    this.limit = $event.pageSize;
+    this.offset = $event.pageIndex * $event.pageSize;
 
     this.fetchCryptos();
   }
 
 
+  // tslint:disable-next-line:max-line-length
   constructor(public auth: AuthService, public cryptoService: CryptoService, public userService: UserService, public currencyService: CurrencyService) { }
 
 }
