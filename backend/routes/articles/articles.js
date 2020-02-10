@@ -205,6 +205,14 @@ router.get('/', function (req, res) {
           })
         })
       }
+      else {    Article.find({}, function (err, result) {
+        if (err) res.json({
+          err: err
+        })
+        res.json({
+          articles: result
+        })
+      }); }
     }
   } else {
 
@@ -218,6 +226,7 @@ router.get('/', function (req, res) {
       })
     });
   }
+  
 })
 
 
