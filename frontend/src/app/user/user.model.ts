@@ -23,6 +23,8 @@ export class UserModel {
 
   keywords$  = of(this.keywords);
 
+  admin$ = of(this.isAdmin());
+
   roles: Array<string>;
   /**
    * Constructeur complet
@@ -51,7 +53,9 @@ export class UserModel {
    * Return true if the user is an admin, oherwise return false
    */
   public isAdmin(): boolean {
+    if (this.roles === undefined) {return false ; }
     return this.roles.indexOf('admin') > -1 ? true : false;
+
   }
 
   /**
@@ -95,6 +99,7 @@ export class UserModel {
   public containsKeyWords(keyword: string): boolean {
     return this.keywords.includes(keyword);
   }
+
   public setUser(id, username, email, currency, cryptos, keywords, roles) {
     this.id = id;
     this.username = username;
