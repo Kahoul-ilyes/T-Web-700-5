@@ -1,19 +1,46 @@
 <pre *ngIf="auth.userProfile$ | async as profile">
 {{ profile | json }}
-</pre>
 
-<div class="example-container">
 
-  <mat-form-field [floatLabel]="options.value.floatLabel">
-    <mat-label>Name</mat-label>
-    <input matInput placeholder="name" [value]="name">
+<div>
+  <form class="example-container" [formGroup]="profileForm">
+  <!-- ToDo -->
+  <mat-form-field class="full-width" appearance="standard">
+    <mat-label>Keywords</mat-label>
+    <input matInput placeholder="keywords" [value]="keywords">
   </mat-form-field>
 
-  <mat-form-field [floatLabel]="options.value.floatLabel">
+   <!-- ToDo -->
+  <mat-form-field class="full-width" appearance="standard">
+    <mat-label>Cryptos</mat-label>
+    <input matInput placeholder="cryptos" [value]="cryptos">
+  </mat-form-field>
+
+  <!-- ToDo -->
+  <mat-form-field class="full-width" appearance="standard">
+    <mat-label>Currency</mat-label>
+    <input matInput placeholder="currency" [value]="currency">
+  </mat-form-field>
+
+  <!-- ToDo -->
+  <mat-form-field class="full-width" appearance="standard">
+    <mat-label>Name</mat-label>
+    <input matInput placeholder="name" [value]="profile.name" formControlName="name" required>
+  </mat-form-field>
+
+  <!-- ToDo -->
+  <mat-form-field class="full-width" appearance="standard">
     <mat-label>Email</mat-label>
-    <input matInput placeholder="email" [value]="email">
+    <input matInput placeholder="email" [value]="profile.email">
+  </mat-form-field>
+
+  <!-- ToDo -->
+  <mat-form-field class="full-width" appearance="standard">
+    <mat-label>Password</mat-label>
+    <input matInput placeholder="password" [value]="password">
   </mat-form-field>
 
   <button mat-raised-button color="primary">Submit</button>
+  </form>
 </div>
-
+</pre>
