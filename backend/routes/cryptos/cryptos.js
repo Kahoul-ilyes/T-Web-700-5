@@ -148,7 +148,7 @@ router.get('/', (req, res, next) => {
     }
   }
   
-  request = Crypto.find(query)
+  request = Crypto.find(query).sort({currentPrice: -1})
   
   if (req.query.limit) {
     limit = parseInt(req.query.limit)

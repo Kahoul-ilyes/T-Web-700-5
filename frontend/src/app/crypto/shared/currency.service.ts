@@ -33,6 +33,5 @@ export class CurrencyService {
    * @param httpClient pour la communication avec les APIs
    */
   constructor(private httpClient: HttpClient) {
-
   }
 }
