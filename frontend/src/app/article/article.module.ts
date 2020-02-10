@@ -6,7 +6,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ArticlePageComponent } from './article-page/article-page.component';
 import {RouterModule} from '@angular/router';
 import {MatChipsModule} from '@angular/material/chips';
@@ -30,7 +30,8 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
     MatChipsModule,
     MatExpansionModule,
     MatIconModule,
-    MatButtonToggleModule
+    MatButtonToggleModule,
+    FormsModule
   ]
 })
 export class ArticleModule { }
