@@ -21,26 +21,22 @@
     </div>
     <table mat-table [dataSource]="dataSourceFavorites"  class="mat-elevation-z8">
 
-      <!-- Logo Column -->
       <ng-container matColumnDef="logo">
           <th mat-header-cell *matHeaderCellDef>  </th>
   
           <td mat-cell *matCellDef="let element"> <a [href]="element.website" target="_blank"><img [src]="element.logo"/></a> </td>
         </ng-container>
         
-      <!-- Acronym Column -->
       <ng-container matColumnDef="acronym">
         <th mat-header-cell *matHeaderCellDef> No. </th>
         <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
       </ng-container>
 
-      <!-- Name Column -->
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef> Name </th>
         <td mat-cell *matCellDef="let element"> {{element.name}} </td>
       </ng-container>
 
-      <!-- Symbol Column -->
       <ng-container matColumnDef="value" >
         <th mat-header-cell *matHeaderCellDef> Current Price </th>
         <td mat-cell *matCellDef="let element"> {{ element.currentPrice * rate | currency : currencyCode }} </td>
@@ -100,7 +96,7 @@
         Trading Only
       </mat-slide-toggle>
     </div>
-    <table mat-table [dataSource]="dataSourceAllUsers" class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSourceCryptos" class="mat-elevation-z8">
 
       <!-- Acronym Column -->
       <ng-container matColumnDef="acronym">
@@ -151,10 +147,7 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-    <mat-paginator
-      [pageSizeOptions]="[25, 5, 10, 100]"
-      (page)="onPageChange($event)"></mat-paginator>
-
+    <mat-paginator [length]="totalCryptosLength" [pageSize]="limit" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons (page)="onPageChange($event)"></mat-paginator>
   </mat-expansion-panel>
 </mat-accordion>
 </div>

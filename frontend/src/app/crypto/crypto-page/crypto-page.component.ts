@@ -21,9 +21,7 @@ export class CryptoPageComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
-  cryptoOnPage: CryptoModel[];
-  cryptoSymbolDisplayed = '';
-  displayedColumns: string[];
+  displayedColumns = ['logo', 'acronym', 'name', 'value', 'capitalization', 'evolution', 'favorite'];
   /** Colonnes affichées */
 
   /** Values du bouton de
@@ -33,28 +31,31 @@ export class CryptoPageComponent implements OnInit {
   color = 'primary';
   checked = true;
   /** Liste Affichée une fois filtré */
-  cryptoListAllUsers: CryptoModel[];
+  private cryptoList: CryptoModel[] = [];
+  private favoriteList: CryptoModel[] = [];
 
-  cryptoListFavorites: CryptoModel[];
+  cryptoToSubscribe: string[] = [];
 
   // Currency
   currencyCode = 'EUR';
   rate = 1.0;
 
-  /** Liste complète de toute les cryptos */
-  cryptoListFull: CryptoModel[];
   /** Systeme d'affichage d'angular mat */
-  dataSourceAllUsers = new MatTableDataSource(this.cryptoListAllUsers);
-  dataSourceFavorites = new MatTableDataSource(this.cryptoListFavorites);
+  private dataSourceCryptos = new MatTableDataSource(this.cryptoList);
+  private dataSourceFavorites = new MatTableDataSource(this.favoriteList);
 
   displayFav = false;
-  /** permet d'acceder aux cryptos displayed */
+  
+  // limit & offset for crypto list
+  totalCryptosLength: Number = 0
+  limit: Number = 25
+  offset: Number = 0
+  available: Boolean = true
   pageEvent: PageEvent;
-  private suscription: Subscription;
+  pageSizeOptions: number[] = [25, 5, 10, 100];
 
 
   ngOnInit() {
-
     // update currency to use
     this.auth.userProfile$.subscribe(res => {
       if (res && res.sub) {
@@ -74,51 +75,43 @@ export class CryptoPageComponent implements OnInit {
       }
     })
 
-
-    this.displayedColumns = ['logo', 'acronym', 'name', 'value', 'capitalization', 'evolution', 'favorite'];
-
-    this.dataSourceAllUsers.paginator = this.paginator;
-    this.cryptoListAllUsers = new Array<CryptoModel>();
-    this.cryptoListFull = new Array<CryptoModel>();
-    this.cryptoListFavorites = new Array<CryptoModel>();
-
-
-    this.cryptoService.getAllCryptos().subscribe(data => {
-      // @ts-ignore cryptos n'est pas trouvé sinon
-      for (const d of (data.cryptos)) {
-        this.cryptoListFull.push( new CryptoModel(d.isTradable, d.isAvailable, d._id, this.cryptoListFull.length, d.name,
-          d.__v, d.createdAt, d.dateAvailability, d.logo, d.symbol, d.updatedAt, d.website,
-          d.currentPrice, d.lowestPrice, d.openingPrice, d.highestPrice, d.supply, d.marketCap));
-      }
-      this.initDataSource();
-    });
-
     this.currencyService.getRate('USD', this.currencyCode).subscribe(res => {
       if (res && res['status'] == 'success') {
         this.rate = parseFloat(res["rates"][this.currencyCode]["rate"]);
       }  
     })
+
+    this.dataSourceCryptos.paginator = this.paginator;
+    this.paginator.length = this.totalCryptosLength.valueOf();
+    this.paginator._changePageSize(25);
+    
+
+    // tslint:disable-next-line:no-shadowed-variable
+    const timer = setInterval(() => this.refreshTable(), 1000);
+    // const timout = setTimeout(() => this.displayFavorites(), 1000);
   }
 
 
+  private fetchCryptos() {
+    this.cryptoList = [];
 
-  /**
-   * Initialise la liste pour diffuser les cryptos dans le bon ordre
-   */
-  initDataSource() {
-    this.filterList();
-    this.sortList();
+    this.cryptoService.countCryptos(true).subscribe(data => {
+      this.totalCryptosLength = data['count']
+    })
 
-    this.dataSourceAllUsers = new MatTableDataSource(this.cryptoListAllUsers);
-    this.dataSourceFavorites = new MatTableDataSource(this.cryptoListFavorites);
+    this.cryptoService.getAllCryptosWithParams(this.available, this.limit, this.offset).subscribe(data => {
+      // @ts-ignore cryptos n'est pas trouvé sinon
+      for (const d of (data.cryptos)) {
+        this.cryptoList.push( new CryptoModel(d.isTradable, d.isAvailable, d._id, d.name, d.createdAt, d.dateAvailability, d.logo, d.symbol, d.updatedAt, d.website,
+          d.currentPrice, d.lowestPrice, d.openingPrice, d.highestPrice, d.supply, d.marketCap));
+      }
+      
+      this.dataSourceCryptos = new MatTableDataSource(this.cryptoList);
 
-    this.dataSourceAllUsers.paginator = this.paginator;
-    this.paginator._changePageSize(25);
-    this.onPageChange(null);
-
-    // tslint:disable-next-line:no-shadowed-variable
-    const timer = setInterval(() => this.refreshTable(), 10000);
-    const timout = setTimeout(() => this.displayFavorites(), 4000);
+      // subscribe ticker for crypto displayed
+      this.cryptoService.subscribeCryptosTicker(this.getCryptosBySymbolString()).subscribe(data2 => {
+      });
+    });
   }
 
 
@@ -127,7 +120,26 @@ export class CryptoPageComponent implements OnInit {
     this.displayFav = true;
   }
 
+  getCryptosBySymbol(): string[] {
+    let ret = [];
 
+    for (const crypto of this.cryptoList) {
+      ret.push(crypto.symbol)
+    }
+
+    return ret;
+  }
+
+  getCryptosBySymbolString(): string {
+    let cryptoToSubscribe = '';
+    for (const crypto of this.getCryptosBySymbol()) {
+      if (crypto.length <= 8) {
+        cryptoToSubscribe += crypto + ',';
+      }
+    }
+
+    return cryptoToSubscribe;
+  }
 
   // ######### Système de filtre ##############
 
@@ -135,19 +147,7 @@ export class CryptoPageComponent implements OnInit {
    * Update toutes les 2 sec des datas affichées
    */
   refreshTable(): void {
-    this.cryptoOnPage = this.dataSourceAllUsers._pageData(this.dataSourceAllUsers.data);
-    const cryptoTab = new Array<string>();
-    const cryptoRef = new Array<string>();
-
-    this.cryptoOnPage.forEach((crypto, index) => cryptoTab[index] = crypto.symbol);
-    this.cryptoOnPage.forEach((crypto) => cryptoRef[crypto.symbol] = crypto.idTab);
-    this.cryptoService.getCryptosBySymbol(cryptoTab).subscribe(data => {
-      // @ts-ignore cryptos n'est pas trouvé sinon
-      for (const d of (data.cryptos)) {
-        this.cryptoListAllUsers[cryptoRef[d.symbol]].changeCryptoValue(d);
-        this.dataSourceAllUsers.data = this.cryptoListAllUsers;
-      }
-    });
+    this.fetchCryptos()
   }
 
   addCrypto(symbol: string) {
@@ -168,29 +168,26 @@ export class CryptoPageComponent implements OnInit {
   /** Applique des filtres sur la liste à afficher */
   filterList() {
     // this.cryptoListSort = this.cryptoListFull.filter((a, b) => a.currentPrice !== 0);
-    this.cryptoListAllUsers = this.cryptoListFull;
+    // this.cryptoList = this.cryptoListFull;
     // tslint:disable-next-line:max-line-length
-    this.cryptoListFavorites = this.cryptoListFull.filter(crypto => this.userService.currentUser.cryptos.includes(crypto.symbol));
-    // console.log('favorites', this.cryptoListFavorites);
+    this.favoriteList = this.cryptoList.filter(crypto => this.userService.currentUser.cryptos.includes(crypto.symbol));
+    // console.log('favorites', this.favoriteList);
   }
 
   /** Tri de base, par capitalisation (prix* quantité) */
   sortList() {
-    this.cryptoListAllUsers.sort((a, b) =>
+    this.cryptoList.sort((a, b) =>
       b.currentPrice * b.marketCap - a.currentPrice * a.marketCap
     );
-    this.cryptoListFavorites.sort((a, b) =>
+    this.favoriteList.sort((a, b) =>
       b.currentPrice * b.marketCap - a.currentPrice * a.marketCap
     );
   }
 
   refreshFavorites() {
-    this.cryptoListFavorites = this.cryptoListFull.filter(crypto => this.userService.currentUser.cryptos.includes(crypto.symbol));
-    console.log('favoritesdata ', this.dataSourceFavorites);
-    this.cryptoListFavorites = this.cryptoListFavorites.sort((a, b) =>
-      b.currentPrice * b.marketCap - a.currentPrice * a.marketCap
-    );
-    this.dataSourceFavorites.data = this.cryptoListFavorites;
+    this.filterList()
+    // this.sortList()
+    this.dataSourceFavorites.data = this.favoriteList;
   }
 
   /** filtre les cryptos selon leur valeurs */
@@ -208,14 +205,14 @@ export class CryptoPageComponent implements OnInit {
    */
   applyInputFilter(target: EventTarget) {
     // @ts-ignore
-    this.dataSourceAllUsers.filter = target.value.trim().toLowerCase();
-    this.cryptoSymbolDisplayed = '';
-    this.dataSourceAllUsers.filteredData.slice(0, 24).forEach(a => {
+    this.dataSourceCryptos.filter = target.value.trim().toLowerCase();
+    let cryptoToSubscribe = '';
+    this.dataSourceCryptos.filteredData.slice(0, 24).forEach(a => {
       if (a.symbol.length <= 8) {
-        this.cryptoSymbolDisplayed += a.symbol + ',';
+        cryptoToSubscribe += a.symbol + ',';
       }
     });
-    this.cryptoService.subscribeCryptosTicker(this.cryptoSymbolDisplayed).subscribe(data2 => {
+    this.cryptoService.subscribeCryptosTicker(cryptoToSubscribe).subscribe(data2 => {
     });
   }
 
@@ -223,10 +220,11 @@ export class CryptoPageComponent implements OnInit {
    * Fonction appelé a chaque changement de pages
    */
   onPageChange($event: PageEvent) {
-    this.cryptoSymbolDisplayed = '';
-    this.dataSourceAllUsers._pageData(this.dataSourceAllUsers.data).forEach(a => this.cryptoSymbolDisplayed += a.symbol + ',');
-    this.cryptoService.subscribeCryptosTicker(this.cryptoSymbolDisplayed).subscribe(data2 => {
-    });
+    this.totalCryptosLength = $event.length
+    this.limit = $event.pageSize
+    this.offset = $event.pageIndex * $event.pageSize
+
+    this.fetchCryptos();
   }
 
 

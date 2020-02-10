@@ -114,11 +114,11 @@ export class CryptoService {
    * @param httpClient pour la communication avec les APIs
    */
   constructor(private httpClient: HttpClient) {
-     if (localStorage.getItem('baseUpdated') === undefined) {
-       console.log(localStorage.getItem('baseUpdated'));
-       this.updateCoinList().subscribe((data) => {
-          localStorage.setItem('baseUpdated', 'true');
-        });
-    }
+    //  if (localStorage.getItem('baseUpdated') === undefined) {
+    //    console.log(localStorage.getItem('baseUpdated'));
+    //    this.updateCoinList().subscribe((data) => {
+    //       localStorage.setItem('baseUpdated', 'true');
+    //     });
+    // }
   }
 }

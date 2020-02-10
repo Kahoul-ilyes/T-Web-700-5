@@ -47,7 +47,6 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     this.fetchAllRss()
-    this.fetchAllCrypto()
     this.dataSourceCrypto.paginator = this.paginator;
     this.paginator.length = this.totalCryptosLength.valueOf()
     this.paginator._changePageSize(25);
@@ -57,7 +56,6 @@ export class AdminComponent implements OnInit {
    * Fonction appelé a chaque changement de pages
    */
   onPageChange($event: PageEvent) {
-    console.log($event)
     this.totalCryptosLength = $event.length
     this.limit = $event.pageSize
     this.offset = $event.pageIndex * $event.pageSize
@@ -93,8 +91,7 @@ export class AdminComponent implements OnInit {
     this.cryptoService.getAllCryptosWithParams(this.available, this.limit, this.offset).subscribe(data => {
       // @ts-ignore cryptos n'est pas trouvé sinon
       for (const d of (data.cryptos)) {
-        this.cryptoArray.push( new CryptoModel(d.isTradable, d.isAvailable, d._id, this.cryptoArray.length, d.name,
-          d.__v, d.createdAt, d.dateAvailability, d.logo, d.symbol, d.updatedAt, d.website,
+        this.cryptoArray.push( new CryptoModel(d.isTradable, d.isAvailable, d._id, d.name, d.createdAt, d.dateAvailability, d.logo, d.symbol, d.updatedAt, d.website,
           d.currentPrice, d.lowestPrice, d.openingPrice, d.highestPrice, d.supply, d.marketCap));
       }
       this.dataSourceCrypto = new MatTableDataSource(this.cryptoArray)
