@@ -10,10 +10,11 @@ table {
   width: 20vw;
 }
 
-.mat-tab-body-content {
+
+mat-tab-body-content, .mat-tab-body-wrapper, .mat-tab-body-content {
   margin-left: auto !important;
   margin-right: auto !important;
-  width: 80% !important;
+  width: 80vw !important;
 }
 
 .margin-auto {
@@ -28,6 +29,11 @@ mat-header-cell {
 
 mat-cell {
   justify-content: center;
+}
+
+
+.table-label-color-red {
+  color: #f44336 !important;
 }
 
 

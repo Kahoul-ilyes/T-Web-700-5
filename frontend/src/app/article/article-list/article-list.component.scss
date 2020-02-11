@@ -1,6 +1,10 @@
 .example-card {
-  width: 350px;
+  width: 30vw;
   margin: 20px;
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 .main-display{
   margin-left: 5%;
@@ -9,10 +13,16 @@
 .mat-card-content{
  margin: 25px
 }
+
+.mat-card-title {
+  min-height: 15vh;
+}
+
 .article-list-image{
   background-size: cover;
-  padding: 10px;
-  width: 350px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .close-button{
@@ -35,8 +45,15 @@ text-align: end}
 
 .crypto-param-inputs {
   display: flex;
+  justify-content: space-evenly;
 }
 
 .crypto-param-inputs > p:nth-child(1) {
   margin-right: 10vh;
+}
+
+.crypto-param-inputs p {
+  background-color:#424242;
+  padding: 15px;
+  color:white;
 }

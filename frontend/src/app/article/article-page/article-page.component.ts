@@ -26,7 +26,6 @@ export class ArticlePageComponent implements OnInit {
         // tslint:disable-next-line:max-line-length
         this.article = new ArticleModel(articleRes.title, '', articleRes['content:encoded'], articleRes.pubDatedate, articleRes.image, articleRes._id, articleRes.link);
         this.display = true;
-        console.log('result get by id' , res);
       });
   }
 

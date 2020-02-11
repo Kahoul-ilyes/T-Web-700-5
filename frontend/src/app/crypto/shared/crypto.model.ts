@@ -63,11 +63,11 @@ export class CryptoModel {
       this.marketCap = marketCap;
 
     } else {
-      this.currentPrice = -1;
-      this.lowestPrice = -1;
-      this.openingPrice = -1;
-      this.highestPrice = -1;
-      this.marketCap = -1;
+      this.currentPrice = 0;
+      this.lowestPrice = 0;
+      this.openingPrice = 0;
+      this.highestPrice = 0;
+      this.marketCap = 0;
     }
     this.supply = supply;
   }

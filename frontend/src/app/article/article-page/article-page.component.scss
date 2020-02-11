@@ -7,6 +7,7 @@
   padding: 10px;
   width: 480px;
   display: block;
+  margin-bottom: 10vh;
 }
 
 .article{
@@ -17,7 +18,7 @@
 a:hover {
   text-decoration: none;
   color: purple;
-  }
+}
 
  .article-link{
    text-align:right;
@@ -33,4 +34,12 @@ a:hover {
 .article-title{
   font-weight: bold;
   text-align: center;
+}
+
+.cursor-pointer:hover {
+  cursor: pointer;
+}
+
+.mat-expansion-indicator::after, .mat-expansion-panel-header-description {
+  color: black;
 }
