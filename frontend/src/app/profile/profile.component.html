@@ -1,19 +1,23 @@
-<pre *ngIf="auth.userProfile$ | async as profile">
-{{ profile | json }}
 
+<pre *ngIf="auth.userProfile$ | async as profile">
+  <!--
+  {{ profile | json }}
+-->
 
 <div>
-  <form class="example-container" [formGroup]="profileForm">
+  <form class="container" [formGroup]="profileForm">
   <!-- ToDo -->
   <mat-form-field class="full-width" appearance="standard">
     <mat-label>Currency</mat-label>
-    <input matInput placeholder="currency" formControlName="currency">
+    <mat-select placeholder="currency" formControlName="currency">
+      <mat-option *ngFor="let currency of currencyList" value="currency">{{currency}}</mat-option>
+    </mat-select>
   </mat-form-field>
 
   <!-- ToDo -->
   <mat-form-field class="full-width" appearance="standard">
-    <mat-label>Name</mat-label>
-    <input matInput placeholder="name" formControlName="name" required>
+    <mat-label>Username</mat-label>
+    <input matInput placeholder="username" formControlName="username" required>
   </mat-form-field>
 
   <!-- ToDo -->
@@ -25,10 +29,17 @@
   <!-- ToDo -->
   <mat-form-field class="full-width" appearance="standard">
     <mat-label>Password</mat-label>
-    <input matInput placeholder="Change password" >
+    <input matInput placeholder="Change password" formControlName="password" [disabled]="isPasswordEntered()">
   </mat-form-field>
 
-  <button mat-raised-button color="primary">Submit</button>
+    <!-- ToDo -->
+  <mat-form-field class="full-width" appearance="standard">
+    <mat-label>Password confirmation</mat-label>
+    <input matInput placeholder="Change password" formControlName="password">
+  </mat-form-field>
+
+
+  <button mat-raised-button color="primary" (click)="save()">Submit</button>
   </form>
 </div>
 </pre>
