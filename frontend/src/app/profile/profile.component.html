@@ -10,7 +10,7 @@
   <mat-form-field class="full-width" appearance="standard">
     <mat-label>Currency</mat-label>
     <mat-select placeholder="currency" formControlName="currency">
-      <mat-option *ngFor="let currency of currencyList" value="currency">{{currency}}</mat-option>
+      <mat-option *ngFor="let currency of currencyList" [value]="currency">{{currency}}</mat-option>
     </mat-select>
   </mat-form-field>
 

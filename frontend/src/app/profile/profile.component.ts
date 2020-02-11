@@ -41,8 +41,6 @@ export class ProfileComponent implements OnInit {
             currency: [this.currentUser.user_metadata.currency, Validators.required],
             password: [null, Validators.required],
           });
-          // console.log(res)
-          console.log(this.objectUser())
         })
       }
     })
@@ -52,15 +50,6 @@ export class ProfileComponent implements OnInit {
         this.currencyList.push(data)
       }
     })
-  }
-
-
-  objectUser(){
-    return this.profileForm.getRawValue()
-  }
-
-  submitUpdate(){
-    this.userService.updateUser(this.userService.currentUser.id,this.profileForm.getRawValue())
   }
 
 
@@ -78,20 +67,11 @@ export class ProfileComponent implements OnInit {
           } )
     }
     // @ts-ignore
-
-    else if (data.email !== null) {
-      // @ts-ignore
-
-      this.userService.updateUser(this.userService.currentUser.id,{email: data.email}).subscribe(res => {
-        console.log('resultat update email',res)
-      }
-      )
-    }
     else if (data.currency !== null) {
       // @ts-ignore
 
-      this.userService.updateUser(this.userService.currentUser.currency,{currency: data.currency}).subscribe(res => {
-        console.log('resultat update currency',res)
+      this.userService.updateUser(this.userService.currentUser.user_metadata.currency,{dat: data.currency}).subscribe(resu => {
+        console.log('resultat update currency',resu)
       } )
     }
 
