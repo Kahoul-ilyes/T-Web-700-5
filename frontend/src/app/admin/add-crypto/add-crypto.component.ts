@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CryptoService } from 'src/app/crypto/shared/crypto.service';
+import {MatDialogRef} from "@angular/material/dialog";
 
 const URL_REGEXP = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
@@ -24,7 +25,9 @@ export class AddCryptoComponent {
 
   @Output() refreshCrypto: EventEmitter<any> = new EventEmitter();
 
-  constructor(private fb: FormBuilder, private cryptoService: CryptoService, private snackBar: MatSnackBar) {}
+  constructor(
+    public dialogRef: MatDialogRef<AddCryptoComponent>,
+    private fb: FormBuilder, private cryptoService: CryptoService, private snackBar: MatSnackBar) {}
 
   save() {
     // call addrss service method
@@ -42,5 +45,9 @@ export class AddCryptoComponent {
         }
       })
     }
+  }
+
+  close() {
+    this.dialogRef.close();
   }
 }

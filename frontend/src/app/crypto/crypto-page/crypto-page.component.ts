@@ -42,8 +42,8 @@ export class CryptoPageComponent implements OnInit {
   rate = 1.0;
 
   /** Systeme d'affichage d'angular mat */
-  private dataSourceCryptos = new MatTableDataSource(this.cryptoList);
-  private dataSourceFavorites = new MatTableDataSource(this.favoriteList);
+  public dataSourceCryptos = new MatTableDataSource(this.cryptoList);
+  public dataSourceFavorites = new MatTableDataSource(this.favoriteList);
 
   displayFav = false;
 
