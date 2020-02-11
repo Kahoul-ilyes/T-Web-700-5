@@ -5,7 +5,7 @@ import {UserService} from '../user/user.service';
 import {empty} from 'rxjs';
 import {getSortHeaderNotContainedWithinSortError} from '@angular/material/sort/typings/sort-errors';
 import {CurrencyService} from '../crypto/shared/currency.service';
-import {MatSnackBar} from "@angular/material/snack-bar";
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Component({
@@ -19,7 +19,7 @@ export class ProfileComponent implements OnInit {
 
   currencyList = Array();
   passVerifDisabled = true;
-  constructor(public auth: AuthService, public userService: UserService, public currencyService: CurrencyService, private fb: FormBuilder,private snackBar: MatSnackBar) {
+  constructor(public auth: AuthService, public userService: UserService, public currencyService: CurrencyService, private fb: FormBuilder, private snackBar: MatSnackBar) {
   }
   currentUser = null;
   // options: FormGroup;
@@ -87,20 +87,21 @@ export class ProfileComponent implements OnInit {
       this.userService.updateUser(this.userService.currentUser.id, {password: data.password}).subscribe(resu => {
         console.log('resultat update password', resu);
       });
-    } else if(data.password === null || data.passwordverif === null){
+    } else if (data.password === null) {
+      // rien, ca signifie qu'il n'y a pas eu de tentative d'edit
+    } else if (data.passwordverif === null) {
       this.snackBar.open('please enter password and validation');
-    }
-    else if (data.passwordverif !== data.password){
+    } else if (data.passwordverif !== data.password) {
       this.snackBar.open('password didnt match confirmation');
-    } else if (!this.isPasswordStrong(data.password)){
+    } else if (!this.isPasswordStrong(data.password)) {
       this.snackBar.open('Password should contain 8+ characters,at least one uppercase and one lowercase letter, and a digit ');
     }
 
   }
-isPasswordStrong(password: string ): boolean{
- return password.length >= 8 && password.match('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)') !== null;
+  isPasswordStrong(password: string ): boolean {
+    return password.length >= 8 && password.match('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*\W)') !== null;
 
-}
+  }
 
   isPasswordEntered(): void {
     this.passVerifDisabled =  !(this.profileForm.getRawValue().password === null || this.profileForm.getRawValue().password.trim() !== '');

@@ -8,6 +8,7 @@ import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {Subscription} from 'rxjs';
 import {MatSort, MatSortable, Sort} from '@angular/material/sort';
 import { CurrencyService } from '../shared/currency.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 
@@ -116,6 +117,8 @@ export class CryptoPageComponent implements OnInit {
 
       this.dataSourceCryptos = new MatTableDataSource(this.cryptoList);
     });
+    this.refreshFavorites();
+
   }
 
 
@@ -128,7 +131,7 @@ export class CryptoPageComponent implements OnInit {
     const ret = [];
 
     for (const crypto of this.cryptoList) {
-      if (crypto.symbol) ret.push(crypto.symbol);
+      if (crypto.symbol) { ret.push(crypto.symbol); }
     }
 
     return ret;
@@ -160,6 +163,8 @@ export class CryptoPageComponent implements OnInit {
     this.userService.updateUser(this.userService.currentUser.id, this.userService.currentUser.toJSON()).subscribe(res => console.log('update result' , res));
 
     this.refreshFavorites();
+    this.snackBar.open(symbol + ' added to favorites');
+
   }
 
   removeCrypto(symbol: string) {
@@ -167,6 +172,7 @@ export class CryptoPageComponent implements OnInit {
     // tslint:disable-next-line:max-line-length
     this.userService.updateUser(this.userService.currentUser.id, this.userService.currentUser.toJSON()).subscribe(res => console.log('update result' , res));
     this.refreshFavorites();
+    this.snackBar.open(symbol + ' removed from favorites');
   }
 
   /** Applique des filtres sur la liste à afficher */
@@ -189,7 +195,7 @@ export class CryptoPageComponent implements OnInit {
   }
 
   refreshFavorites() {
-    if(this.userService.currentUser.cryptos.length > 0) {
+    if (this.userService.currentUser.cryptos.length > 0) {
       this.cryptoService.getCryptosBySymbol(this.userService.currentUser.cryptos).subscribe(data => {
         this.favoriteList = new Array<CryptoModel>();
         // @ts-ignore
@@ -261,6 +267,9 @@ export class CryptoPageComponent implements OnInit {
 
 
   // tslint:disable-next-line:max-line-length
-  constructor(public auth: AuthService, public cryptoService: CryptoService, public userService: UserService, public currencyService: CurrencyService) { }
+  constructor(public auth: AuthService, public cryptoService: CryptoService,
+              public userService: UserService, public currencyService: CurrencyService,
+              private snackBar: MatSnackBar
+  ) { }
 
 }
