@@ -53,7 +53,6 @@ export class ProfileComponent implements OnInit {
       }
     })
   }
-// Faire un ngfor sur currency list // Option value etc..
 
 
   objectUser(){
@@ -67,19 +66,34 @@ export class ProfileComponent implements OnInit {
 
   save() {
     // call address service method
-    let data = this.userService.currentUser;
+    let data = this.profileForm.value;
 
-    if (data.username !== null) {
+    console.log('data', data)
+    // @ts-ignore
+    if (data.username !== null){
+      // @ts-ignore
+
       this.userService.updateUser(this.userService.currentUser.id,{username: data.username}).subscribe(res => {
          console.log('resultat update username',res)
           } )
     }
+    // @ts-ignore
+
     else if (data.email !== null) {
+      // @ts-ignore
+
       this.userService.updateUser(this.userService.currentUser.id,{email: data.email}).subscribe(res => {
         console.log('resultat update email',res)
+      }
+      )
+    }
+    else if (data.currency !== null) {
+      // @ts-ignore
+
+      this.userService.updateUser(this.userService.currentUser.currency,{currency: data.currency}).subscribe(res => {
+        console.log('resultat update currency',res)
       } )
     }
-
 
   }
 

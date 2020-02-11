@@ -1,8 +1,8 @@
 
 <pre *ngIf="auth.userProfile$ | async as profile">
-  <!--
+
   {{ profile | json }}
--->
+
 
 <div>
   <form class="container" [formGroup]="profileForm">
@@ -39,7 +39,7 @@
   </mat-form-field>
 
 
-  <button mat-raised-button color="primary" (click)="save()">Submit</button>
+  <button mat-raised-button color="primary" (click)="save()">Update</button>
   </form>
 </div>
 </pre>
