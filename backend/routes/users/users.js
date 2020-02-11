@@ -5,7 +5,7 @@ let router = express.Router()
 
 let axios = require('axios')
 
-axios.defaults.baseURL = `${process.env.AUDIENCE_AUTH0}`
+axios.defaults.baseURL = `${process.env.AUTH0_AUDIENCE}`
 
 function handleError(err) {
   if (err.response) {
@@ -41,13 +41,13 @@ function logHandleError(err) {
 
 // get access token
 const getAccessToken = (callback) => {
-  console.log('retrieving accesstoken')
   const accessTokenDatas = {
     "client_id":`${process.env.CLIENT_ID}`,
     "client_secret": `${process.env.CLIENT_SECRET}`,
-    "audience": `${process.env.AUDIENCE_AUTH0}`,
+    "audience": `${process.env.AUTH0_AUDIENCE}`,
     "grant_type": "client_credentials"
   }
+
   axios
   .post('https://dev-m6frxp9u.eu.auth0.com/oauth/token', accessTokenDatas)
   .then(response => {
@@ -180,6 +180,52 @@ router.get('/:id', (req, res, next) => {
 })
 
 /**
+ * @api {get} /users/:id Request an user's roles
+ * @apiName GetUserRoles
+ * @apiGroup User
+ *
+ * @apiParam {ObjectId} id User's unique ID.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ * {
+ *   "roles": ['basic', 'admin']
+ * }
+ * @apiUse NoUserError
+ */
+router.get('/:id/roles', (req, res, next) => {
+  if (!req.params.id) res.json({err: 'Please provide an id param.'})
+
+  async([
+    getAccessToken,
+    function(callback) {
+      axios
+      .get(`users/${req.params.id}`)
+      .then(response => {
+        let user = response.data
+        callback(null, user)
+      }).catch(err => {
+        callback(err)
+      })
+    },
+    function(user, callback) {
+      // get user roles
+      axios
+      .get(`users/${req.params.id}/roles`)
+      .then(response => {
+        callback(null, {user: user, roles: response.data})
+      }).catch(err => {
+        callback(err)
+      })
+    }
+  ], function(err, result) {
+    if (err) res.json(handleError(err))
+    else res.json(result)
+  })
+  
+})
+
+/**
  * @api {post} /users/:id/initialize Initialize a new user
  * @apiName InitializeUser
  * @apiGroup User
@@ -202,9 +248,9 @@ router.post('/:id/initialize', (req, res, next) => {
     function(callback) {
       let datas = {
         user_metadata: {
-          currency: "EUR",
-          cryptos: [],
-          keywords: []
+          "currency": "EUR",
+          "cryptos": [],
+          "keywords": []
         }
       }
     
@@ -285,19 +331,19 @@ router.post('/', (req, res, next) => {
       let datas = {
         connection: "Username-Password-Authentication",
         user_metadata: {
-          currency: "EUR",
-          cryptos: [],
-          keywords: []
+          "currency": "EUR",
+          "cryptos": [],
+          "keywords": []
         },
         verify_email: true
       }
 
-      if (username) datas.username = username
-      if (email) datas.email = email
-      if (password) datas.password = password
-      if (currency) datas.user_metadata.currency = currency
-      if (cryptos) datas.user_metadata.cryptos = cryptos
-      if (keywords) datas.user_metadata.keywords = keywords
+      if (username) datas["username"] = username
+      if (email) datas["email"] = email
+      if (password) datas["password"] = password
+      if (currency) datas.user_metadata["currency"] = currency
+      if (cryptos) datas.user_metadata["cryptos"] = cryptos
+      if (keywords) datas.user_metadata["keywords"] = keywords
 
       axios
       .post('users', datas)
@@ -344,41 +390,46 @@ router.post('/', (req, res, next) => {
 router.patch('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
-  async([
-    getAccessToken,
-    function(callback) {
-      // mandatory
-      let username = req.body.username
-      let email = req.body.email
-      let password = req.body.password
-      // optionnal
-      let currency = req.body.currency
-      let cryptos = req.body.cryptos
-      let keywords = req.body.keywords
+  if (Object.keys(req.body).length > 0) {
+    async([
+      getAccessToken,
+      function(callback) {
+        // mandatory
+        let username = req.body.username
+        let email = req.body.email
+        let password = req.body.password
+        // optionnal
+        let currency = req.body.currency
+        let cryptos = req.body.cryptos
+        let keywords = req.body.keywords
 
-      let datas = {
-        user_metadata: {}
+        let datas = {
+        }
+
+        if (currency || cryptos || keywords) datas.user_metadata = {}
+
+        if (username) datas["username"] = username
+        if (email) datas["email"] = email
+        if (password) datas["password"] = password
+        if (currency) datas.user_metadata["currency"] = currency
+        if (cryptos) datas.user_metadata["cryptos"] = cryptos
+        if (keywords) datas.user_metadata["keywords"] = keywords
+
+        axios
+        .patch(`users/${req.params.id}`, datas)
+        .then(response => {
+          callback(null, {user: response.data, msg: 'User updated successfully.'})
+        }).catch(err => {
+          callback(err)
+        })
       }
-
-      if (username) datas.username = username
-      if (email) datas.email = email
-      if (password) datas.password = password
-      if (currency) datas.user_metadata.currency = currency
-      if (cryptos) datas.user_metadata.cryptos = cryptos
-      if (keywords) datas.user_metadata.keywords = keywords
-
-      axios
-      .patch(`users/${req.params.id}`, datas)
-      .then(response => {
-        callback(null, {user: response.data, msg: 'User updated successfully.'})
-      }).catch(err => {
-        callback(err)
-      })
-    }
-  ], function(err, result) {
-    if (err) res.json(handleError(err))
-    else res.json(result)
-  })
+    ], function(err, result) {
+      if (err) res.json(handleError(err))
+      else res.json(result)
+    })
+  } else {
+    res.json({err: 'No body given, the user has not been updated'})
+  }
 })
 
 /**

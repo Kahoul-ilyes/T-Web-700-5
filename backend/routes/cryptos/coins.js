@@ -29,7 +29,6 @@ router.get('/', (req, res, next) => {
       authorization: `Apikey ${process.env.API_KEY_CRYPTO_COMPARE}`
     } 
   }).then((res) => {
-    // console.log(res.data.Data)
     let coins = res.data.Data;
     for (const key in coins) {
       if (coins.hasOwnProperty(key)) {
@@ -42,7 +41,6 @@ router.get('/', (req, res, next) => {
         let isTradable = coin.IsTrading
         let dateAvailability = coin.ContentCreatedOn
         let supply = 0
-        // console.log(coin.TotalCoinSupply)
         if (coin.TotalCoinsMined && coin.TotalCoinsMined != null && coin.TotalCoinsMined !== "N/A")
           supply = coin.TotalCoinsMined
 
@@ -56,10 +54,11 @@ router.get('/', (req, res, next) => {
           supply: supply
         }
         Crypto.findOneAndUpdate({name: name}, datas, {upsert: true, runValidators: true}, (err, crypto) => {
-          if (err) throw err
-
-          if (crypto) {
-            console.log(`Crypto ${name} added/updated successfully.`)
+          if (err) res.json({err: err})
+          else {
+            if (crypto) {
+              console.log(`Crypto ${name} added/updated successfully.`)
+            }
           }
         })
         
@@ -67,7 +66,7 @@ router.get('/', (req, res, next) => {
     }
     res.json({msg: 'Crypto list updated successfully.'})
   }).catch((err) => {
-    throw err
+    if (err) res.json({err: err})
   })
 
 })

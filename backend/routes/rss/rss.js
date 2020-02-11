@@ -32,7 +32,7 @@ let Rss = require('../../models/rss')
 router.get('/', (req, res, next) => {
 
   Rss.find({}).exec((err, rss) => {
-    if (err) throw err
+    if (err) res.json({err: err})
 
     if (rss) res.send({ rss: rss})
     else res.send({ rss: []})
@@ -61,7 +61,7 @@ router.get('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
   Rss.findById(req.params.id, (err, rss) => {
-    if (err) throw err
+    if (err) res.json({err: err})
 
     if (rss) {
       res.json({rss: rss})
@@ -110,12 +110,13 @@ router.post('/', (req, res, next) => {
   if (isFetchable != null) datas.isFetchable = isFetchable
 
   Rss.create(datas, (err, rss) => {
-    if (err) throw err
-    
-    if (rss) {
-      res.json({rss: rss, msg: 'Rss created successfully.'})
-    } else {
-      res.json({err: 'Unable to create this rss.'})
+    if (err) res.json({err: err})
+    else {
+      if (rss) {
+        res.json({rss: rss, msg: 'Rss created successfully.'})
+      } else {
+        res.json({err: 'Unable to create this rss.'})
+      }
     }
   })
 })
@@ -157,13 +158,14 @@ router.put('/:id', (req, res, next) => {
   if (url) datas.url = url
   if (isFetchable != null) datas.isFetchable = isFetchable
 
-  Rss.findOneAndUpdate(req.params.id, datas, (err, rss) => {
-    if (err) throw err
-
-    if (rss) {
-      res.json({rss: rss, msg: 'Rss updated successfully.'})
-    } else {
-      res.json({err: 'No rss found with this id.'})
+  Rss.findByIdAndUpdate(req.params.id, datas, (err, rss) => {
+    if (err) res.json({err: err})
+    else {
+      if (rss) {
+        res.json({rss: rss, msg: 'Rss updated successfully.'})
+      } else {
+        res.json({err: 'No rss found with this id.'})
+      }
     }
   })
 })
@@ -186,8 +188,8 @@ router.put('/:id', (req, res, next) => {
 router.delete('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
 
-  Rss.findOneAndDelete(req.params.id, (err, rss) => {
-    if (err) throw err
+  Rss.findByIdAndDelete(req.params.id, (err, rss) => {
+    if (err) res.json({err: err})
 
     if (rss) {
       res.json({_id: req.params.id, msg: 'Rss deleted successfully.'})

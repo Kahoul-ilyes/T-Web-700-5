@@ -77,7 +77,7 @@ router.get('/subscribe', (req, res, next) => {
 })
 
 /**
- * @api {get} /cryptos(?cryptos=BTC,ETH)(?ids=ObjectID1,ObjectID2,ObjectID3) Request all cryptos
+ * @api {get} /cryptos(?cryptos=BTC,ETH)(?ids=ObjectID1,ObjectID2,ObjectID3)(?available=true)(&offset=0)(&limit=1000) Request all cryptos
  * @apiName GetCryptos
  * @apiGroup Crypto
  *
@@ -122,27 +122,73 @@ router.get('/', (req, res, next) => {
 
   let query = {}
   let cryptosToRetrieve = []
+  let available = null
+  let offset = 0
+  let limit = 0
+
+  let request = null
   if (req.query.cryptos) {
     cryptosToRetrieve = req.query.cryptos.split(',')
   } else if (req.query.ids) {
     cryptosToRetrieve = req.query.ids.split(',')
+  } else if (req.query.available) {
+    available = Boolean(req.query.available)
   }
 
+  
   if (cryptosToRetrieve.length > 0) {
     if (Array.isArray(cryptosToRetrieve)) {
       if (req.query.cryptos) {
         query = {symbol: { $in: cryptosToRetrieve }}
       } else if (req.query.ids) {
         query = {_id: { $in: cryptosToRetrieve }}
+      } else if (available != null) {
+        query = { isAvailable: available }
       }
     }
   }
+  
+  request = Crypto.find(query).sort({currentPrice: -1})
+  
+  if (req.query.limit) {
+    limit = parseInt(req.query.limit)
+    request = request.limit(limit)
+  }
+  if (req.query.offset) {
+    offset = parseInt(req.query.offset)
+    request = request.skip(offset)
+  }
 
-  Crypto.find(query).collation( { locale: 'fr', strength: 1 } ).exec((err, cryptos) => {
-    if (err) throw err
+  request.collation( { locale: 'fr', strength: 1 } ).exec((err, cryptos) => {
+    if (err) res.json({err: err})
+    else {
+      if (cryptos) res.send({ cryptos: cryptos})
+      else res.send({ cryptos: []})
+    }
+  })
+})
 
-    if (cryptos) res.send({ cryptos: cryptos})
-    else res.send({ cryptos: []})
+/**
+ * @api {get} /cryptos/count(?available=true) Count all cryptos
+ * @apiName CountCryptos
+ * @apiGroup Crypto
+ *
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+ *       "count": 4500
+ *     }
+ */
+router.get('/count', (req, res, next) => {
+
+  let available = true
+
+  if (req.query.available) {
+    available = Boolean(req.query.available)
+  }
+  
+  Crypto.countDocuments({}, (err, nb) => {
+    res.send({count: nb})
   })
 })
 
@@ -176,16 +222,18 @@ router.get('/', (req, res, next) => {
  */
 router.get('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
-
-  Crypto.findById(req.params.id, (err, crypto) => {
-    if (err) throw err
-
-    if (crypto) {
-      res.json({crypto: crypto})
-    } else {
-      res.json({err: 'No crypto found with this id.'})
-    }
-  })
+  else {
+    Crypto.findById(req.params.id, (err, crypto) => {
+      if (err) res.json({err: err})
+      else {
+        if (crypto) {
+          res.json({crypto: crypto})
+        } else {
+          res.json({err: 'No crypto found with this id.'})
+        }
+      }
+    })
+  }
 })
 
 /**
@@ -231,7 +279,7 @@ router.post('/', (req, res, next) => {
 
   // mandatory
   let name = req.body.name
-  let acronym = req.body.acronym
+  let symbol = req.body.symbol
   // optionnal
   let logo = req.body.logo
   let website = req.body.website
@@ -244,35 +292,37 @@ router.post('/', (req, res, next) => {
   let isTradable = req.body.isTradable
   let isAvailable = req.body.isAvailable
 
-  if (!name || !acronym) {
-    res.json({error: 'Bad request formatting, name or acronym is missing.'})
+  if (!name || !symbol) {
+    res.json({error: 'Bad request formatting, name or symbol is missing.'})
+  } else {
+
+    let datas = {}
+
+    if (name) datas.name = name
+    if (symbol) datas.symbol = symbol
+    if (logo) datas.logo = logo
+    if (website) datas.website = website
+    if (currentPrice) datas.currentPrice = currentPrice
+    if (openingPrice) datas.openingPrice = openingPrice
+    if (lowestPrice) datas.lowestPrice = lowestPrice
+    if (highestPrice) datas.website = highestPrice
+    if (supply) datas.supply = supply
+    if (marketCap) datas.marketCap = marketCap
+    if (isTradable != null) datas.isTradable = isTradable
+    if (isAvailable != null) datas.isAvailable = isAvailable
+
+
+    Crypto.create(datas, (err, crypto) => {
+      if (err) res.json({err: err})
+      else {
+        if (crypto) {
+          res.json({crypto: crypto, msg: 'Crypto created successfully.'})
+        } else {
+          res.json({err: 'Unable to create this crypto.'})
+        }
+      }
+    })
   }
-
-  let datas = {}
-
-  if (name) datas.name = name
-  if (acronym) datas.acronym = acronym
-  if (logo) datas.logo = logo
-  if (website) datas.website = website
-  if (currentPrice) datas.currentPrice = currentPrice
-  if (openingPrice) datas.openingPrice = openingPrice
-  if (lowestPrice) datas.lowestPrice = lowestPrice
-  if (highestPrice) datas.website = highestPrice
-  if (supply) datas.supply = supply
-  if (marketCap) datas.marketCap = marketCap
-  if (isTradable) datas.isTradable = isTradable
-  if (isAvailable) datas.isAvailable = isAvailable
-
-
-  Crypto.create(datas, (err, crypto) => {
-    if (err) throw err
-    
-    if (crypto) {
-      res.json({crypto: crypto, msg: 'Crypto created successfully.'})
-    } else {
-      res.json({err: 'Unable to create this crypto.'})
-    }
-  })
 })
 
 /**
@@ -309,46 +359,48 @@ router.post('/', (req, res, next) => {
  */
 router.put('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
+  else {
+    // mandatory
+    let name = req.body.name
+    let acronym = req.body.acronym
+    // optionnal
+    let logo = req.body.logo
+    let website = req.body.website
+    let currentPrice = req.body.currentPrice
+    let openingPrice = req.body.openingPrice
+    let lowestPrice = req.body.lowestPrice
+    let highestPrice = req.body.highestPrice
+    let supply = req.body.supply
+    let marketCap = req.body.marketCap
+    let isTradable = req.body.isTradable
+    let isAvailable = req.body.isAvailable
 
-  // mandatory
-  let name = req.body.name
-  let acronym = req.body.acronym
-  // optionnal
-  let logo = req.body.logo
-  let website = req.body.website
-  let currentPrice = req.body.currentPrice
-  let openingPrice = req.body.openingPrice
-  let lowestPrice = req.body.lowestPrice
-  let highestPrice = req.body.highestPrice
-  let supply = req.body.supply
-  let marketCap = req.body.marketCap
-  let isTradable = req.body.isTradable
-  let isAvailable = req.body.isAvailable
+    let datas = {}
 
-  let datas = {}
+    if (name) datas.name = name
+    if (acronym) datas.acronym = acronym
+    if (logo) datas.logo = logo
+    if (website) datas.website = website
+    if (currentPrice) datas.currentPrice = currentPrice
+    if (openingPrice) datas.openingPrice = openingPrice
+    if (lowestPrice) datas.lowestPrice = lowestPrice
+    if (highestPrice) datas.website = highestPrice
+    if (supply) datas.supply = supply
+    if (marketCap) datas.marketCap = marketCap
+    if (isTradable != null) datas.isTradable = isTradable
+    if (isAvailable != null) datas.isAvailable = isAvailable
 
-  if (name) datas.name = name
-  if (acronym) datas.acronym = acronym
-  if (logo) datas.logo = logo
-  if (website) datas.website = website
-  if (currentPrice) datas.currentPrice = currentPrice
-  if (openingPrice) datas.openingPrice = openingPrice
-  if (lowestPrice) datas.lowestPrice = lowestPrice
-  if (highestPrice) datas.website = highestPrice
-  if (supply) datas.supply = supply
-  if (marketCap) datas.marketCap = marketCap
-  if (isTradable) datas.isTradable = isTradable
-  if (isAvailable) datas.isAvailable = isAvailable
-
-  Crypto.findOneAndUpdate(req.params.id, datas, (err, crypto) => {
-    if (err) throw err
-
-    if (crypto) {
-      res.json({crypto: crypto, msg: 'Crypto updated successfully.'})
-    } else {
-      res.json({err: 'No crypto found with this id.'})
-    }
-  })
+    Crypto.findByIdAndUpdate(req.params.id, datas, (err, crypto) => {
+      if (err) res.json({err: err})
+      else {
+        if (crypto) {
+          res.json({crypto: crypto, msg: 'Crypto updated successfully.'})
+        } else {
+          res.json({err: 'No crypto found with this id.'})
+        }
+      }
+    })
+  }
 })
 
 /**
@@ -368,16 +420,18 @@ router.put('/:id', (req, res, next) => {
  */
 router.delete('/:id', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
-
-  Crypto.findOneAndDelete(req.params.id, (err, crypto) => {
-    if (err) throw err
-
-    if (crypto) {
-      res.json({_id: req.params.id, msg: 'Crypto deleted successfully.'})
-    } else {
-      res.json({err: 'No crypto found with this id.'})
-    }
-  })
+  else {
+    Crypto.findByIdAndDelete(req.params.id, (err, crypto) => {
+      if (err) res.json({err: err})
+      else {
+        if (crypto) {
+          res.json({_id: req.params.id, msg: 'Crypto deleted successfully.'})
+        } else {
+          res.json({err: 'No crypto found with this id.'})
+        }
+      }
+    })
+  }
 })
 
 /**
@@ -401,24 +455,25 @@ router.delete('/:id', (req, res, next) => {
  */
 router.get('/:id/prices', (req, res, next) => {
   if (!req.params.id) res.json({err: 'Please provide an id param.'})
-
-  Crypto.findById(req.params.id, 'currentPrice openingPrice lowestPrice highestPrice', (err, doc) => {
-    if (err) throw err
-    console.log(doc)
-
-    if (doc) {
-      res.json({
-        currentPrice: doc.currentPrice,
-        openingPrice: doc.openingPrice,
-        lowestPrice: doc.lowestPrice,
-        highestPrice: doc.highestPrice,
-        supply: doc.supply,
-        marketCap: doc.marketCap
-      })
-    } else {
-      res.json({err: 'No crypto found with this id.'})
-    }
-  })
+  else {
+    Crypto.findById(req.params.id, 'currentPrice openingPrice lowestPrice highestPrice', (err, doc) => {
+      if (err) res.json({err: err})
+      else {
+        if (doc) {
+          res.json({
+            currentPrice: doc.currentPrice,
+            openingPrice: doc.openingPrice,
+            lowestPrice: doc.lowestPrice,
+            highestPrice: doc.highestPrice,
+            supply: doc.supply,
+            marketCap: doc.marketCap
+          })
+        } else {
+          res.json({err: 'No crypto found with this id.'})
+        }
+      }
+    })
+  }
 })
 
 module.exports = router

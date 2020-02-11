@@ -10,7 +10,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
-/** Module pour tout ce qui concerne la structure du site, headers, menues ... */
+/** Module pour tout ce qui concerne la structure du site, headers, menus ... */
 @NgModule({
   imports: [
     CommonModule,

@@ -6,12 +6,18 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
-import {ReactiveFormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { ArticlePageComponent } from './article-page/article-page.component';
+import {RouterModule} from '@angular/router';
+import {MatChipsModule} from '@angular/material/chips';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatIconModule} from '@angular/material/icon';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 
 
 @NgModule({
-  declarations: [ArticleListComponent],
+  declarations: [ArticleListComponent, ArticlePageComponent],
   imports: [
     CommonModule,
     MatCardModule,
@@ -19,7 +25,13 @@ import {ReactiveFormsModule} from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterModule,
+    MatChipsModule,
+    MatExpansionModule,
+    MatIconModule,
+    MatButtonToggleModule,
+    FormsModule
   ]
 })
 export class ArticleModule { }

@@ -1,0 +1,70 @@
+<div class="display-center" >
+
+  <mat-tab-group mat-align-tabs="center">
+      <mat-tab>
+          <ng-template mat-tab-label>
+            <span class="table-label-color-red" color="warn">Rss</span>
+          </ng-template>
+
+          <button mat-raised-button color="primary" class="action-button" (refreshRss)="fetchAllRss($event)" (click)="openAddRssDialog()">Add rss</button>
+
+          <mat-table [dataSource]="dataSourceRss" class="mat-elevation-z8">
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+              <mat-cell *matCellDef="let rss"> {{rss.id}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="url">
+              <mat-header-cell *matHeaderCellDef> Url </mat-header-cell>
+              <mat-cell *matCellDef="let rss"><a target="_blank" href="{{rss.url}}" color="primary">{{rss.url}}</a> </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+              <mat-cell *matCellDef="let rss">
+                <button *ngIf="rss.isFetchable" mat-stroked-button color="warn" class="action-button margin-auto" (click)="fetchRss(rss.id, false)">Unfetch</button>
+                <button *ngIf="!rss.isFetchable" mat-stroked-button color="primary" class="action-button margin-auto" (click)="fetchRss(rss.id, true)">Fetch</button>
+                <button mat-raised-button color="warn" class="action-button margin-auto" (click)="deleteRss(rss.id)">Delete</button>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumnsRss"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumnsRss;"></mat-row>
+          </mat-table>
+
+      </mat-tab>
+      <mat-tab>
+          <ng-template mat-tab-label color="warn">
+            <span class="table-label-color-red" color="warn">Cryptos</span>
+          </ng-template>
+          <button mat-raised-button color="primary" class="action-button" (refreshCrypto)="fetchAllCrypto($event)" (click)="openAddCryptoDialog()">Add crypto</button>
+
+          <mat-table [dataSource]="dataSourceCrypto" matSort class="mat-elevation-z8">
+            <ng-container matColumnDef="id">
+              <mat-header-cell *matHeaderCellDef> Id </mat-header-cell>
+              <mat-cell *matCellDef="let crypto"> {{crypto.id}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="name">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+              <mat-cell *matCellDef="let crypto"> {{crypto.name}} - {{crypto.symbol}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="price">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Price </mat-header-cell>
+              <mat-cell *matCellDef="let crypto"> {{ crypto.currentPrice | currency }} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="actions">
+              <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+              <mat-cell *matCellDef="let crypto">
+                <button *ngIf="crypto.isAvailable" mat-stroked-button color="warn" class="action-button margin-auto" (click)="availableCrypto(crypto.id, false)">Unavailable</button>
+                <button *ngIf="!crypto.isAvailable" mat-stroked-button color="primary" class="action-button margin-auto" (click)="availableCrypto(crypto.id, true)">Available</button>
+                <button mat-raised-button color="warn" class="action-button margin-auto" (click)="deleteCrypto(crypto.id)">Delete</button>
+              </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="displayedColumnsCrypto"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumnsCrypto;"></mat-row>
+          </mat-table>
+
+          <mat-paginator [length]="totalCryptosLength" [pageSize]="limit" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons (page)="onPageChange($event)"></mat-paginator>
+      </mat-tab>
+    </mat-tab-group>
+
+</div>

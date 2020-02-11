@@ -37,7 +37,9 @@ let adressBook = defaultAdressBook
 router.get('/rss/', function (req, res) {
 
   Rss.find({}, async function (err, result) {
-    if (err) throw err;
+    if (err) res.json({
+      err: err
+    })
     result.forEach(item => {
       if (!adressBook.includes(item.url)) {
         adressBook.push(item.url)
@@ -45,7 +47,6 @@ router.get('/rss/', function (req, res) {
 
     })
   })
-  console.log("adress book status ", adressBook)
   let articleAddedCount = 0
   // scan rss content
   let parser1 = new Parser();
@@ -53,7 +54,6 @@ router.get('/rss/', function (req, res) {
 
     // scan rss for every adresses
     for (let j = 0; j < adressBook.length; j++) {
-      console.log("checking on ", adressBook[j])
       feed = await parser1.parseURL(adressBook[j]);
       feed.items.forEach(item => {
         //set default image
@@ -71,7 +71,7 @@ router.get('/rss/', function (req, res) {
               if (item.hasOwnProperty(key)) {
                 const value = item[key];
                 if (imageSet === false) {
-                  let regExpImg = RegExp('"(https.*?png|bmp|jpg|gif)"', "gi").exec(value)
+                  let regExpImg = RegExp('(https?.*?(?:png|bmp|jpg|gif))', "i").exec(value)
                   if (regExpImg) {
                     item.image = regExpImg[0]
                   }
@@ -81,7 +81,9 @@ router.get('/rss/', function (req, res) {
             }
             //store in dbb
             Article.create(item, (err, article) => {
-              if (err) throw err
+              if (err) res.json({
+                err: err
+              })
               else {
                 console.log(item.link + " has been added successfully!")
                 articleAddedCount++
@@ -95,7 +97,6 @@ router.get('/rss/', function (req, res) {
 
   })()
   .then(function (result) {
-    console.log(articleAddedCount + ' added successfully!')
     res.json({
       msg: articleAddedCount + ' added successfully!'
     })
@@ -108,7 +109,7 @@ router.get('/rss/', function (req, res) {
 // get user interest keywords, scan rss flux, send back to front concerned articles or every article if no keywords
 /*GET /articles[?params1=value1&...]
 params: free. User MUST be logged in (OR NOT). If the user is anonymous the settings (if any) are
-ignored and the last published articles are returned. If the user is logged in the settings are used to
+ignored and the last published articles are returned. If the user isuser found with this id logged in the settings are used to
 return only the items most relevant to the user (a list of keywords might help you). You are free to define
 the parameters that you think will be useful depending on the search options you offer to your users.
 Here for each article, you must provide at least:
@@ -190,63 +191,37 @@ router.get('/', function (req, res) {
             $search: userKeywords
           }
         }, (err, result) => {
-          if (err) throw err;
+          if (err) res.json({
+            err: err
+          })
           res.json({
             articles: result
           })
         })
       }
+      else {    Article.find({}, function (err, result) {
+        if (err) res.json({
+          err: err
+        })
+        res.json({
+          articles: result
+        })
+      }); }
     }
   } else {
 
-    console.log('No user found with this id, default: no keywords')
+    console.log('No keywords, default: no keywords')
     Article.find({}, function (err, result) {
-      if (err) throw err;
+      if (err) res.json({
+        err: err
+      })
       res.json({
         articles: result
       })
     });
   }
+  
 })
-
-
-
-
-
-// RIP
-// function returnArticles(userKeywords, callback) {
-//   // let articlesToTest=[]
-//   let articlesToReturn = []
-
-//   //get every article to test
-//   Article.find({}, (err, result) => {
-//     if (err) throw err;
-//     for (let i = 0; i < userKeywords.length; i++) {
-//       let keywordIsPresent = false;
-//       for (let l = 0; l < result.length; l++) {
-//         for (const key in result[l]) {
-//           if (result[l].hasOwnProperty(key) && !keywordIsPresent) {
-//             const value = result[l][key]
-//             const regExpTest = new RegExp("(" + userKeywords[i] + ")", "gi")
-//             // console.log("Keyword" ,userKeywords[i])
-//             // console.log("Value ", value)
-
-//             if (value && ((value.title && regExpTest.test(value.title)) || (value.content && regExpTest.test(value.content)) || (value["content:encoded"] && regExpTest.test(value["content:encoded"])))) {
-//               keywordIsPresent = true;
-//               console.log("test test test" + result[l])
-//               articlesToReturn.push(result[l])
-//             }
-//           }
-//         }
-//       }
-//     }
-//     // console.log("RETURN ", articlesToReturn)
-//     callback(articlesToReturn)
-//   })
-
-
-
-// }
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -292,13 +267,59 @@ router.get('/:id', function (req, res, next) {
   if (!req.params.id) res.json({
     err: 'Please provide an id param.'
   })
+  else {
+    Article.findById(
+      req.params.id, (err, article) => {
+        if (err) res.json({
+          err: err
+        })
+        else {
+          if (article) {
+            res.json({
+              article
+            })
+          } else {
+            res.json({
+              err: 'No article found with this id.'
+            })
+          }
+        }
+      })
+  }
+})
 
-  Article.findById(
-    req.params.id, (err, article) => {
-      if (err) throw err
+
+/**
+ * @api {delete} /articles/:id Delete an article by ID
+ * @apiName DeleteArticleByID
+ * @apiGroup Articles
+ *
+ * @apiParam {ObjectId} id article's unique ID.
+ * @apiSuccessExample {json} Success-Response:
+ *     HTTP/1.1 200 OK
+ *     {
+    "_id": "5e399a82b2745b6f3ad4e8ac",
+    "msg": "Article deleted successfully."
+}
+ */
+router.delete('/:id', (req, res, next) => {
+  if (!req.params.id) res.json({
+    err: 'Please provide an id param.'
+  })
+  else if (req.params.id.length !== 24)
+    res.json({
+      err: 'Please provide a valid id param, 24 digit.'
+    })
+  else
+    Article.findByIdAndDelete(req.params.id, (err, article) => {
+      if (err) res.json({
+        err: err
+      })
+      else
       if (article) {
         res.json({
-          article
+          _id: req.params.id,
+          msg: 'Article deleted successfully.'
         })
       } else {
         res.json({
@@ -306,28 +327,6 @@ router.get('/:id', function (req, res, next) {
         })
       }
     })
-})
-
-// delete an article
-router.delete('/:id', (req, res, next) => {
-  if (!req.params.id) res.json({
-    err: 'Please provide an id param.'
-  })
-
-  Article.findOneAndDelete(req.params.id, (err, article) => {
-    if (err) throw err
-
-    if (article) {
-      res.json({
-        _id: req.params.id,
-        msg: 'Article deleted successfully.'
-      })
-    } else {
-      res.json({
-        err: 'No article found with this id.'
-      })
-    }
-  })
 })
 
 

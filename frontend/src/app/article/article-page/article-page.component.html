@@ -1,0 +1,11 @@
+<div class="article-container" >
+
+  <mat-icon class="cursor-pointer" [routerLink]='["/articles"]'>arrow_back  </mat-icon>
+  <div class="article" [hidden]="!display">
+    <h2 class="article-title" [innerHTML]="article.title"> </h2>
+    <div class="image-container">
+      <img class ="img-responsive image-article mat-card-header" src="{{article.image}}" />
+    </div>
+    <div [innerHTML]="article.content"> </div>
+  </div>
+</div>

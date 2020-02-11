@@ -22,16 +22,47 @@ export class UserModel {
   cryptos$ = of(this.cryptos);
 
   keywords$  = of(this.keywords);
+
+  admin$ = of(this.isAdmin());
+
+  roles: Array<string>;
   /**
    * Constructeur complet
    */
-  constructor(id, username, email, currency, cryptos, keywords) {
+  constructor(id, username, email, currency, cryptos, keywords, roles) {
     this.id = id;
     this.username = username;
     this.email = email;
     this.currency = currency;
     this.cryptos = cryptos;
     this.keywords = keywords;
+    this.roles = roles;
+  }
+
+  /**
+   * Set user roles
+   * @param roles
+   */
+  public setRoles(roles) {
+    for (const r of roles) {
+      this.roles.push(r.name);
+    }
+  }
+
+  /**
+   * Return true if the user is an admin, oherwise return false
+   */
+  public isAdmin(): boolean {
+    if (this.roles === undefined) return false;
+    return this.roles.indexOf('admin') > -1 ? true : false;
+
+  }
+
+  /**
+   * Return true if the user is a basic user, oherwise return false
+   */
+  public isBasic(): boolean {
+    return this.roles.indexOf('basic') > -1 ? true : false;
   }
 
   /** Renvois true si keywords n'estp as vide */
@@ -57,7 +88,7 @@ export class UserModel {
   }
 
   public removeKeyword(keyword: string) {
-    this.cryptos.splice(this.keywords.lastIndexOf(keyword), 1);
+    this.keywords.splice(this.keywords.lastIndexOf(keyword), 1);
   }
 
 
@@ -68,12 +99,26 @@ export class UserModel {
   public containsKeyWords(keyword: string): boolean {
     return this.keywords.includes(keyword);
   }
+
+  public setUser(id, username, email, currency, cryptos, keywords, roles) {
+    this.id = id;
+    this.username = username;
+    this.email = email;
+    this.currency = currency;
+    this.cryptos = cryptos;
+    this.keywords = keywords;
+    this.roles = roles;
+  }
   /** Format to JSON */
   toJSON() {
     return {
       cryptos: this.cryptos,
       keywords : this.keywords
     };
+  }
+
+  hasPassword(): boolean {
+    return !this.id.includes('-') && !(this.id === '');
   }
 }
 

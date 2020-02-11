@@ -1,0 +1,39 @@
+
+table {
+  width: 100%;
+}
+
+.action-button {
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+  margin-left: 5vw;
+  width: 20vw;
+}
+
+
+mat-tab-body-content, .mat-tab-body-wrapper, .mat-tab-body-content {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  width: 80vw !important;
+}
+
+.margin-auto {
+  margin-left: auto;
+  margin-right: auto;
+  width: 40%;
+}
+
+mat-header-cell {
+  justify-content: center;
+}
+
+mat-cell {
+  justify-content: center;
+}
+
+
+.table-label-color-red {
+  color: #f44336 !important;
+}
+
+

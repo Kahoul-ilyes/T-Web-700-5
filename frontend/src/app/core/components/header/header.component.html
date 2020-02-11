@@ -1,11 +1,13 @@
 <!-- header -->
 <mat-toolbar>
   <img src="">
-  <span routerLink="/">Crypto Infos</span>
+  <span routerLink="/">Coin Codex</span>
   <span class="example-spacer"></span>
 
-  <button [routerLink]="'cryptos'" mat-button color="primary">Cryptos</button>
-  <button [routerLink]="'article'"  mat-button color="primary">News</button>
-  <button (click)="auth.login()" *ngIf="!auth.loggedIn" mat-button color="primary">Login</button>
-  <button (click)="auth.logout()" *ngIf="auth.loggedIn" mat-button color="primary">Logout</button>
+  <button *ngIf="userService.currentUser.isAdmin() " [routerLink]="'admin'" mat-button color="warn">Admin</button>
+  <button [routerLink]="'profile'" *ngIf="auth.loggedIn" mat-button color="warn">Profile</button>
+  <button [routerLink]="'cryptos'" mat-button color="warn">Cryptos</button>
+  <button [routerLink]="'articles'"  mat-button color="warn">News</button>
+  <button (click)="auth.login()" *ngIf="!auth.loggedIn" mat-button color="warn">Login</button>
+  <button (click)="auth.logout()" *ngIf="auth.loggedIn" mat-button color="warn">Logout</button>
 </mat-toolbar>

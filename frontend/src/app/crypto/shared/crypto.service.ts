@@ -22,7 +22,7 @@ export class CryptoService {
    * @param body une crypto
    */
   public createCrypto(body: string) {
-    return this.httpClient.post(this.URL + '/api/v0/cryptos/', body);
+    return this.httpClient.post(this.URL + '/api/v0/cryptos/', JSON.parse(body));
   }
 
   /**
@@ -58,6 +58,24 @@ export class CryptoService {
   }
 
   /**
+   * Récupération de toute les cryptos available
+   */
+  public getAllCryptosAvailable() {
+    return this.httpClient.get<any[]>(this.URL + '/api/v0/cryptos?available=true');
+  }
+
+  /**
+   * Récupération de toute les cryptos with params
+   */
+  public getAllCryptosWithParams(available: Boolean = true, limit: Number = 25, offset: Number = 0) {
+    return this.httpClient.get<any[]>(this.URL + `/api/v0/cryptos?available=${available}&limit=${limit}&offset=${offset}`);
+  }
+
+  public countCryptos(available: Boolean = true) {
+    return this.httpClient.get<any[]>(this.URL + `/api/v0/cryptos/count?available=${available}`);
+  }
+
+  /**
    * Récupération des cryptos dont l'id est fourni
    * @param idCrypto id de la crypto a get
    */
@@ -82,7 +100,7 @@ export class CryptoService {
    * @param body les changements sur la crypto
    */
   public updateCrypto(idCrypto: string , body: string) {
-    return this.httpClient.put(this.URL + '/api/v0/cryptos/', body);
+    return this.httpClient.put(this.URL + `/api/v0/cryptos/${idCrypto}`, JSON.parse(body));
   }
 
   /** Mise a jour de la liste des cryptos de la BDD */
@@ -96,11 +114,11 @@ export class CryptoService {
    * @param httpClient pour la communication avec les APIs
    */
   constructor(private httpClient: HttpClient) {
-     if (localStorage.getItem('baseUpdated') === undefined) {
-       console.log(localStorage.getItem('baseUpdated'));
-       this.updateCoinList().subscribe((data) => {
-          localStorage.setItem('baseUpdated', 'true');
-        });
-    }
+    //  if (localStorage.getItem('baseUpdated') === undefined) {
+    //    console.log(localStorage.getItem('baseUpdated'));
+    //    this.updateCoinList().subscribe((data) => {
+    //       localStorage.setItem('baseUpdated', 'true');
+    //     });
+    // }
   }
 }
