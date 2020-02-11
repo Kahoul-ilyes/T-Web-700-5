@@ -37,13 +37,15 @@ export class ProfileComponent implements OnInit {
         this.userService.getUser(userAuthO.sub).subscribe(res => {
           // @ts-ignore
           this.currentUser = res.user;
-          this.profileForm = this.fb.group({
-            username: [this.currentUser.username, Validators.required],
-            email: [this.currentUser.email, Validators.required],
-            currency: [this.currentUser.user_metadata.currency, Validators.required],
-            password: [null, Validators.required],
-            passwordverif: [null, Validators.required]
-          });
+          if (this.currentUser) {
+            this.profileForm = this.fb.group({
+              username: [this.currentUser.username, Validators.required],
+              email: [this.currentUser.email, Validators.required],
+              currency: [this.currentUser.user_metadata.currency, Validators.required],
+              password: [null, Validators.required],
+              passwordverif: [null, Validators.required]
+            });
+          }
           // console.log(res)
           console.log(this.objectUser());
         });
