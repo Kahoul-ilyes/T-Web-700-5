@@ -244,10 +244,9 @@ export class CryptoPageComponent implements OnInit {
     // console.log(this.limit, this.offset);
 
     this.cryptoService.getAllCryptosWithParams(this.available, this.limit, this.offset).subscribe(data => {
-      
+
       // @ts-ignore cryptos n'est pas trouvé sinon
       for (const d of (data.cryptos)) {
-        console.log(d)
         // tslint:disable-next-line:max-line-length
         this.cryptoList.push( new CryptoModel(d.isTradable, d.isAvailable, d._id, d.name, d.createdAt, d.dateAvailability, d.logo, d.symbol, d.updatedAt, d.website,
           d.currentPrice, d.lowestPrice, d.openingPrice, d.highestPrice, d.supply, d.marketCap));

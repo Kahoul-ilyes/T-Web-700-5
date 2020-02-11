@@ -3,6 +3,22 @@
   flex-direction: column;
 }
 
+mat-card{
+  margin-left: 15% ;
+  margin-right: 15% ;
+  text-align: center;
+
+}
+
+.password{
+margin-right: 10%;
+}
+
+.password-verif{
+  margin-left: 10%;
+
+}
+
 .example-container > * {
   width: 100%;
 }

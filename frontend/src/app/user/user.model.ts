@@ -116,5 +116,9 @@ export class UserModel {
       keywords : this.keywords
     };
   }
+
+  hasPassword(): boolean {
+    return !this.id.includes('-') && !(this.id === '');
+  }
 }
 

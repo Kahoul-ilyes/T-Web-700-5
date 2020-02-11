@@ -1,45 +1,41 @@
 
-<pre *ngIf="auth.userProfile$ | async as profile">
+<mat-card   *ngIf="auth.userProfile$ | async as profile">
 
-  {{ profile | json }}
+  <mat-card-content>
+    <form class="container" [formGroup]="profileForm">
+      <!-- ToDo -->
+      <mat-form-field class="full-width" appearance="standard">
+        <mat-label>Currency</mat-label>
+        <mat-select placeholder="currency" formControlName="currency">
+          <mat-option *ngFor="let currency of currencyList" [value]="currency">{{currency}}</mat-option>
+        </mat-select>
+      </mat-form-field>
 
+      <mat-form-field class="full-width" appearance="standard">
+        <mat-label>Username</mat-label>
+        <input matInput placeholder="username" formControlName="username" required>
+      </mat-form-field>
 
-<div>
-  <form class="container" [formGroup]="profileForm">
-  <!-- ToDo -->
-  <mat-form-field class="full-width" appearance="standard">
-    <mat-label>Currency</mat-label>
-    <mat-select placeholder="currency" formControlName="currency">
-      <mat-option *ngFor="let currency of currencyList" [value]="currency">{{currency}}</mat-option>
-    </mat-select>
-  </mat-form-field>
+      <mat-form-field class="full-width" appearance="standard" >
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="email" formControlName="email" required>
+      </mat-form-field>
+      <br>
 
-  <!-- ToDo -->
-  <mat-form-field class="full-width" appearance="standard">
-    <mat-label>Username</mat-label>
-    <input matInput placeholder="username" formControlName="username" required>
-  </mat-form-field>
+      <div [hidden]="!userService.currentUser.hasPassword()">
+        <mat-form-field class="password" appearance="standard">
+          <mat-label>Password</mat-label>
+          <input type="password" matInput placeholder="Change password" (ngModelChange)="isPasswordEntered()" formControlName="password" >
+        </mat-form-field>
 
-  <!-- ToDo -->
-  <mat-form-field class="full-width" appearance="standard" >
-    <mat-label>Email</mat-label>
-    <input matInput placeholder="email" formControlName="email" required>
-  </mat-form-field>
+        <mat-form-field class="password-verif" appearance="standard">
+          <mat-label>Password confirmation</mat-label>
+          <input matInput placeholder="Change password" formControlName="passwordverif"  type="password"  [disabled]="passVerifDisabled" >
+        </mat-form-field>
+        <br>
+      </div>
 
-  <!-- ToDo -->
-  <mat-form-field class="full-width" appearance="standard">
-    <mat-label>Password</mat-label>
-    <input matInput placeholder="Change password" formControlName="password" [disabled]="isPasswordEntered()">
-  </mat-form-field>
-
-    <!-- ToDo -->
-  <mat-form-field class="full-width" appearance="standard">
-    <mat-label>Password confirmation</mat-label>
-    <input matInput placeholder="Change password" formControlName="password">
-  </mat-form-field>
-
-
-  <button mat-raised-button color="primary" (click)="save()">Update</button>
-  </form>
-</div>
-</pre>
+      <button mat-raised-button color="primary" (click)="save()">Submit</button>
+    </form>
+  </mat-card-content>
+</mat-card>
