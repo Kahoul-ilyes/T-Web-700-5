@@ -64,7 +64,7 @@ export class ProfileComponent implements OnInit {
     return this.profileForm.getRawValue();
   }
   submitUpdate() {
-    this.userService.updateUser(this.userService.currentUser.id, this.profileForm.getRawValue());
+    this.userService.updateUser(this.currentUser.id, this.profileForm.getRawValue());
   }
 
   save() {
@@ -75,18 +75,18 @@ export class ProfileComponent implements OnInit {
     // @ts-ignore
     if (data.username !== null) {
       // @ts-ignore
-      this.userService.updateUser(this.userService.currentUser.id, {username: data.username}).subscribe(res => {
+      this.userService.updateUser(this.currentUser.id, {username: data.username}).subscribe(res => {
         console.log('resultat update username', res);
       } );
     }
     if (data.currency !== null) {
       // @ts-ignore
-      this.userService.updateUser(this.userService.currentUser.id, {currency: data.currency}).subscribe(resu => {
+      this.userService.updateUser(this.currentUser.id, {currency: data.currency}).subscribe(resu => {
         console.log('resultat update currency', resu);
       } );
     }
     if (data.password !== null && data.passwordverif !== null && data.passwordverif === data.password && this.isPasswordStrong(data.password)) {
-      this.userService.updateUser(this.userService.currentUser.id, {password: data.password}).subscribe(resu => {
+      this.userService.updateUser(this.currentUser.id, {password: data.password}).subscribe(resu => {
         console.log('resultat update password', resu);
       });
     } else if (data.password === null) {
