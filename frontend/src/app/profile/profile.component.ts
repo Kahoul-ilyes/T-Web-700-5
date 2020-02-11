@@ -67,7 +67,9 @@ export class ProfileComponent implements OnInit {
   }
   submitUpdate() {
     if (this.userId) {
-      this.userService.updateUser(this.userId, this.profileForm.getRawValue());
+      this.userService.updateUser(this.userId, JSON.stringify(this.profileForm.getRawValue())).subscribe(res => {
+        console.log('resul on submpit', res)
+      });
     }
   }
 
@@ -80,19 +82,19 @@ export class ProfileComponent implements OnInit {
       // @ts-ignore
       if (data.username !== null) {
         // @ts-ignore
-        this.userService.updateUser(this.userId, {username: data.username}).subscribe(res => {
+        this.userService.updateUser(this.userId, JSON.stringify({username: data.username})).subscribe(res => {
           console.log('resultat update username', res);
         } );
       }
       if (data.currency !== null) {
         // @ts-ignore
-        this.userService.updateUser(this.userId, {currency: data.currency}).subscribe(resu => {
-          console.log('resultat update currency', resu);
+        this.userService.updateUser(this.userId, JSON.stringify({currency: data.currency})).subscribe(res => {
+          console.log('resultat update currency', res);
         } );
       }
       if (data.password !== null && data.passwordverif !== null && data.passwordverif === data.password && this.isPasswordStrong(data.password)) {
-        this.userService.updateUser(this.userId, {password: data.password}).subscribe(resu => {
-          console.log('resultat update password', resu);
+        this.userService.updateUser(this.userId, JSON.stringify({password: data.password})).subscribe(res => {
+          console.log('resultat update password', res);
         });
       } else if (data.password === null) {
         // rien, ca signifie qu'il n'y a pas eu de tentative d'edit

@@ -78,7 +78,7 @@ export class UserService {
   public updateUser(userId: string, body) {
     console.log('body' , body);
 
-    return this.httpClient.patch(this.URL +  '/api/v0/users/' + userId, body );
+    return this.httpClient.patch(this.URL +  '/api/v0/users/' + userId, JSON.parse(body) );
   }
 
   /**
