@@ -3,9 +3,102 @@ let router = express.Router()
 
 let Crypto = require('../../models/crypto')
 
-const axios = require('axios');
+const scrapeIt = require("scrape-it")
 
-
+const cryptos = [
+  'bitcoin',
+  'ethereum',
+  'bnb',
+  'bitcoin-cash',
+  'ethereum-classic',
+  'litecoin',
+  'eos',
+  'ripple',
+  'chainlink',
+  'BUSD',
+  'tronix',
+  'ontology',
+  'tezos',
+  'waves',
+  'cardano',
+  'zcash',
+  'neo',
+  'true-usd',
+  'stellar',
+  'dash',
+  'usdc',
+  'matic-network',
+  'cosmos',
+  'WRX',
+  'algo',
+  'basic-attention-token',
+  'icon',
+  'vechain',
+  'miota',
+  'OGN',
+  'lisk',
+  'qtum',
+  'monero',
+  'fetch.ai',
+  'paxos-standard',
+  'ravencoin',
+  'bittorent(btt)',
+  'perlin',
+  'lto-network',
+  'dogecoin',
+  'erd',
+  'enjin-coin',
+  '0x',
+  'ftt',
+  'WINk',
+  'Holo',
+  'nano',
+  'theta-token',
+  'beam',
+  'zilliqa',
+  'HBAR',
+  'metal',
+  'celer-token',
+  'omisego',
+  'kava',
+  'tomochain',
+  'stacks',
+  'harmony',
+  'dock',
+  'wan',
+  'drep',
+  'troy',
+  'dusk-network',
+  'arpa-chain',
+  'fantom',
+  'chiliz',
+  'band',
+  'civic',
+  'iotex',
+  'theta-fuel',
+  'nuls',
+  'mithril',
+  'dent',
+  'nkn',
+  'contentos',
+  'pundi-x',
+  'cocos',
+  'mainframe',
+  'hshare',
+  'bitshares',
+  'funfair',
+  'republic-protocol',
+  'iexecrlc',
+  'gifto',
+  'tokenclub token',
+  'cortex',
+  'ONG',
+  'mco',
+  'storm',
+  'vite',
+  'bancor',
+  'stableusd'
+]
 
 /**
  * @api {get} /coins/ Get the available coin list and update database
@@ -21,53 +114,50 @@ const axios = require('axios');
  */
 router.get('/', (req, res, next) => {
 
-  // check that this crypto is in the available coin list
-  axios({
-    url: 'https://min-api.cryptocompare.com/data/all/coinlist',
-    method: 'get',
-    headers: {
-      authorization: `Apikey ${process.env.API_KEY_CRYPTO_COMPARE}`
-    } 
-  }).then((res) => {
-    let coins = res.data.Data;
-    for (const key in coins) {
-      if (coins.hasOwnProperty(key)) {
-        const coin = coins[key];
-
-        let name = coin.CoinName
-        let symbol = coin.Symbol
-        let logo = 'https://www.cryptocompare.com' + coin.ImageUrl
-        let website = 'https://www.cryptocompare.com' + coin.Url
-        let isTradable = coin.IsTrading
-        let dateAvailability = coin.ContentCreatedOn
-        let supply = 0
-        if (coin.TotalCoinsMined && coin.TotalCoinsMined != null && coin.TotalCoinsMined !== "N/A")
-          supply = coin.TotalCoinsMined
-
+  for (const crypto of cryptos) {
+    scrapeIt(`https://info.binance.com/en/currencies/${crypto}`, {
+      name: ".instro",
+      symbol: ".cryptoName > h1:nth-child(2)",
+      logo: {
+        selector: ".cryptoName > img:nth-child(1)",
+        attr: "src"
+      },
+      website: {
+        selector: "div.infoline:nth-child(2) > a:nth-child(2)",
+        attr: "href"
+      },
+      currentPrice: ".ix71fe-7",
+      marketCap: ".ix71fe-6 > ul:nth-child(1) > li:nth-child(1) > div:nth-child(2)",
+      supply: ".ix71fe-6 > ul:nth-child(1) > li:nth-child(3) > div:nth-child(2)",
+      dateAvailability: ".ix71fe-6 > ul:nth-child(1) > li:nth-child(4) > div:nth-child(2)"
+    })
+    .then(({data, response}) => {
+      if(response.statusCode == 200) {
         let datas = {
-          name: name,
-          symbol: symbol,
-          logo: logo,
-          website: website,
-          isTradable: isTradable,
-          dateAvailability: dateAvailability,
-          supply: supply
+          name: data['name'],
+          symbol: data['symbol'],
+          currentPrice: parseFloat(data['currentPrice'].replace('$','')),
+          marketCap: parseInt(data['marketCap'].replace('$','').split(',').join('')),
+          supply: parseInt(data['supply'].split(',').join('')),
+          logo: data['logo'],
+          website: data['website'],
+          dateAvailability: data['dateAvailability'] != '-' ? new Date(data['dateAvailability']) : new Date(),
+          isTradable: true,
+          isAvailable: true
         }
-        Crypto.findOneAndUpdate({name: name}, datas, {upsert: true, runValidators: true}, (err, crypto) => {
-          if (err) res.json({err: err})
+
+        Crypto.findOneAndUpdate({name: data['name']}, datas, {upsert: true, runValidators: true}, (err, crypto) => {
+          if (err) throw err
           else {
             if (crypto) {
-              console.log(`Crypto ${name} added/updated successfully.`)
+              console.log(`Crypto ${data['name']} added/updated successfully.`)
             }
           }
         })
-        
       }
-    }
-    res.json({msg: 'Crypto list updated successfully.'})
-  }).catch((err) => {
-    if (err) res.json({err: err})
-  })
+    })
+  }
+  res.json({msg: 'Crypto is updating, please wait...'})
 
 })
 

@@ -41,6 +41,16 @@ socket.onmessage = (event) => {
     // subscribed coins list event
     if (data.id == 3) {
       subscribedCryptos = data.result
+      console.log('SUBSCRIBED CRYPTOS', subscribedCryptos)
+
+      socket.send(JSON.stringify(
+        {
+          method: "UNSUBSCRIBE",
+          params: subscribedCryptos,
+          id: 312
+        }
+      ))
+      console.log()
     }
     // unsubscribed event
     if (data.id == 312) {
@@ -50,7 +60,7 @@ socket.onmessage = (event) => {
 
 
   // TODO: connexion websocket between serveur and client frontend
-  console.log(event.data)
+  // console.log(event.data)
   if (event.data.indexOf('stream') > -1 && event.data.indexOf('data' > -1)) {
     let data = JSON.parse(event.data)
     // save data in crypto

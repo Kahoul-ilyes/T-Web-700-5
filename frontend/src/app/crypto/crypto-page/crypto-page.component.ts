@@ -142,7 +142,7 @@ export class CryptoPageComponent implements OnInit {
       }
     }
 
-    return cryptoToSubscribe;
+    return cryptoToSubscribe.slice(0, cryptoToSubscribe.length - 1);
   }
 
   // ######### Système de filtre ##############

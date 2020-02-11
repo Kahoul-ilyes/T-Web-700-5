@@ -37,20 +37,13 @@ router.get('/subscribe', (req, res, next) => {
 
   if (cryptos.length > 0) {
     if (Array.isArray(cryptos)) {
+      console.log('cryptos list to subscribe', cryptos)
       
-      let streams = websocket.subscribedCryptos
-
+      // let streams = websocket.subscribedCryptos
+      let streams = [];
       cryptos.forEach(crypto => {
 
         let stream = `${crypto.toLowerCase()}usdt@ticker`
-        // unsubscribe from this crypto
-        websocket.socket.send(JSON.stringify(
-          {
-            method: "UNSUBSCRIBE",
-            params: [stream],
-            id: 312
-          }
-        ))
 
         if (streams.indexOf(stream) == -1)
           streams.push(stream)
