@@ -6,7 +6,7 @@
             <span class="table-label-color-red" color="warn">Rss</span>
           </ng-template>
 
-          <button mat-raised-button color="primary" class="action-button" (refreshRss)="fetchAllRss($event)" (click)="openAddRssDialog()">Add rss</button>
+          <button mat-raised-button color="primary" class="action-button" (refreshRss)="fetchAllRss()" (click)="openAddRssDialog()">Add rss</button>
 
           <mat-table [dataSource]="dataSourceRss" class="mat-elevation-z8">
             <ng-container matColumnDef="id">
@@ -35,7 +35,7 @@
           <ng-template mat-tab-label color="warn">
             <span class="table-label-color-red" color="warn">Cryptos</span>
           </ng-template>
-          <button mat-raised-button color="primary" class="action-button" (refreshCrypto)="fetchAllCrypto($event)" (click)="openAddCryptoDialog()">Add crypto</button>
+          <button mat-raised-button color="primary" class="action-button" (refreshCrypto)="fetchAllCrypto()" (click)="openAddCryptoDialog()">Add crypto</button>
 
           <mat-table [dataSource]="dataSourceCrypto" matSort class="mat-elevation-z8">
             <ng-container matColumnDef="id">

@@ -34,40 +34,44 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule, MatFormFieldControl } from '@angular/material/form-field';
 import { MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarModule } from '@angular/material/snack-bar';
 import {MatListModule} from "@angular/material/list";
+import {MatExpansionModule} from "@angular/material/expansion";
+import {MatTabsModule} from "@angular/material/tabs";
 
 
 @NgModule({
 
-    imports: [
-        // Our components
-        ArticleModule,
-        CryptoModule,
-        CoreModule,
-        UserModule,
-        AdminModule,
-        BrowserModule,
-        BrowserAnimationsModule,
-        // Materials components
-        MatButtonModule,
-        MatToolbarModule,
-        MatToolbarModule,
-        MatTooltipModule,
-        MatDialogModule,
-        MatSelectModule,
-        MatCardModule,
-        MatRadioModule,
-        MatInputModule,
-        MatFormFieldModule,
-        MatSnackBarModule,
-        // Http requests modules
-        HttpClientModule,
-        HttpClientModule,
-        // Routing
-        appRoutingModule,
-        // Forms
-        ReactiveFormsModule,
-        MatListModule,
-    ],
+  imports: [
+    // Our components
+    ArticleModule,
+    CryptoModule,
+    CoreModule,
+    UserModule,
+    AdminModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    // Materials components
+    MatButtonModule,
+    MatToolbarModule,
+    MatToolbarModule,
+    MatTooltipModule,
+    MatDialogModule,
+    MatSelectModule,
+    MatCardModule,
+    MatRadioModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSnackBarModule,
+    // Http requests modules
+    HttpClientModule,
+    HttpClientModule,
+    // Routing
+    appRoutingModule,
+    // Forms
+    ReactiveFormsModule,
+    MatListModule,
+    MatExpansionModule,
+    MatTabsModule,
+  ],
   declarations: [
     ProfileComponent,
     AddRssComponent,

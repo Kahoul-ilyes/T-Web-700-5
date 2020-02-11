@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { RssService } from '../shared/rss.service'
 import { MatSnackBar } from '@angular/material/snack-bar';
+import {MatDialogRef} from "@angular/material/dialog";
 
 const URL_REGEXP = '(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?';
 
@@ -18,8 +19,10 @@ export class AddRssComponent {
 
   @Output() refreshRss: EventEmitter<any> = new EventEmitter();
 
-  constructor(private fb: FormBuilder, private rssService: RssService, private snackBar: MatSnackBar) {}
-  
+  constructor(
+    public dialogRef: MatDialogRef<AddRssComponent>,
+    private fb: FormBuilder, private rssService: RssService, private snackBar: MatSnackBar) {}
+
   save() {
     // call addrss service method
     let datas = this.addRssForm.value
@@ -36,5 +39,9 @@ export class AddRssComponent {
         }
       })
     }
+  }
+
+  close() {
+    this.dialogRef.close();
   }
 }

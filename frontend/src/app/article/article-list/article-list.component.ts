@@ -3,6 +3,9 @@ import {ArticleService} from '../shared/article.service';
 import {ArticleModel} from '../shared/article.model';
 import {UserService} from '../../user/user.service';
 import {MatOptionSelectionChange} from '@angular/material/core';
+import {Validators} from "@angular/forms";
+import {AuthService} from "../../auth.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-article-list',
@@ -13,7 +16,7 @@ export class ArticleListComponent implements OnInit {
 
   keywordsSelected = new Array<string> ();
   newKeyword: string;
-  constructor(public articleService: ArticleService, public userService: UserService) { }
+  constructor(public articleService: ArticleService, public userService: UserService, public auth : AuthService,  private snackBar: MatSnackBar) { }
 
   displayedArticle = new Array<ArticleModel>();
   keyWordsCollect = this.userService.currentUser.keywords;
@@ -32,6 +35,15 @@ export class ArticleListComponent implements OnInit {
           }
         }
       });
+
+    this.auth.userProfile$.subscribe(userAuthO => {
+      if (userAuthO) {
+        this.userService.getUser(userAuthO.sub).subscribe(res => {
+          // @ts-ignore
+          this.keyWordsCollect = res.user.user_metadata.keywords;
+        });
+      }
+    });
   }
 
   removeKeyword(keyword: string) {
@@ -45,7 +57,7 @@ export class ArticleListComponent implements OnInit {
     this.userService.updateUser(this.userService.currentUser.id, this.userService.currentUser.toJSON()).subscribe(
       res => console.log('update user' , res));
     this.keyWordsCollect = this.userService.currentUser.keywords;
-
+    this.snackBar.open(keyword + ': this topic have been removed from favorites');
     this.refreshArticleList();
 
   }
@@ -57,6 +69,8 @@ export class ArticleListComponent implements OnInit {
       console.log('keywords pass');
       this.userService.currentUser.addKeyword(this.newKeyword);
       this.userService.updateUser(this.userService.currentUser.id, this.userService.currentUser.toJSON()).subscribe(res => console.log('update user' , res));
+      this.snackBar.open(this.newKeyword + ': this topic have been removed from favorites');
+
     }
     this.newKeyword = '';
   }
