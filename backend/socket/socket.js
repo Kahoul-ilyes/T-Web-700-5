@@ -50,6 +50,7 @@ socket.onmessage = (event) => {
 
 
   // TODO: connexion websocket between serveur and client frontend
+  console.log(event.data)
   if (event.data.indexOf('stream') > -1 && event.data.indexOf('data' > -1)) {
     let data = JSON.parse(event.data)
     // save data in crypto

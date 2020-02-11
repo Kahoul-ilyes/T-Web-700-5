@@ -104,6 +104,8 @@ export class CryptoPageComponent implements OnInit {
       this.totalCryptosLength = data.count;
     });
 
+    // console.log(this.limit, this.offset);
+
     this.cryptoService.getAllCryptosWithParams(this.available, this.limit, this.offset).subscribe(data => {
       // @ts-ignore cryptos n'est pas trouvé sinon
       for (const d of (data.cryptos)) {
@@ -113,10 +115,6 @@ export class CryptoPageComponent implements OnInit {
       }
 
       this.dataSourceCryptos = new MatTableDataSource(this.cryptoList);
-
-      // subscribe ticker for crypto displayed
-      this.cryptoService.subscribeCryptosTicker(this.getCryptosBySymbolString()).subscribe(data2 => {
-      });
     });
   }
 
@@ -130,7 +128,7 @@ export class CryptoPageComponent implements OnInit {
     const ret = [];
 
     for (const crypto of this.cryptoList) {
-      ret.push(crypto.symbol);
+      if (crypto.symbol) ret.push(crypto.symbol);
     }
 
     return ret;
@@ -215,18 +213,18 @@ export class CryptoPageComponent implements OnInit {
     return (element.isAvailable);
   }
 
-  applyInputFilter(target: EventTarget) {
-    // @ts-ignore
-    this.dataSourceCryptos.filter = target.value.trim().toLowerCase();
-    let cryptoToSubscribe = '';
-    this.dataSourceCryptos.filteredData.slice(0, 24).forEach(a => {
-      if (a.symbol.length <= 8) {
-        cryptoToSubscribe += a.symbol + ',';
-      }
-    });
-    this.cryptoService.subscribeCryptosTicker(cryptoToSubscribe).subscribe(data2 => {
-    });
-  }
+  // applyInputFilter(target: EventTarget) {
+  //   // @ts-ignore
+  //   this.dataSourceCryptos.filter = target.value.trim().toLowerCase();
+  //   let cryptoToSubscribe = '';
+  //   this.dataSourceCryptos.filteredData.slice(0, 24).forEach(a => {
+  //     if (a.symbol.length <= 8) {
+  //       cryptoToSubscribe += a.symbol + ',';
+  //     }
+  //   });
+  //   this.cryptoService.subscribeCryptosTicker(cryptoToSubscribe).subscribe(data2 => {
+  //   });
+  // }
 
   /**
    * Fonction appelé a chaque changement de pages
@@ -236,7 +234,30 @@ export class CryptoPageComponent implements OnInit {
     this.limit = $event.pageSize;
     this.offset = $event.pageIndex * $event.pageSize;
 
-    this.fetchCryptos();
+    this.cryptoList = [];
+
+    this.cryptoService.countCryptos(true).subscribe(data => {
+      // @ts-ignore
+      this.totalCryptosLength = data.count;
+    });
+
+    // console.log(this.limit, this.offset);
+
+    this.cryptoService.getAllCryptosWithParams(this.available, this.limit, this.offset).subscribe(data => {
+      
+      // @ts-ignore cryptos n'est pas trouvé sinon
+      for (const d of (data.cryptos)) {
+        console.log(d)
+        // tslint:disable-next-line:max-line-length
+        this.cryptoList.push( new CryptoModel(d.isTradable, d.isAvailable, d._id, d.name, d.createdAt, d.dateAvailability, d.logo, d.symbol, d.updatedAt, d.website,
+          d.currentPrice, d.lowestPrice, d.openingPrice, d.highestPrice, d.supply, d.marketCap));
+      }
+
+      this.dataSourceCryptos = new MatTableDataSource(this.cryptoList);
+      // subscribe ticker for crypto displayed
+      this.cryptoService.subscribeCryptosTicker(this.getCryptosBySymbolString()).subscribe(data2 => {
+      });
+    });
   }
 
 
