@@ -120,5 +120,9 @@ export class UserModel {
   hasPassword(): boolean {
     return !this.id.includes('-') && !(this.id === '');
   }
+
+  isSocial(): boolean {
+    if(this.username) return true; else return false;
+  }
 }
 
