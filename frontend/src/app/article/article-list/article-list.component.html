@@ -13,7 +13,8 @@
         <mat-form-field>
           <mat-select [multiple]="true"> <!-- [formControl]="bankMultiCtrl" placeholder="Banks" -->
             <mat-option *ngFor="let keyword of keyWordsCollect" [value]="keyword" (onSelectionChange)="refreshTable($event)">
-              <span class="close-button">  {{keyword}}      <mat-icon (click)="removeKeyword(keyword)">close</mat-icon></span>
+               {{keyword}}
+              <span *ngIf="!this.keywordsSelected.includes(keyword)" class="close-button"> <mat-icon (click)="removeKeyword(keyword)">close</mat-icon></span>
 
             </mat-option>
           </mat-select  >
