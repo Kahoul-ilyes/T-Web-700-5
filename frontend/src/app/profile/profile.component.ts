@@ -22,6 +22,7 @@ export class ProfileComponent implements OnInit {
   constructor(public auth: AuthService, public userService: UserService, public currencyService: CurrencyService, private fb: FormBuilder, private snackBar: MatSnackBar) {
   }
   currentUser = null;
+  userId = null;
   // options: FormGroup;
   profileForm = this.fb.group({
     username: [null, Validators.required],
@@ -34,6 +35,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
     this.auth.userProfile$.subscribe(userAuthO => {
       if (userAuthO) {
+        this.userId = userAuthO.sub;
         this.userService.getUser(userAuthO.sub).subscribe(res => {
           // @ts-ignore
           this.currentUser = res.user;
@@ -64,39 +66,43 @@ export class ProfileComponent implements OnInit {
     return this.profileForm.getRawValue();
   }
   submitUpdate() {
-    this.userService.updateUser(this.currentUser.id, this.profileForm.getRawValue());
+    if (this.userId) {
+      this.userService.updateUser(this.userId, this.profileForm.getRawValue());
+    }
   }
 
   save() {
-    // call address service method
-    const data = this.profileForm.value;
+    if (this.userId) {
+      // call address service method
+      const data = this.profileForm.value;
 
-    console.log('data', data);
-    // @ts-ignore
-    if (data.username !== null) {
+      console.log('data', data);
       // @ts-ignore
-      this.userService.updateUser(this.currentUser.id, {username: data.username}).subscribe(res => {
-        console.log('resultat update username', res);
-      } );
-    }
-    if (data.currency !== null) {
-      // @ts-ignore
-      this.userService.updateUser(this.currentUser.id, {currency: data.currency}).subscribe(resu => {
-        console.log('resultat update currency', resu);
-      } );
-    }
-    if (data.password !== null && data.passwordverif !== null && data.passwordverif === data.password && this.isPasswordStrong(data.password)) {
-      this.userService.updateUser(this.currentUser.id, {password: data.password}).subscribe(resu => {
-        console.log('resultat update password', resu);
-      });
-    } else if (data.password === null) {
-      // rien, ca signifie qu'il n'y a pas eu de tentative d'edit
-    } else if (data.passwordverif === null) {
-      this.snackBar.open('please enter password and validation');
-    } else if (data.passwordverif !== data.password) {
-      this.snackBar.open('password didnt match confirmation');
-    } else if (!this.isPasswordStrong(data.password)) {
-      this.snackBar.open('Password should contain 8+ characters,at least one uppercase and one lowercase letter, and a digit ');
+      if (data.username !== null) {
+        // @ts-ignore
+        this.userService.updateUser(this.userId, {username: data.username}).subscribe(res => {
+          console.log('resultat update username', res);
+        } );
+      }
+      if (data.currency !== null) {
+        // @ts-ignore
+        this.userService.updateUser(this.userId, {currency: data.currency}).subscribe(resu => {
+          console.log('resultat update currency', resu);
+        } );
+      }
+      if (data.password !== null && data.passwordverif !== null && data.passwordverif === data.password && this.isPasswordStrong(data.password)) {
+        this.userService.updateUser(this.userId, {password: data.password}).subscribe(resu => {
+          console.log('resultat update password', resu);
+        });
+      } else if (data.password === null) {
+        // rien, ca signifie qu'il n'y a pas eu de tentative d'edit
+      } else if (data.passwordverif === null) {
+        this.snackBar.open('please enter password and validation');
+      } else if (data.passwordverif !== data.password) {
+        this.snackBar.open('password didnt match confirmation');
+      } else if (!this.isPasswordStrong(data.password)) {
+        this.snackBar.open('Password should contain 8+ characters,at least one uppercase and one lowercase letter, and a digit ');
+      }
     }
 
   }
