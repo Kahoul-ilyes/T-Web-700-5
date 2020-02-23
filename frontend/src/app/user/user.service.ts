@@ -20,7 +20,6 @@ export class UserService {
     this.usersubs = auth.userProfile$.subscribe(userAuthO => {
       if (userAuthO) {
         console.log('Auth0', userAuthO);
-
         this.getUser(userAuthO.sub).subscribe(res => {
           // @ts-ignore
           const setUser = res.user;
@@ -68,8 +67,9 @@ export class UserService {
    * Request all users
    */
   public initializeUser(id: string) {
+
     console.log('initialize' , this.URL + '/api/v0/users/' + id + '/initialize');
-    return this.httpClient.post(this.URL + '/api/v0/users/' + id + '/initialize', '');
+    return this.httpClient.post(new URL(this.URL + '/api/v0/users/' + id + '/initialize', '').href, '' );
   }
 
   /**
@@ -77,8 +77,8 @@ export class UserService {
    * @param userI duser unique id
    */
   public getUser(userId: string ) {
-    console.log('requetes', this.URL +  '/api/v0/users/' + userId );
-    return this.httpClient.get(this.URL +  '/api/v0/users/' + userId );
+    console.log('requetes get', new URL(this.URL +  '/api/v0/users/' + userId) );
+    return this.httpClient.get( new URL(this.URL +  '/api/v0/users/' + userId).href );
   }
 
   public updateUser(userId: string, body) {
