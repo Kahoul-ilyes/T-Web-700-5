@@ -69,7 +69,7 @@ export class UserService {
   public initializeUser(id: string) {
 
     console.log('initialize' , this.URL + '/api/v0/users/' + id + '/initialize');
-    return this.httpClient.post(new URL(this.URL + '/api/v0/users/' + id + '/initialize', '').href, '' );
+    return this.httpClient.post(new URL(this.URL + '/api/v0/users/' + id + '/initialize').href, '' );
   }
 
   /**
