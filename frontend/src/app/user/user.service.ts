@@ -28,14 +28,16 @@ export class UserService {
           console.log('getUser', res);
 
           // tslint:disable-next-line:max-line-length
-          if (setUser !== undefined && setUser.user_metadata !== null && setUser.user_metadata.cryptos !== undefined && setUser.user_metadata.keywords !== undefined ) {
+          if (setUser !== undefined && setUser.user_metadata !== undefined && setUser.user_metadata.cryptos !== undefined && setUser.user_metadata.keywords !== undefined ) {
             this.currentUser.setUser(setUser.user_id,
               setUser.username, setUser.email, setUser.user_metadata.currency,
               setUser.user_metadata.cryptos, setUser.user_metadata.keywords, []);
             this.currentUser.setRoles(roles);
           } else {
             this.initializeUser(userAuthO.sub).subscribe(initializedRes => {
+              console.log('Initialized', initializedRes);
               // @ts-ignore
+
               const setNewUser = initializedRes.user;
               // tslint:disable-next-line:max-line-length
               if (setNewUser !== undefined && setNewUser.user_metadata !== null && setNewUser.user_metadata.cryptos !== undefined && setNewUser.user_metadata.keywords !== undefined ) {
