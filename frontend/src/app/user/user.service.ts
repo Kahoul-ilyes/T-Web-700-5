@@ -19,10 +19,14 @@ export class UserService {
      */
     this.usersubs = auth.userProfile$.subscribe(userAuthO => {
       if (userAuthO) {
+        console.log('Auth0', userAuthO);
+
         this.getUser(userAuthO.sub).subscribe(res => {
           // @ts-ignore
           const setUser = res.user;
           const roles = res['roles'];
+          console.log('getUser', res);
+
           // tslint:disable-next-line:max-line-length
           if (setUser !== undefined && setUser.user_metadata !== null && setUser.user_metadata.cryptos !== undefined && setUser.user_metadata.keywords !== undefined ) {
             this.currentUser.setUser(setUser.user_id,
