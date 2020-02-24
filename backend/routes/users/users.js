@@ -8,6 +8,8 @@ let axios = require('axios')
 axios.defaults.baseURL = `${process.env.AUTH0_AUDIENCE}`
 
 function handleError(err) {
+
+  console.log(err)
   if (err.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx

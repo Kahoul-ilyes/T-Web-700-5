@@ -19,19 +19,24 @@ export class UserService {
      */
     this.usersubs = auth.userProfile$.subscribe(userAuthO => {
       if (userAuthO) {
+        console.log('Auth0', userAuthO);
         this.getUser(userAuthO.sub).subscribe(res => {
           // @ts-ignore
           const setUser = res.user;
           const roles = res['roles'];
+          console.log('getUser', res);
+
           // tslint:disable-next-line:max-line-length
-          if (setUser !== undefined && setUser.user_metadata !== null && setUser.user_metadata.cryptos !== undefined && setUser.user_metadata.keywords !== undefined ) {
+          if (setUser !== undefined && setUser.user_metadata !== undefined && setUser.user_metadata.cryptos !== undefined && setUser.user_metadata.keywords !== undefined ) {
             this.currentUser.setUser(setUser.user_id,
               setUser.username, setUser.email, setUser.user_metadata.currency,
               setUser.user_metadata.cryptos, setUser.user_metadata.keywords, []);
             this.currentUser.setRoles(roles);
           } else {
             this.initializeUser(userAuthO.sub).subscribe(initializedRes => {
+              console.log('Initialized', initializedRes);
               // @ts-ignore
+
               const setNewUser = initializedRes.user;
               // tslint:disable-next-line:max-line-length
               if (setNewUser !== undefined && setNewUser.user_metadata !== null && setNewUser.user_metadata.cryptos !== undefined && setNewUser.user_metadata.keywords !== undefined ) {
@@ -62,8 +67,9 @@ export class UserService {
    * Request all users
    */
   public initializeUser(id: string) {
+
     console.log('initialize' , this.URL + '/api/v0/users/' + id + '/initialize');
-    return this.httpClient.post(this.URL + '/api/v0/users/' + id + '/initialize', '');
+    return this.httpClient.post(new URL(this.URL + '/api/v0/users/' + id + '/initialize').href, '' );
   }
 
   /**
@@ -71,8 +77,8 @@ export class UserService {
    * @param userI duser unique id
    */
   public getUser(userId: string ) {
-    console.log('requetes', this.URL +  '/api/v0/users/' + userId );
-    return this.httpClient.get(this.URL +  '/api/v0/users/' + userId );
+    console.log('requetes get', new URL(this.URL +  '/api/v0/users/' + userId) );
+    return this.httpClient.get( new URL(this.URL +  '/api/v0/users/' + userId).href );
   }
 
   public updateUser(userId: string, body) {

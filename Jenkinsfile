@@ -7,7 +7,7 @@ pipeline {
         PRIVATE_NETWORK = 'private-network'
         AUTH0_DOMAIN = 'dev-m6frxp9u.eu.auth0.com'
         AUTH0_AUDIENCE = 'https://dev-m6frxp9u.eu.auth0.com/api/v2/'
-        CLIENT_ID = '47yNDCUxZMI2lBNGH6v0gVbGdvTTdNRu'
+        CLIENT_ID = 'rEWYoWt0Gf19ygTZbLFEUJFEUv6LZ3Vk'
         API_KEY_CRYPTOCOMPARE = credentials("API_KEY_CRYPTO_COMPARE")
         CLIENT_SECRET = credentials("CLIENT_SECRET")
     }
